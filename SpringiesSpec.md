@@ -14,18 +14,20 @@ Packages & Classes
 
 ### Springies
 
-#### SpringiesListener 
+#### Controller
+
+##### Listener 
 Behaviors:  
 * "Listens" for user input
 * Calls controller methods
 
-#### SpringiesController 
+##### Controller 
 Behaviors:
 * Modifies environment and objects
 * Parse XML files and build the assembly
 * Controlled by user input
   
-#### Environment
+##### Environment
 Features include: 
 * gravity, gravity_direction, viscosity  
   
@@ -63,7 +65,7 @@ Behaviors:
 * Affected by Environment (gravity, viscosity, etc)  
 * Controlled by user input  
 
-#### SpringMassAssembly   
+#### Assembly   
 Behaviors:        
 * Control position of spring-mass assembly as a whole   
 * Move as an assembly as opposed to individual masses  
