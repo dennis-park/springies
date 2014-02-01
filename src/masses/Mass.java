@@ -1,17 +1,15 @@
 package masses;
 
-import org.jbox2d.collision.ShapeDef;
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.BodyDef;
+import springies.EnvironmentForces;
 import jboxGlue.*;
 import jgame.JGColor;
 
 
-public class Mass extends PhysicalObject {
-    float mInitVelX;
-    float mInitVelY;
-    float mMass;
+public class Mass extends PhysicalObjectCircle {
+ 
+    EnvironmentForces mForces;
+    int mMassId;
 
     /**
      * This class represents the Mass objects in our Spring-Mass assemblies.
@@ -23,75 +21,63 @@ public class Mass extends PhysicalObject {
      * are not given, the default value should be 0. If the mass is not given, the default
      * value should be 1.
      * 
+     * Radius for all masses will be 1.  
+     * 
      * @param x_pos
      * @param y_pos
      * @param init_vel_x
      * @param init_vel_y
      * @param mass
      */
-    public Mass (float x_pos, float y_pos, float init_vel_x, float init_vel_y, float mass) {
-        super("mass", 0, JGColor.black);
-        setPos(x, y);
-        mInitVelX = init_vel_x;
-        mInitVelY = init_vel_y;
-        mMass = mass;
+    public Mass (int mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y, double mass) {
+        super("mass", 0, JGColor.black, 1, mass);
+        setPos(x_pos, y_pos);
+        xspeed = init_vel_x;
+        yspeed = init_vel_y;
+        mMassId = mass_id;
+        mForces = WorldManager.getWorldForces();
+    }
+    public Mass (int mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y) {
+        this(mass_id, x_pos, y_pos, init_vel_x, init_vel_y, 1);
+    }
+    public Mass (int mass_id, double x_pos, float y_pos) {
+        this(mass_id, x_pos, y_pos, 0, 0, 1);
+    }
+    public Mass (int mass_id) {
+        this(mass_id, 0, 0, 0, 0, 1);
     }
 
-    public Mass (float x_pos, float y_pos, float init_vel_x, float init_vel_y) {
-        this(x_pos, y_pos, init_vel_x, init_vel_y, 1);
+    /**
+     * The Physical Object class will copy all the JBox positions onto JGame positions
+     * applyAllWorldForces() will set the global force acting on the Mass object 
+     */
+    public void move() {
+        applyAllWorldForces();
+        super.move();
     }
-
-    public Mass (float x_pos, float y_pos) {
-        this(x_pos, y_pos, 0, 0, 1);
-    }
-
-    public Mass () {
-        this(0, 0, 0, 0, 1);
-    }
-
-    @Override
-    protected void createBody (ShapeDef shapeDefinition)
+    
+    /**
+     * Apply all the world forces
+     * 
+     */
+    public void applyAllWorldForces ()
     {
-        myBody = WorldManager.getWorld().createBody(new BodyDef());
-        myBody.createShape(shapeDefinition);
-        myBody.setUserData(this); // for following body back to JGObject
-        myBody.setMassFromShapes();
-        myBody.m_world = WorldManager.getWorld();
+        Vec2 all_world_forces = calcAllWorldForces();
+        myBody.applyForce(all_world_forces, myBody.m_xf.position);
+    }
+    
+    /**
+     * Calculate all the environmental forces that will (not including gravity)
+     * Spring force is NOT an environmental force.
+     * 
+     */
+    protected Vec2 calcAllWorldForces() {
+        Vec2 total_force = new Vec2();
+        total_force.addLocal(mForces.getViscosity());
+        total_force.addLocal(mForces.getCenterOfMass());
+        total_force.addLocal(mForces.getWallRepulsion());
+        
+        return total_force;
     }
 
-    @Override
-    public void move ()
-    {
-        // if the JGame object was deleted, remove the physical object too
-        if (myBody.m_world != WorldManager.getWorld()) {
-            remove();
-            return;
-        }
-        // copy the position and rotation from the JBox world to the JGame world
-        Vec2 position = myBody.getPosition();
-        x = position.x;
-        y = position.y;
-        myRotation = -myBody.getAngle();
-    }
-
-    @Override
-    public void setPos (double x, double y)
-    {
-        // there's no body while the game object is initializing
-        if (myBody != null) {
-            // set position of jbox2d object, not jgame object
-            myBody.setXForm(new Vec2((float) x, (float) y), -myRotation);
-        }
-    }
-
-    public void setForce (double x, double y)
-    {
-        myBody.applyForce(new Vec2((float) x, (float) y), myBody.m_xf.position);
-    }
-
-    @Override
-    protected void paintShape () {
-        // TODO Auto-generated method stub
-
-    }
 }

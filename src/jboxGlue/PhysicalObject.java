@@ -88,6 +88,8 @@ public abstract class PhysicalObject extends JGObject
             return;
         }
         // copy the position and rotation from the JBox world to the JGame world
+        // this means that the JBox world will perform all necessary calculations 
+        // and the JGame world just needs to display the new positions
         Vec2 position = myBody.getPosition();
         x = position.x;
         y = position.y;
