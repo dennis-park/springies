@@ -66,15 +66,12 @@ public class PhysicalObjectRect extends PhysicalObject
         createBody(shape);
         setBBox(-(int) width / 2, -(int) height / 2, (int) width, (int) height);
     }
-    
-    
-    public void setStart(double startX, double startY){
-    	
+    public void setWidth(double rec_width) {
+    	myWidth = rec_width;
     }
-    public void setEnd(double endX, double endY){
-    	
+    public void setHeight(double rec_height) {
+    	myHeight = rec_height;
     }
-
     @Override
     public void paintShape()
     {

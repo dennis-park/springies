@@ -2,7 +2,6 @@ package springs;
 
 import org.jbox2d.collision.PolygonDef;
 import org.jbox2d.common.Vec2;
-
 import jboxGlue.PhysicalObject;
 import jboxGlue.PhysicalObjectRect;
 import jgame.JGColor;
@@ -17,30 +16,32 @@ public class Spring extends PhysicalObjectRect{
 	private int mStartY;
 	private int mEndX;
 	private int mEndY;
-	private static double mWidth = 2.0;
-	private static double mHeight = 1.0;
+	private double mWidth;
+	private double mHeight;
 	
 	private static final String springID = "spring";
 	private static final int DEFAULT_KVAL = 1;
+	private static final double DEFAULT_WIDTH = 2.0;
+	private static final double DEFAULT_HEIGHT = 1.0;
 	private static JGColor DEFAULT_COLOR = JGColor.blue;
 
 	/**
 	 * Spring constructor that sets private member attributes
 	 */
-	public Spring(Mass m1, Mass m2, double length, double k) {
-		super(springID, 1, DEFAULT_COLOR, mWidth, mHeight);
+	public Spring(Mass m1, Mass m2, double length, double k, double width, double height) {
+		super(springID, 1, DEFAULT_COLOR, width, height);
 		mStart = m1;
 		mEnd = m2;
 		mLength = length;
 		mKval = k;
-		
+		init(width,height,1);
 	}
 	public Spring(Mass start, Mass end) {
-		this(start, end, computeLength(start,end), DEFAULT_KVAL);
+		this(start, end, computeLength(start,end), DEFAULT_KVAL, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
 
 	public Spring(Mass start, Mass end, double length){
-		this(start, end, length, DEFAULT_KVAL);
+		this(start, end, length, DEFAULT_KVAL, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
 
 	private static double computeLength(Mass m1, Mass m2) {
@@ -70,10 +71,9 @@ public class Spring extends PhysicalObjectRect{
 		force = force.mul(mag);
 		return force;
 	}
-	public void updateString(Mass mass_start, Mass mass_end) {
-		
+	public void resizeSpring(Mass mass_start, Mass mass_end) {
+		setWidth(computeLength(mass_start, mass_end));
 	}
-	
 	public Mass getStart() {
 		return mStart;
 	}
