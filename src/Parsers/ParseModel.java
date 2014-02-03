@@ -1,6 +1,9 @@
 package Parsers;
-import masses.Mass;
+
+import masses.*;
+import springs.*;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -8,15 +11,13 @@ import org.xml.sax.SAXException;
 public class ParseModel extends XMLParser {
     boolean isEnvXML;
     int mNodeNum;
-    ArrayList<Mass> mMasses;
-    ArrayList<FixedMass> mFixedMasses;
+    Hashtable<String, Mass> mMasses;
     ArrayList<Spring> mSprings;
     ArrayList<Muscle> mMuscles;
 
     public ParseModel () {
         isEnvXML = false;
-        mMasses = new ArrayList<Mass>();
-        mFixedMasses = new ArrayList<FixedMass>();
+        mMasses = new Hashtable<String, Mass>();
         mSprings = new ArrayList<Spring>();
         mMuscles = new ArrayList<Muscle>();
     }
@@ -47,36 +48,39 @@ public class ParseModel extends XMLParser {
 
     public void endDocument () throws SAXException {
         System.out
-                .printf("%d nodes read, %d masses added, %d fixed masses added, %d springs added, %d muscles added\n",
-                        mNodeNum, mMasses.size(), mFixedMasses.size(), mSprings.size(),
+                .printf("%d nodes read, %d masses added, %d springs added, %d muscles added\n",
+                        mNodeNum, mMasses.size(), mSprings.size(),
                         mMuscles.size());
     }
 
     private void parseMass (Attributes a) {
         checkIdXY(a);
         Mass newMass = createMassObj(a.getValue("id"), a.getValue("x"), a.getValue("y"),
-                                      a.getValue("vx"), a.getValue("vy"), a.getValue("mass"));
-        mMasses.add(newMass);
+                                     a.getValue("vx"), a.getValue("vy"), a.getValue("mass"));
+        mMasses.put(a.getValue("id"), newMass);
     }
 
     private void parseFixedMass (Attributes a) {
         checkIdXY(a);
-        FixedMassDef newMass =
-                new FixedMassDef(a.getValue("id"), a.getValue("x"), a.getValue("mass"));
-        mFixedMasses.add(newMass);
+        FixedMass newMass =
+                createFixedMassObj(a.getValue("id"), a.getValue("x"), a.getValue("y"),
+                                   a.getValue("mass"));
+        mMasses.put(a.getValue("id"), newMass);
     }
 
     private void parseSpring (Attributes a) {
         checkSpringMasses(a);
-        SpringDef newSpring =
-                new SpringDef(a.getValue("a"), a.getValue("b"), a.getValue("restlength"));
+        Spring newSpring =
+                createSpringObj(a.getValue("a"), a.getValue("b"), a.getValue("restlength"),
+                                a.getValue("constant"));
         mSprings.add(newSpring);
     }
 
     private void parseMuscle (Attributes a) {
         checkSpringMasses(a);
-        MuscleDef newMuscle =
-                new MuscleDef(a.getValue("a"), a.getValue("b"), a.getValue("restlength"));
+        Muscle newMuscle =
+                createMuscleObj(a.getValue("a"), a.getValue("b"), a.getValue("restlength"),
+                                a.getValue("amplitude"));
         mMuscles.add(newMuscle);
     }
 
@@ -91,14 +95,8 @@ public class ParseModel extends XMLParser {
 
     private boolean checkMassesExist (String mass_id) {
         boolean exist = false;
-        for (MassDef m : mMasses) {
-            if (m.mId.equals(mass_id)) {
-                exist = true;
-                break;
-            }
-        }
-        for (FixedMassDef f : mFixedMasses) {
-            if (f.mId.equals(mass_id)) {
+        for (String m_id : mMasses.keySet()) {
+            if (m_id.equals(mass_id)) {
                 exist = true;
                 break;
             }
@@ -117,28 +115,61 @@ public class ParseModel extends XMLParser {
             malformedXML(a);
         }
     }
-    
-    public Mass createMassObj(String id, String x, String y, String init_x, String init_y, String mass)  {
+
+    public FixedMass createFixedMassObj (String id, String x, String y, String mass) {
         if (id == null || x == null || y == null) {
             System.out.println("Mass not properly created");
         }
         String mass_id = id;
         double x_pos = Double.parseDouble(x);
-        double y_pos = Double.parseDouble(y); 
-        double init_x_pos = 0.0;
-        double init_y_pos = 0.0;
+        double y_pos = Double.parseDouble(y);
         double obj_mass = 0.0;
-        
-        if (init_x != null && init_y != null) {
-            init_x_pos = Double.parseDouble(init_x);
-            init_y_pos = Double.parseDouble(init_y);
-        }        
         if (mass != null) {
             obj_mass = Double.parseDouble(mass);
         }
-        
-        return new Mass(mass_id, x_pos, y_pos, init_x_pos, init_y_pos, obj_mass);
+
+        return new FixedMass(mass_id, x_pos, y_pos, obj_mass);
+    }
+
+    public Mass createMassObj (String id,
+                               String x,
+                               String y,
+                               String init_x,
+                               String init_y,
+                               String mass) {
+        if (id == null || x == null || y == null) {
+            System.out.println("Mass not properly created");
+        }
+        String mass_id = id;
+        double x_pos = Double.parseDouble(x);
+        double y_pos = Double.parseDouble(y);
+
+        if (init_x == null && init_y == null && mass == null) { return new Mass(mass_id, x_pos,
+                                                                                y_pos); }
+        if (init_x == null && init_y == null) { return new Mass(mass_id, x_pos, y_pos,
+                                                                Double.parseDouble(mass)); }
+        if (mass == null) { return new Mass(mass_id, x_pos, y_pos, Double.parseDouble(init_x),
+                                            Double.parseDouble(init_y)); }
+        return new Mass(mass_id, x_pos, y_pos, Double.parseDouble(init_x),
+                        Double.parseDouble(init_y), Double.parseDouble(mass));
+    }
+
+    private Spring createSpringObj (String m1_id, String m2_id, String restlength, String constant) {
+        Mass m1 = mMasses.get(m1_id);
+        Mass m2 = mMasses.get(m2_id);
+
+        if (restlength == null && constant == null) { return new Spring(m1, m2); }
+        if (constant == null) { return new Spring(m1, m2, Double.parseDouble(restlength)); }
+        return new Spring(m1, m2, Double.parseDouble(restlength), Double.parseDouble(constant));
+    }
+
+    private Muscle createMuscleObj (String m1_id, String m2_id, String restlength, String amplitude) {
+        Mass m1 = mMasses.get(m1_id);
+        Mass m2 = mMasses.get(m2_id);
+        double amp = Double.parseDouble(amplitude);
+
+        if (restlength == null) { return new Muscle(m1, m2, amp); }
+        return new Muscle(m1, m2, Double.parseDouble(restlength), amp);
     }
 
 }
- 
