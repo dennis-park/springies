@@ -1,18 +1,23 @@
 package masses;
 
+import java.util.ArrayList;
+
 import org.jbox2d.common.Vec2;
+
 import springies.EnvironmentForces;
+import springs.Spring;
 import jboxGlue.*;
 import jgame.JGColor;
 
 
 public class Mass extends PhysicalObjectCircle {
- 
-    EnvironmentForces mForces;
-    int mMassId;
+    private float mMass;
     private static final String massID = "mass";
     private float mX, mY;
-
+    
+    protected ArrayList<Spring> mSpringList = new ArrayList<Spring>();
+    EnvironmentForces mForces;
+    
     /**
      * This class represents the Mass objects in our Spring-Mass assemblies.
      * 
@@ -31,22 +36,22 @@ public class Mass extends PhysicalObjectCircle {
      * @param init_vel_y
      * @param mass
      */
-    public Mass (int mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y, double mass) {
+    public Mass (double x_pos, double y_pos, double init_vel_x, double init_vel_y, double mass) {
         super(massID, 0, JGColor.white, 1, mass);
         setPos(x_pos, y_pos);
         xspeed = init_vel_x;
         yspeed = init_vel_y;
-        mMassId = mass_id;
+        mMass = (float) mass;
         mForces = WorldManager.getWorldForces();
     }
-    public Mass (int mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y) {
-        this(mass_id, x_pos, y_pos, init_vel_x, init_vel_y, 1);
+    public Mass (double x_pos, double y_pos, double init_vel_x, double init_vel_y) {
+        this(x_pos, y_pos, init_vel_x, init_vel_y, 1);
     }
-    public Mass (int mass_id, double x_pos, float y_pos) {
-        this(mass_id, x_pos, y_pos, 0, 0, 1);
+    public Mass (double x_pos, double y_pos, double mass) {
+        this(x_pos, y_pos, 0, 0, 1);
     }
-    public Mass (int mass_id) {
-        this(mass_id, 0, 0, 0, 0, 1);
+    public Mass (double mass) {
+        this(0, 0, 0, 0, 1);
     }
 
     /**
@@ -58,6 +63,9 @@ public class Mass extends PhysicalObjectCircle {
         super.move();
     }
     
+    public void connectSpring(Spring spring) {
+    	mSpringList.add(spring);
+    }
     /**
      * Apply all the world forces
      * 
@@ -78,8 +86,10 @@ public class Mass extends PhysicalObjectCircle {
         total_force.addLocal(mForces.getViscosity());
         total_force.addLocal(mForces.getCenterOfMass());
         total_force.addLocal(mForces.getWallRepulsion());
-        
         return total_force;
+    }
+    public float getMass() {
+    	return this.mMass;
     }
     public void setX(float x) {
     	mX = x;

@@ -4,10 +4,17 @@ import masses.Mass;
 
 public class Muscle extends Spring{
 
-	public Muscle(Mass start, Mass end) {
+	private double mAmplitude;
+	private double mLength;
+	private static final int mPeriod = 60;
+	
+	public Muscle(Mass start, Mass end, double amplitude) {
 		super(start, end);
-		// TODO Auto-generated constructor stub
+		mAmplitude = amplitude;
+		mLength = super.getLength();
 	}
+	
+	
 	
 
 }
