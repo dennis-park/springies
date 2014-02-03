@@ -1,8 +1,5 @@
 package springs;
-
-import org.jbox2d.collision.PolygonDef;
 import org.jbox2d.common.Vec2;
-import jboxGlue.PhysicalObject;
 import jboxGlue.PhysicalObjectRect;
 import jgame.JGColor;
 import masses.Mass;
@@ -35,31 +32,24 @@ public class Spring extends PhysicalObjectRect{
 		mLength = length;
 		mKval = k;
 		init(width,height,1);
+		m1.connectSpring(this);
+		m2.connectSpring(this);
 	}
 	public Spring(Mass start, Mass end) {
 		this(start, end, computeLength(start,end), DEFAULT_KVAL, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
-
 	public Spring(Mass start, Mass end, double length){
 		this(start, end, length, DEFAULT_KVAL, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
-
 	private static double computeLength(Mass m1, Mass m2) {
 		return Math.sqrt(Math.pow(m1.x - m2.x, 2)
 				+ Math.pow(m1.y - m2.y, 2));
 	}
-
-	protected double getLength() {
-		return mLength;
-	}
-	protected double setLength(double length) {
-		return mLength = length;
-	}
 	/**
-	 * 
+	 * Computes Hooke's Law
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return spring force vector
 	 */
 	public Vec2 getForce(double x, double y) {
 		float mag =	(float) (mKval*(mLength-computeLength(mStart,mEnd)));
@@ -73,6 +63,12 @@ public class Spring extends PhysicalObjectRect{
 	}
 	public void resizeSpring(Mass mass_start, Mass mass_end) {
 		setWidth(computeLength(mass_start, mass_end));
+	}
+	protected double getLength() {
+		return mLength;
+	}
+	protected double setLength(double length) {
+		return mLength = length;
 	}
 	public Mass getStart() {
 		return mStart;
