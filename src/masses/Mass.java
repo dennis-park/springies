@@ -1,14 +1,17 @@
 package masses;
 
-
+import java.util.ArrayList;
 import org.jbox2d.common.Vec2;
 import springies.EnvironmentForces;
+import springs.Spring;
 import jboxGlue.*;
 import jgame.JGColor;
 
 
 public class Mass extends PhysicalObjectCircle {
- 
+    private float mMass;
+    private float mX, mY;
+    protected ArrayList<Spring> mSpringList = new ArrayList<Spring>();
     EnvironmentForces mForces;
     String mMassId;
 
@@ -30,8 +33,9 @@ public class Mass extends PhysicalObjectCircle {
      * @param init_vel_y
      * @param mass
      */
+
     public Mass (String mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y, double mass) {
-        super("mass", 1, JGColor.white, 10, mass);
+        super(mass_id, 1, JGColor.white, 10, mass);
         setPos(x_pos, y_pos);
         xspeed = init_vel_x;
         yspeed = init_vel_y;
@@ -57,6 +61,9 @@ public class Mass extends PhysicalObjectCircle {
         super.move();
     }
     
+    public void connectSpring(Spring spring) {
+    	mSpringList.add(spring);
+    }
     /**
      * Apply all the world forces
      * 
@@ -77,8 +84,15 @@ public class Mass extends PhysicalObjectCircle {
         total_force.addLocal(mForces.getViscosity());
         total_force.addLocal(mForces.getCenterOfMass());
         total_force.addLocal(mForces.getWallRepulsion());
-        
         return total_force;
     }
-
+    public float getMass() {
+    	return this.mMass;
+    }
+    public void setX(float x) {
+    	mX = x;
+    }
+    public void setY(float y) {
+    	mY = y;
+    }
 }
