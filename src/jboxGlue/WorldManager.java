@@ -34,6 +34,7 @@ public class WorldManager
     }
 
     public static EnvironmentForces getWorldForces () {
+        if (mForces == null) { throw new RuntimeException("call initWorld() before getEnvironmentForces()!"); }
         return mForces;
     }
 
@@ -43,6 +44,8 @@ public class WorldManager
                                     new Vec2(engine.displayWidth(), engine.displayHeight()));
         Vec2 gravity = new Vec2(0.0f, 0.0f);
         ourWorld = new World(worldBounds, gravity, true);
+        ourWorld.setGravity(new Vec2(0.0f, 0.1f));
+        //ourWorld.setGravity(mForces.getGravity());
     }
 
     /**
@@ -52,9 +55,5 @@ public class WorldManager
      */
     public static void setWorldForces (EnvironmentForces forces) {
         mForces = forces;
-    }
-
-    public void setGravity () {
-        ourWorld.setGravity(mForces.getGravity());
     }
 }

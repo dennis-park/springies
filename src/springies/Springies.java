@@ -8,7 +8,7 @@ import jgame.JGColor;
 import jgame.JGObject;
 import jgame.platform.JGEngine;
 import org.jbox2d.common.Vec2;
-
+import masses.Mass;
 
 @SuppressWarnings("serial")
 public class Springies extends JGEngine
@@ -44,11 +44,39 @@ public class Springies extends JGEngine
         // so gravity is up in world coords and down in game coords
         // so set all directions (e.g., forces, velocities) in world coords
         WorldManager.initWorld(this);
-        WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.1f));
+        WorldManager.getWorld().setGravity(new Vec2(0.0f, 1.0f));
         addBall();
         addWalls();
     }
 
+    public void addBall ()
+    {
+        // add a bouncy ball
+        // NOTE: you could make this into a separate class, but I'm lazy
+        PhysicalObject ball = new Mass(1, displayWidth() / 2, displayHeight() / 2, 1, 0) {
+ 
+            @Override
+            public void hit (JGObject other)
+            {
+                // we hit something! bounce off it!
+                Vec2 velocity = myBody.getLinearVelocity();
+                // is it a tall wall?
+                final double DAMPING_FACTOR = 0.8;
+                boolean isSide = other.getBBox().height > other.getBBox().width;
+                if (isSide) {
+                    velocity.x *= -DAMPING_FACTOR;
+                }
+                else {
+                    velocity.y *= -DAMPING_FACTOR;
+                }
+                // apply the change
+                myBody.setLinearVelocity(velocity);
+            }
+        };
+        ball.setForce(8000, -10000);
+    }
+    
+    /*
     public void addBall ()
     {
         // add a bouncy ball
@@ -75,7 +103,7 @@ public class Springies extends JGEngine
         ball.setPos(displayWidth() / 2, displayHeight() / 2);
         ball.setForce(8000, -10000);
     }
-
+*/
     private void addWalls ()
     {
         // add walls to bounce off of

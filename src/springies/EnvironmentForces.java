@@ -1,5 +1,8 @@
 package springies;
 
+import jboxGlue.PhysicalObject;
+import jboxGlue.PhysicalObjectRect;
+import jgame.JGColor;
 import org.jbox2d.common.Vec2;
 
 
@@ -14,8 +17,10 @@ public class EnvironmentForces {
     }
 
     public EnvironmentForces (String xml_fn) {
-
+        
     }
+    
+    
 
     public Vec2 getGravity () {
         if (mGravity == null) { return new Vec2(0.0f, 0.0f); }

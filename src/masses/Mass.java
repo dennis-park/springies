@@ -1,5 +1,6 @@
 package masses;
 
+
 import org.jbox2d.common.Vec2;
 import springies.EnvironmentForces;
 import jboxGlue.*;
@@ -9,7 +10,7 @@ import jgame.JGColor;
 public class Mass extends PhysicalObjectCircle {
  
     EnvironmentForces mForces;
-    int mMassId;
+    String mMassId;
 
     /**
      * This class represents the Mass objects in our Spring-Mass assemblies.
@@ -21,7 +22,7 @@ public class Mass extends PhysicalObjectCircle {
      * are not given, the default value should be 0. If the mass is not given, the default
      * value should be 1.
      * 
-     * Radius for all masses will be 1.  
+     * Radius for all masses will be 10 and default collision  
      * 
      * @param x_pos
      * @param y_pos
@@ -29,21 +30,21 @@ public class Mass extends PhysicalObjectCircle {
      * @param init_vel_y
      * @param mass
      */
-    public Mass (int mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y, double mass) {
-        super("mass", 0, JGColor.black, 1, mass);
+    public Mass (String mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y, double mass) {
+        super("mass", 1, JGColor.white, 10, mass);
         setPos(x_pos, y_pos);
         xspeed = init_vel_x;
         yspeed = init_vel_y;
         mMassId = mass_id;
-        mForces = WorldManager.getWorldForces();
+        //mForces = WorldManager.getWorldForces();
     }
-    public Mass (int mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y) {
+    public Mass (String mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y) {
         this(mass_id, x_pos, y_pos, init_vel_x, init_vel_y, 1);
     }
-    public Mass (int mass_id, double x_pos, float y_pos) {
+    public Mass (String mass_id, double x_pos, float y_pos) {
         this(mass_id, x_pos, y_pos, 0, 0, 1);
     }
-    public Mass (int mass_id) {
+    public Mass (String mass_id) {
         this(mass_id, 0, 0, 0, 0, 1);
     }
 
@@ -52,7 +53,7 @@ public class Mass extends PhysicalObjectCircle {
      * applyAllWorldForces() will set the global force acting on the Mass object 
      */
     public void move() {
-        applyAllWorldForces();
+        // applyAllWorldForces();
         super.move();
     }
     
