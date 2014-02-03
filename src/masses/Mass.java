@@ -9,12 +9,19 @@ import jgame.JGColor;
 
 
 public class Mass extends PhysicalObjectCircle {
-    private float mMass;
-    private float mX, mY;
+    private double mMass;
     protected ArrayList<Spring> mSpringList = new ArrayList<Spring>();
     EnvironmentForces mForces;
-    String mMassId;
 
+    private static final int COLLISION_ID = 0;
+    private static final int DEFAULT_RADIUS = 5;
+    private static final JGColor DEFAULT_COLOR = JGColor.white;
+    private static final double DEFAULT_XPOS = 0.0;
+    private static final double DEFAULT_YPOS = 0.0;
+    private static final double DEFAULT_XVEL = 0.0;
+    private static final double DEFAULT_YVEL = 0.0;
+    private static final double DEFAULT_MASS = 0.0;
+    
     /**
      * This class represents the Mass objects in our Spring-Mass assemblies.
      * 
@@ -35,24 +42,23 @@ public class Mass extends PhysicalObjectCircle {
      */
 
     public Mass (String mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y, double mass) {
-        super(mass_id, 1, JGColor.white, 10, mass);
+        super(mass_id, COLLISION_ID, DEFAULT_COLOR, DEFAULT_RADIUS, mass);
         setPos(x_pos, y_pos);
         xspeed = init_vel_x;
         yspeed = init_vel_y;
-        mMassId = mass_id;
-        //mForces = WorldManager.getWorldForces();
+        mForces = WorldManager.getWorldForces();
     }
     public Mass (String mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y) {
         this(mass_id, x_pos, y_pos, init_vel_x, init_vel_y, 1);
     }
     public Mass (String mass_id, double x_pos, double y_pos, double mass) {
-        this(mass_id, x_pos, y_pos, 0, 0, mass); 
+        this(mass_id, x_pos, y_pos, DEFAULT_XVEL, DEFAULT_YVEL, mass); 
     }
     public Mass (String mass_id, double x_pos, double y_pos) {
-        this(mass_id, x_pos, y_pos, 0, 0, 1);
+        this(mass_id, x_pos, y_pos, DEFAULT_XVEL, DEFAULT_YVEL, DEFAULT_MASS);
     }
     public Mass (String mass_id) {
-        this(mass_id, 0, 0, 0, 0, 1);
+        this(mass_id, DEFAULT_XPOS, DEFAULT_YPOS, DEFAULT_XVEL, DEFAULT_YVEL, DEFAULT_MASS);
     }
 
     /**
@@ -89,13 +95,7 @@ public class Mass extends PhysicalObjectCircle {
         total_force.addLocal(mForces.getWallRepulsion());
         return total_force;
     }
-    public float getMass() {
+    public double getMass() {
     	return this.mMass;
-    }
-    public void setX(float x) {
-    	mX = x;
-    }
-    public void setY(float y) {
-    	mY = y;
     }
 }
