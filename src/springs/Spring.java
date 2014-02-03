@@ -8,7 +8,7 @@ import jboxGlue.PhysicalObjectRect;
 import jgame.JGColor;
 import masses.Mass;
 
-public class Spring extends PhysicalObject{
+public class Spring extends PhysicalObjectRect{
 	private Mass mStart;
 	private Mass mEnd;
 	private double mLength;
@@ -17,8 +17,9 @@ public class Spring extends PhysicalObject{
 	private int mStartY;
 	private int mEndX;
 	private int mEndY;
-	private double mWidth;
-	private double mHeight;
+	private static double mWidth = 2.0;
+	private static double mHeight = 1.0;
+	private String springID = "spring";
 
 	private static final int DEFAULT_KVAL = 1;
 	private static JGColor DEFAULT_COLOR = JGColor.blue;
@@ -27,24 +28,13 @@ public class Spring extends PhysicalObject{
 	 * Spring constructor that sets private member attributes
 	 */
 	public Spring(Mass m1, Mass m2, double length, double k) {
-		super("spring", 1, DEFAULT_COLOR);
+		super("spring", 1, DEFAULT_COLOR, mWidth, mHeight);
 		mStart = m1;
 		mEnd = m2;
 		mLength = length;
 		mKval = k;
 		
 	}
-	private void init(double width, double height, double mass) {
-		mWidth = width;
-		mHeight = height;
-		// make it a rect
-		PolygonDef shape = new PolygonDef();
-		shape.density = (float) mass;
-		shape.setAsBox((float) width, (float) height);
-		createBody(shape);
-		setBBox(-(int) width / 2, -(int) height / 2, (int) width, (int) height);
-	}
-
 	public Spring(Mass start, Mass end) {
 		this(start, end, computeLength(start,end), DEFAULT_KVAL);
 	}
@@ -72,8 +62,6 @@ public class Spring extends PhysicalObject{
 	 */
 	public Vec2 getForce(double x, double y) {
 		float mag =	(float) (mKval*(mLength-computeLength(mStart,mEnd)));
-		// either the myFirst or mySecond coordinates should be equivalent and
-		// so have no effect
 		Vec2 force = new Vec2(
 				(float)((x-mStart.x)+(x-mEnd.x)),
 				(float)((y-mStart.y)+(y-mEnd.y))
@@ -82,10 +70,9 @@ public class Spring extends PhysicalObject{
 		force = force.mul(mag);
 		return force;
 	}
-	public void updateString() {
-		//TODO
+	public void updateString(Mass mass_start, Mass mass_end) {
+		
 	}
-	
 	
 	public Mass getStart() {
 		return mStart;
@@ -104,10 +91,5 @@ public class Spring extends PhysicalObject{
 	}
 	public int getEndY() {
 		return mEndY;
-	}
-	@Override
-	protected void paintShape() {
-		// TODO Auto-generated method stub
-		
 	}
 }
