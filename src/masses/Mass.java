@@ -45,6 +45,10 @@ public class Mass extends PhysicalObjectCircle {
     public Mass (String mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y) {
         this(mass_id, x_pos, y_pos, init_vel_x, init_vel_y, 1);
     }
+
+    public Mass (String mass_id, double x_pos, double y_pos, double mass) {
+        this(mass_id, x_pos, y_pos, 0, 0, mass); 
+    }
     public Mass (String mass_id, double x_pos, double y_pos) {
         this(mass_id, x_pos, y_pos, 0, 0, 1);
     }

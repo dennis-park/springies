@@ -40,6 +40,9 @@ public class Spring extends PhysicalObjectRect{
 	public Spring(Mass start, Mass end, double length){
 		this(start, end, length, DEFAULT_KVAL, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	}
+	public Spring(Mass start, Mass end, double length, double k){
+            this(start, end, length, k, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
 	private static double computeLength(Mass m1, Mass m2) {
 		return Math.sqrt(Math.pow(m1.x - m2.x, 2)
 				+ Math.pow(m1.y - m2.y, 2));

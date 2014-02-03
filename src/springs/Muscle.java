@@ -14,9 +14,13 @@ public class Muscle extends Spring{
 		mAmplitude = amplitude;
 		mLength = super.getLength();
 	}
-	
+	public Muscle(Mass m1, Mass m2, double length, double amplitude) {
+            super(m1, m2, length);
+            mAmplitude = amplitude;
+            mLength = length;
+    }
 	public Muscle(Mass m1, Mass m2, double length, double k, double amplitude) {
-		super(m1, m2, k);
+		super(m1, m2, length, k);
 		mAmplitude = amplitude;
 		mLength = length;
 	}
