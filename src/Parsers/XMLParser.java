@@ -6,7 +6,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class XMLParser extends DefaultHandler{     
     protected int mNodeNum;
     
-    protected static String convertToFileURL(String filename) {
+    public static String convertToFileURL(String filename) {
         String path = new File(filename).getAbsolutePath();
         if (File.separatorChar != '/') {
             path = path.replace(File.separatorChar, '/');

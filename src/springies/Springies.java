@@ -77,7 +77,7 @@ public class Springies extends JGEngine
     }
     
     
-    private void callXMLParser(String filename) {
+    private void callXMLParser(String filename) throws Exception {
         SAXParserFactory spf = SAXParserFactory.newInstance();
         spf.setNamespaceAware(true);
         SAXParser saxParser = spf.newSAXParser();   

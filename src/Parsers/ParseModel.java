@@ -2,22 +2,24 @@ package Parsers;
 
 import masses.*;
 import springs.*;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Hashtable;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-
 
 public class ParseModel extends XMLParser {
     boolean isEnvXML;
     int mNodeNum;
-    Hashtable<String, Mass> mMasses;
+    HashMap<String, Mass> mMasses;
     ArrayList<Spring> mSprings;
     ArrayList<Muscle> mMuscles;
 
     public ParseModel () {
         isEnvXML = false;
-        mMasses = new Hashtable<String, Mass>();
+        mMasses = new HashMap<String, Mass>();
         mSprings = new ArrayList<Spring>();
         mMuscles = new ArrayList<Muscle>();
     }
