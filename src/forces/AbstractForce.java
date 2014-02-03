@@ -8,6 +8,7 @@ public abstract class AbstractForce {
     protected double xdir;
     protected double ydir;
     protected double mExponent;
+    protected boolean forceOn;
     
     /**
      * This is a general abstract class for global environmental 
@@ -20,6 +21,8 @@ public abstract class AbstractForce {
      * @param y
      * @return
      */
+    public abstract void toggleForce();
+    
     public abstract Vec2 calculateForce(double x, double y);
     
     public abstract void setMagnitude(double magnitude);

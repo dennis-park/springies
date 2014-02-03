@@ -5,8 +5,6 @@ import org.jbox2d.common.Vec2;
 
 public class Gravity extends AbstractForce {
 
-    protected double xdir;
-    protected double ydir;
     private static double GRAVITY_DIRECTION = 90;
     private static double GRAVITY_EXPONENT = 0.0;
 
@@ -18,7 +16,7 @@ public class Gravity extends AbstractForce {
         mMagnitude = magnitude;
         mDirection = direction;
         mExponent = exponent;
-        
+
         xdir = Math.cos(direction);
         ydir = Math.sin(direction);
     }
@@ -46,6 +44,16 @@ public class Gravity extends AbstractForce {
     @Override
     public void setExponent (double exponent) {
         this.mExponent = GRAVITY_EXPONENT;
+    }
+
+    @Override
+    public void toggleForce () {
+        if (!forceOn) {
+            forceOn = true;
+        }
+        else {
+            forceOn = false;
+        }
     }
 
 }
