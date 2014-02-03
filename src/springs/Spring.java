@@ -19,8 +19,8 @@ public class Spring extends PhysicalObjectRect{
 	private int mEndY;
 	private static double mWidth = 2.0;
 	private static double mHeight = 1.0;
-	private String springID = "spring";
-
+	
+	private static final String springID = "spring";
 	private static final int DEFAULT_KVAL = 1;
 	private static JGColor DEFAULT_COLOR = JGColor.blue;
 
@@ -28,7 +28,7 @@ public class Spring extends PhysicalObjectRect{
 	 * Spring constructor that sets private member attributes
 	 */
 	public Spring(Mass m1, Mass m2, double length, double k) {
-		super("spring", 1, DEFAULT_COLOR, mWidth, mHeight);
+		super(springID, 1, DEFAULT_COLOR, mWidth, mHeight);
 		mStart = m1;
 		mEnd = m2;
 		mLength = length;

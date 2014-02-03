@@ -10,6 +10,8 @@ public class Mass extends PhysicalObjectCircle {
  
     EnvironmentForces mForces;
     int mMassId;
+    private static final String massID = "mass";
+    private float mX, mY;
 
     /**
      * This class represents the Mass objects in our Spring-Mass assemblies.
@@ -30,7 +32,7 @@ public class Mass extends PhysicalObjectCircle {
      * @param mass
      */
     public Mass (int mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y, double mass) {
-        super("mass", 0, JGColor.black, 1, mass);
+        super(massID, 0, JGColor.white, 1, mass);
         setPos(x_pos, y_pos);
         xspeed = init_vel_x;
         yspeed = init_vel_y;
@@ -79,5 +81,10 @@ public class Mass extends PhysicalObjectCircle {
         
         return total_force;
     }
-
+    public void setX(float x) {
+    	mX = x;
+    }
+    public void setY(float y) {
+    	mY = y;
+    }
 }

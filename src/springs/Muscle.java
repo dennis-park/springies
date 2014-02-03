@@ -1,5 +1,6 @@
 package springs;
 
-public class Muscle {
+public class Muscle extends Spring{
+	
 
 }
