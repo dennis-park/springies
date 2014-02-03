@@ -4,6 +4,7 @@ import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class XMLParser extends DefaultHandler{     
+    boolean isCorrectModel = false;
     protected int mNodeNum;
     
     public static String convertToFileURL(String filename) {
@@ -28,6 +29,13 @@ public class XMLParser extends DefaultHandler{
             System.out.printf("%s=%s\t", atts.getLocalName(i), atts.getValue(i));
         }
         System.out.print("\n");
+    }
+    
+    public void endDocument () throws SAXException {
+        if (!isCorrectModel) {
+            System.out.printf("Entered wrong XML document for model/environment\n");
+            System.exit(0);
+        }
     }
     
     protected void malformedXML(Attributes a) {

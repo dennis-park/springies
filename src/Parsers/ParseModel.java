@@ -11,14 +11,12 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 public class ParseModel extends XMLParser {
-    boolean isEnvXML;
-    int mNodeNum;
-    HashMap<String, Mass> mMasses;
-    ArrayList<Spring> mSprings;
-    ArrayList<Muscle> mMuscles;
+    protected int mNodeNum;
+    protected HashMap<String, Mass> mMasses;
+    protected ArrayList<Spring> mSprings;
+    protected ArrayList<Muscle> mMuscles;
 
     public ParseModel () {
-        isEnvXML = false;
         mMasses = new HashMap<String, Mass>();
         mSprings = new ArrayList<Spring>();
         mMuscles = new ArrayList<Muscle>();
@@ -31,7 +29,7 @@ public class ParseModel extends XMLParser {
                                               throws SAXException {
 
         if (localName.equals("model")) {
-            isEnvXML = true;
+            this.isCorrectModel = true;
         }
         else if (localName.equals("mass")) {
             parseMass(atts);
@@ -46,13 +44,6 @@ public class ParseModel extends XMLParser {
             parseMuscle(atts);
         }
         mNodeNum++;
-    }
-
-    public void endDocument () throws SAXException {
-        System.out
-                .printf("%d nodes read, %d masses added, %d springs added, %d muscles added\n",
-                        mNodeNum, mMasses.size(), mSprings.size(),
-                        mMuscles.size());
     }
 
     private void parseMass (Attributes a) {
