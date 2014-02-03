@@ -11,7 +11,6 @@ import jgame.JGColor;
 public class Mass extends PhysicalObjectCircle {
     private double mMass;
     protected ArrayList<Spring> mSpringList = new ArrayList<Spring>();
-    EnvironmentForces mForces;
 
     private static final int COLLISION_ID = 0;
     private static final int DEFAULT_RADIUS = 5;
@@ -90,11 +89,7 @@ public class Mass extends PhysicalObjectCircle {
      * 
      */
     protected Vec2 calcAllWorldForces() {
-        Vec2 total_force = new Vec2();
-        total_force.addLocal(mForces.getViscosity());
-        total_force.addLocal(mForces.getCenterOfMass());
-        total_force.addLocal(mForces.getWallRepulsion());
-        return total_force;
+
     }
     public double getMass() {
     	return this.mMass;
