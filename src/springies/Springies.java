@@ -77,13 +77,13 @@ public class Springies extends JGEngine
     }
     
     
-    private void callXMLParser(String filename) throws Exception {
+    public void callXMLParser(String filename, XMLParser parser) throws Exception {
         SAXParserFactory spf = SAXParserFactory.newInstance();
         spf.setNamespaceAware(true);
         SAXParser saxParser = spf.newSAXParser();   
         
         XMLReader xmlReader = saxParser.getXMLReader();
-        xmlReader.setContentHandler(new ParseModel());
+        xmlReader.setContentHandler(parser);
         xmlReader.parse(XMLParser.convertToFileURL(filename));
     }
 

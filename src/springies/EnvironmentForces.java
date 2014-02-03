@@ -10,6 +10,8 @@ public class EnvironmentForces {
     private Vec2 mCenterOfMass;
     private Vec2 mWallRepulsion;
     private Springies springies;
+    
+    private static final String FILE_LOCATION = "assets/environmental.xml";
 
     double mGravMag;
     double mViscMag;
@@ -17,21 +19,14 @@ public class EnvironmentForces {
     double[] mWallMag = new double[4];
     double[] mWallExp = new double[4];
     
-    public EnvironmentForces() {
-    	readXML();
-    }
-
-    private void readXML(String xml_fn) {
-        EnvironmentXMLReader envreader = new EnvironmentXMLReader(xml_fn);
-        
+    public EnvironmentForces(Springies springies) {
+    	this.springies = springies;
+    	springies.callXMLParser(FILE_LOCATION, new ParseEnv());
     }
     
     public void doForces() {
-    	WorldManager.getWorld().
     }
 
-    
-    
     public Vec2 Gravity () {
         if (mGravity != null) {
         	WorldManager.getWorld().setGravity(
