@@ -15,7 +15,6 @@ import springies.EnvironmentForces;
  * This class also controls all the global environment forces which act upon all the
  * objects with mass in the Springies world.
  * 
- * @author Thanh-Ha
  * 
  */
 public class WorldManager
