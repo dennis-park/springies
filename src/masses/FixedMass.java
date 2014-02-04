@@ -9,9 +9,4 @@ public class FixedMass extends Mass {
         super(id, x, y);
     }
 
-    @Override
-    public void applyAllWorldForces () {
-
-    }
-
 }

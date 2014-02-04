@@ -2,7 +2,6 @@ package masses;
 
 import java.util.ArrayList;
 import org.jbox2d.common.Vec2;
-import springies.EnvironmentForces;
 import springs.Spring;
 import jboxGlue.*;
 import jgame.JGColor;
@@ -12,14 +11,14 @@ public class Mass extends PhysicalObjectCircle {
     private double mMass;
     protected ArrayList<Spring> mSpringList = new ArrayList<Spring>();
 
-    private static final int COLLISION_ID = 0;
+    private static final int COLLISION_ID = 1;
     private static final int DEFAULT_RADIUS = 5;
     private static final JGColor DEFAULT_COLOR = JGColor.white;
     private static final double DEFAULT_XPOS = 0.0;
     private static final double DEFAULT_YPOS = 0.0;
     private static final double DEFAULT_XVEL = 0.0;
     private static final double DEFAULT_YVEL = 0.0;
-    private static final double DEFAULT_MASS = 0.0;
+    private static final double DEFAULT_MASS = 1.0 / (Math.PI * DEFAULT_RADIUS * DEFAULT_RADIUS);
     
     /**
      * This class represents the Mass objects in our Spring-Mass assemblies.
@@ -45,7 +44,7 @@ public class Mass extends PhysicalObjectCircle {
         setPos(x_pos, y_pos);
         xspeed = init_vel_x;
         yspeed = init_vel_y;
-        mForces = WorldManager.getWorldForces();
+        System.out.printf("Ball's mass is %.2f\n", this.getBody().m_mass);
     }
     public Mass (String mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y) {
         this(mass_id, x_pos, y_pos, init_vel_x, init_vel_y, 1);
@@ -66,7 +65,6 @@ public class Mass extends PhysicalObjectCircle {
      * applyAllWorldForces() will set the global force acting on the Mass object 
      */
     public void move() {
-        // applyAllWorldForces();
         super.move();
     }
     
@@ -77,20 +75,11 @@ public class Mass extends PhysicalObjectCircle {
      * Apply all the world forces
      * 
      */
-    public void applyAllWorldForces ()
+    public void applyForceVector (Vec2 force)
     {
-        Vec2 all_world_forces = calcAllWorldForces();
-        myBody.applyForce(all_world_forces, myBody.m_xf.position);
+        myBody.applyForce(force, myBody.m_xf.position);
     }
     
-    /**
-     * Calculate all the environmental forces that will (not including gravity)
-     * Spring force is NOT an environmental force.
-     * 
-     */
-    protected Vec2 calcAllWorldForces() {
-
-    }
     public double getMass() {
     	return this.mMass;
     }

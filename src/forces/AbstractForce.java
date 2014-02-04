@@ -2,11 +2,9 @@ package forces;
 
 import org.jbox2d.common.Vec2;
 
-public abstract class AbstractForce {
+public class AbstractForce {
     protected double mMagnitude;
     protected double mDirection;
-    protected double xdir;
-    protected double ydir;
     protected double mExponent;
     protected boolean forceOn;
     
@@ -21,13 +19,27 @@ public abstract class AbstractForce {
      * @param y
      * @return
      */
-    public abstract void toggleForce();
+    public Vec2 calculateForce() {
+        return new Vec2(0.0f, 0.0f);
+    }
+   
+    public void turnOn () {
+        forceOn = true;
+    }
     
-    public abstract Vec2 calculateForce(double x, double y);
+    public void turnOff () {
+        forceOn = false;
+    }
     
-    public abstract void setMagnitude(double magnitude);
+    public void setMagnitude (double magnitude) {
+        this.mMagnitude = magnitude;
+    }
     
-    public abstract void setDirection(double direction);
-    
-    public abstract void setExponent(double exponent);
+    public void setDirection (double direction) {
+        this.mDirection = direction;
+    }
+
+    public void setExponent (double exponent) {
+        this.mExponent = exponent;
+    }
 }

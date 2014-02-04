@@ -66,8 +66,9 @@ public class PhysicalObjectRect extends PhysicalObject
         createBody(shape);
         setBBox(-(int) width / 2, -(int) height / 2, (int) width, (int) height);
     }
+
     @Override
-    public void paintShape()
+    public void paintShape ()
     {
         if (myPolyx == null || myPolyy == null)
         {
