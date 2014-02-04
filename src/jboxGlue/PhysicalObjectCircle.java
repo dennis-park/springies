@@ -6,7 +6,7 @@ import org.jbox2d.collision.CircleDef;
 
 public class PhysicalObjectCircle extends PhysicalObject
 {
-    protected double myRadius;
+    private double myRadius;
 
     public PhysicalObjectCircle (String id,
                                  int collisionId,
@@ -44,21 +44,15 @@ public class PhysicalObjectCircle extends PhysicalObject
         init(radius, mass);
     }
 
-    /**
-     * Initialize the circle physical object given a radius and mass 
-     * @param radius
-     * @param mass
-     */
     private void init (double radius, double mass)
     {
         // save arguments
-        this.myRadius = radius;
+        myRadius = radius;
         int intRadius = (int)radius;
         // make it a circle
         CircleDef shape = new CircleDef();
-        shape.radius = (float) radius;
-        shape.density = (float) mass;
-        // shape.density = (float) (mass / (Math.PI * radius * radius));
+        shape.radius = (float)radius;
+        shape.density = (float)mass;
         createBody(shape);
         setBBox(-intRadius, -intRadius, 2 * intRadius, 2 * intRadius);
     }

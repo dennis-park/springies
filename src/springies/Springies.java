@@ -1,14 +1,15 @@
 package springies;
 
-import Parsers.*;
-import jboxGlue.*;
+import jboxGlue.PhysicalObject;
+import jboxGlue.PhysicalObjectCircle;
+import jboxGlue.PhysicalObjectRect;
+import jboxGlue.WorldManager;
 import jgame.JGColor;
 import jgame.JGObject;
 import jgame.platform.JGEngine;
 import org.jbox2d.common.Vec2;
 import masses.Mass;
-import javax.xml.parsers.*;
-import org.xml.sax.XMLReader;
+
 
 @SuppressWarnings("serial")
 public class Springies extends JGEngine
@@ -44,7 +45,7 @@ public class Springies extends JGEngine
         // so gravity is up in world coords and down in game coords
         // so set all directions (e.g., forces, velocities) in world coords
         WorldManager.initWorld(this);
-        WorldManager.getWorld().setGravity(new Vec2(0.0f, 1.0f));
+        WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.5f));
         addBall();
         addWalls();
     }
@@ -53,8 +54,10 @@ public class Springies extends JGEngine
     {
         // add a bouncy ball
         // NOTE: you could make this into a separate class, but I'm lazy
-        PhysicalObject ball = new Mass("m0", (double) displayWidth() / 2, (double) displayHeight() / 2, 1.0, 0.0) {
- 
+        double xpos = displayWidth() / 2;
+        double ypos = displayHeight() / 2;
+        PhysicalObject ball = new Mass("m0", xpos, ypos) {
+        //PhysicalObject ball = new PhysicalObjectCircle("ball", 1, JGColor.blue, 10, 5) {
             @Override
             public void hit (JGObject other)
             {
@@ -73,18 +76,7 @@ public class Springies extends JGEngine
                 myBody.setLinearVelocity(velocity);
             }
         };
-        ball.setForce(8000, -10000);
-    }
-    
-    
-    public void callXMLParser(String filename, XMLParser parser) throws Exception {
-        SAXParserFactory spf = SAXParserFactory.newInstance();
-        spf.setNamespaceAware(true);
-        SAXParser saxParser = spf.newSAXParser();   
-        
-        XMLReader xmlReader = saxParser.getXMLReader();
-        xmlReader.setContentHandler(parser);
-        xmlReader.parse(XMLParser.convertToFileURL(filename));
+        //ball.setForce(80, -10);
     }
 
     private void addWalls ()
