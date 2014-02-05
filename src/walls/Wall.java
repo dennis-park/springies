@@ -13,8 +13,6 @@ public class Wall extends PhysicalObjectRect{
 	public double mHeight;
 	public static double DEFAULT_MASS = 0.0;
 	public static int wallid;
-	private double mWallMag;
-	private double mWallExp;
 	private Springies mSpringies;
 	
 	public Wall(Springies springies,
@@ -28,12 +26,6 @@ public class Wall extends PhysicalObjectRect{
 	public Wall(double width,
 				double height) {
 		super("wall", 2, JGColor.green, width, height);
-	}
-	public void setWallMag(double magnitude) {
-		mWallMag = magnitude;
-	}
-	public void setWallExp(double exponent) {
-		mWallExp = exponent;
 	}
 	@Override
 	public void move() {
