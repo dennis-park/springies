@@ -1,7 +1,10 @@
 package masses;
 
 import java.util.ArrayList;
+
 import org.jbox2d.common.Vec2;
+
+import forces.ForceManager;
 import springs.Spring;
 import jboxGlue.*;
 import jgame.JGColor;
@@ -49,7 +52,6 @@ public class Mass extends PhysicalObjectCircle {
     public Mass (String mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y) {
         this(mass_id, x_pos, y_pos, init_vel_x, init_vel_y, 1);
     }
-
     public Mass (String mass_id, double x_pos, double y_pos, double mass) {
         this(mass_id, x_pos, y_pos, DEFAULT_XVEL, DEFAULT_YVEL, mass); 
     }

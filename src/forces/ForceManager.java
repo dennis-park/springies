@@ -48,7 +48,6 @@ public class ForceManager {
             e.printStackTrace();
             System.exit(1);
         }
-        
         mGravity = parser.getGravity();
         mViscosity = parser.getViscosity();
         mCOM = parser.getCOM();
@@ -86,14 +85,14 @@ public class ForceManager {
     	}
     }
     public void applyCOM() {
-    	if (toggleMap.get(VISC)) {
+    	if (toggleMap.get(COM)) {
     		/**
     		 * TODO: iterate through hashmap of masses
     		 */
     	}
     }
     public void applyWallRepulsion() {
-    	if (toggleMap.get(VISC)) {
+    	if (toggleMap.get(WALL)) {
     		/**
     		 * TODO: iterate through hashmap of masses
     		 */
