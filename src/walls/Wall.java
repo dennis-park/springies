@@ -9,7 +9,6 @@ import jboxGlue.PhysicalObjectRect;
 import jgame.JGColor;
 
 public class Wall extends PhysicalObjectRect{
-
 	public double mWidth;
 	public double mHeight;
 	public static double DEFAULT_MASS = 0.0;
@@ -36,6 +35,10 @@ public class Wall extends PhysicalObjectRect{
 	public void setWallExp(double exponent) {
 		mWallExp = exponent;
 	}
+	@Override
+	public void move() {
+		
+	}
 	/*public void applyForce() {
 		for (Mass m : mSpringies.getAssemblyMap().values) {
 			
@@ -43,7 +46,6 @@ public class Wall extends PhysicalObjectRect{
 	}
 	
 */
-
 	
 	/*
     wall.setPos(displayWidth() / 2, WALL_MARGIN);
