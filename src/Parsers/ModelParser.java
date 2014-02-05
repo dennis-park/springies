@@ -8,7 +8,6 @@ import java.util.HashMap;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-
 public class ModelParser extends XMLParser {
     protected Springies mSpringies;
     protected HashMap<String, Mass> mMasses;
