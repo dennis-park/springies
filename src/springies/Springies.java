@@ -2,13 +2,17 @@ package springies;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import jboxGlue.PhysicalObject;
 import jboxGlue.PhysicalObjectRect;
 import jboxGlue.WorldManager;
 import jgame.JGColor;
 import jgame.JGObject;
 import jgame.platform.JGEngine;
+
 import org.jbox2d.common.Vec2;
+
+import forces.ForceManager;
 import springs.Spring;
 import masses.Mass;
 
@@ -18,6 +22,7 @@ public class Springies extends JGEngine
 {
     private HashMap<String, Mass> mMassMap;
     private ArrayList<Spring> mSpringsList;
+    //public ForceManager mFManager = new ForceManager();
     
     public Springies ()
     {
@@ -116,6 +121,9 @@ public class Springies extends JGEngine
         WorldManager.getWorld().step(1f, 1);
         moveObjects();
         checkCollision(1 + 2, 1);
+        /**
+         * iterate through massmap to do forcemanager.doforces
+         */
     }
 
     @Override
