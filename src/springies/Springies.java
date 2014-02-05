@@ -1,5 +1,6 @@
 package springies;
 
+import java.util.ArrayList;
 import jboxGlue.PhysicalObject;
 import jboxGlue.PhysicalObjectCircle;
 import jboxGlue.PhysicalObjectRect;
@@ -14,6 +15,7 @@ import masses.Mass;
 @SuppressWarnings("serial")
 public class Springies extends JGEngine
 {
+    private ArrayList<Mass> mMassList;
     public Springies ()
     {
         // set the window size
@@ -115,5 +117,9 @@ public class Springies extends JGEngine
     {
         // nothing to do
         // the objects paint themselves
+    }
+    
+    public ArrayList<Mass> getMassList() {
+        return mMassList;
     }
 }

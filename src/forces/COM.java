@@ -5,6 +5,7 @@ import masses.Mass;
 import org.jbox2d.common.Vec2;
 
 public class COM extends AbstractForce {
+    private static double DEFAULT_MAGNITUDE = 50;
     private static double DEFAULT_EXPONENT = 0.0;
     private List<Mass> mList;
 
@@ -24,16 +25,12 @@ public class COM extends AbstractForce {
         mList = mass_list;
     }
 
-    public COM (double magnitude, double exponent) {
-        this(magnitude, exponent, null);
+    public COM (double magnitude, List<Mass> mass_list) {
+        this(magnitude, DEFAULT_EXPONENT, mass_list);
     }
-
-    public COM (double magnitude) {
-        this(magnitude, DEFAULT_EXPONENT, null);
-    }
-
-    public void addMassList (List<Mass> mass_list) {
-        mList = mass_list;
+    
+    public COM (List<Mass> mass_list) {
+        this(DEFAULT_MAGNITUDE, DEFAULT_EXPONENT, mass_list);
     }
 
     /**
