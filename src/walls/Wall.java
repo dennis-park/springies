@@ -1,7 +1,12 @@
 package walls;
 
 import java.util.HashMap;
+
+import masses.Mass;
+
 import org.jbox2d.common.Vec2;
+
+import springies.Springies;
 import jboxGlue.PhysicalObject;
 import jboxGlue.PhysicalObjectRect;
 import jgame.JGColor;
@@ -14,8 +19,10 @@ public class Wall extends PhysicalObjectRect{
 	public static int wallid;
 	private double mWallMag;
 	private double mWallExp;
+	private Springies mSpringies;
 	
-	public Wall(double width,
+	public Wall(Springies springies,
+				double width,
 				double height,
 				double magnitude,
 				double exponent) {
@@ -26,7 +33,11 @@ public class Wall extends PhysicalObjectRect{
 		mWallExp = exponent;
 	}
 
-	
+	public void applyForce() {
+		for (Mass m : mSpringies.getAssemblyMap) {
+			
+		}
+	}
 	
 
 

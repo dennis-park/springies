@@ -10,13 +10,13 @@ import java.util.Hashtable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
-public class ParseModel extends XMLParser {
+public class ModelParser extends XMLParser {
     protected int mNodeNum;
     protected HashMap<String, Mass> mMasses;
     protected ArrayList<Spring> mSprings;
     protected ArrayList<Muscle> mMuscles;
 
-    public ParseModel () {
+    public ModelParser () {
         mMasses = new HashMap<String, Mass>();
         mSprings = new ArrayList<Spring>();
         mMuscles = new ArrayList<Muscle>();
