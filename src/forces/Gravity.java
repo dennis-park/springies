@@ -2,7 +2,7 @@ package forces;
 
 import org.jbox2d.common.Vec2;
 
-public class Gravity extends AbstractForce {
+public class Gravity extends Force {
 
     private static double GRAVITY_DIRECTION = 90;
 
@@ -15,6 +15,7 @@ public class Gravity extends AbstractForce {
         mDirection = direction;
     }
 
+    @Override
     public Vec2 calculateForce() {
         Vec2 gravity = new Vec2();
         float x_f = (float) (this.mMagnitude * Math.cos(mDirection));
