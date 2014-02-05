@@ -72,7 +72,7 @@ public class Mass extends PhysicalObjectCircle {
     	mSpringList.add(spring);
     }
     /**
-     * Apply all the world forces
+     * Apply specified force vector
      * 
      */
     public void applyForceVector (Vec2 force)
