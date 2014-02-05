@@ -1,27 +1,33 @@
 package springies;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import jboxGlue.PhysicalObject;
-import jboxGlue.PhysicalObjectCircle;
 import jboxGlue.PhysicalObjectRect;
 import jboxGlue.WorldManager;
 import jgame.JGColor;
 import jgame.JGObject;
 import jgame.platform.JGEngine;
 import org.jbox2d.common.Vec2;
+import springs.Spring;
 import masses.Mass;
 
 
 @SuppressWarnings("serial")
 public class Springies extends JGEngine
 {
-    private ArrayList<Mass> mMassList;
+    private HashMap<String, Mass> mMassMap;
+    private ArrayList<Spring> mSpringsList;
+    
     public Springies ()
     {
         // set the window size
         int height = 480;
         double aspect = 16.0 / 9.0;
         initEngineComponent((int) (height * aspect), height);
+        
+        mMassMap = new HashMap<String, Mass>();
+        mSpringsList = (new ArrayList<Spring>());
     }
 
     @Override
@@ -119,7 +125,19 @@ public class Springies extends JGEngine
         // the objects paint themselves
     }
     
-    public ArrayList<Mass> getMassList() {
-        return mMassList;
+    public HashMap<String, Mass> getMassMap() {
+        return mMassMap;
+    }
+    
+    public void setMassMap(HashMap<String, Mass> mass_list) {
+        this.mMassMap = mass_list;
+    }
+
+    public ArrayList<Spring>  getSpringsList () {
+        return mSpringsList;
+    }
+
+    public void setSpringsList (ArrayList<Spring>  springs_list) {
+        this.mSpringsList = springs_list;
     }
 }

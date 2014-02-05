@@ -1,5 +1,7 @@
 package Parsers;
 import java.util.ArrayList;
+import java.util.Collection;
+import masses.Mass;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import springies.Springies;
@@ -61,7 +63,8 @@ public class EnvironmentParser extends XMLParser {
         }
         double mag = Double.parseDouble(a.getValue(MAGNITUDE));
         double exp = Double.parseDouble(a.getValue(EXPONENT));
-        mCOM = new COM(mag, exp, mSpringies.getMassList());
+        Collection<Mass> mass_list = mSpringies.getMassMap().values();
+        mCOM = new COM(mag, exp, mass_list);
     }
 
     private void parseViscosity (Attributes a) {
