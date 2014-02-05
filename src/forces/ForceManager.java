@@ -42,5 +42,6 @@ public class ForceManager {
         mCOM = parser.getCOM();
         mWallRepulsionList = parser.getWallRepulsionList();
     }
+
     
 }
