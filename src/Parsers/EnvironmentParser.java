@@ -1,9 +1,12 @@
 package Parsers;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import masses.Mass;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import springies.Springies;
+import walls.*;
 import forces.*;
 
 public class EnvironmentParser extends XMLParser {
@@ -12,6 +15,7 @@ public class EnvironmentParser extends XMLParser {
     private Viscosity mViscosity;
     private COM mCOM;
     private List<WallRepulsion> mWallRepulsionList;
+    private HashMap<Integer, Wall> mWallList;
     
     protected static final String ID = "id";
     protected static final String MAGNITUDE = "magnitude";
@@ -20,8 +24,19 @@ public class EnvironmentParser extends XMLParser {
     
     public EnvironmentParser(Springies s) {
         mSpringies = s;
+        mWallRepulsionList = new ArrayList<WallRepulsion>();
+        mWallList = new HashMap<Integer, Wall>();
+        makeWalls();
     }
-    
+
+    private void makeWalls () {
+        mWallList.put(WallType.TOP_WALL, new Wall(WallType.TOP_WALL));
+        mWallList.put(WallType.BOTTOM_WALL, new Wall(WallType.BOTTOM_WALL));
+        mWallList.put(WallType.LEFT_WALL, new Wall(WallType.LEFT_WALL));
+        mWallList.put(WallType.RIGHT_WALL, new Wall(WallType.RIGHT_WALL));
+    }
+
+    @Override
     public void startElement (String namespaceURI,
                               String localName,
                               String qName,
@@ -50,10 +65,11 @@ public class EnvironmentParser extends XMLParser {
         if (a.getValue(ID) == null ||  a.getValue(MAGNITUDE) == null|| a.getValue(EXPONENT) == null) {
             this.malformedXML(a);
         }
+        
         int id = Integer.parseInt(a.getValue(ID));
         double mag = Double.parseDouble(a.getValue(MAGNITUDE));
         double exp = Double.parseDouble(a.getValue(EXPONENT));
-        WallRepulsion wall = new WallRepulsion(id, mag, exp);
+        WallRepulsion wall = new WallRepulsion(mWallList.get(id), mag, exp);
         mWallRepulsionList.add(wall);
     }
 

@@ -101,6 +101,8 @@ public abstract class PhysicalObject extends JGObject
         if (myBody != null) { 
             // set position of jbox2d object, not jgame object
             myBody.setXForm(new Vec2((float)x, (float)y), -myRotation);
+            this.x = x;
+            this.y = y;
         }
     }
 

@@ -17,11 +17,11 @@ public class ForceManager {
     protected COM mCOM;
     protected List<WallRepulsion> mWallRepulsionList;
     
-    public static final double DEFAULT_GRAVITY_MAGNITUDE = 20.0;
-    public static final double DEFAULT_VISCOSITY_MAGNITUDE = 0.8;
-    public static final double DEFAULT_COM_MAGNITUDE = 0.8;
-    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 50;
-    public static final double DEFAULT_EXPONENT = 0.0;
+    public static final double DEFAULT_GRAVITY_MAGNITUDE = 0.1;
+    public static final double DEFAULT_VISCOSITY_MAGNITUDE = 0.05;
+    public static final double DEFAULT_COM_MAGNITUDE = 0.1;
+    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 0.1;
+    public static final double DEFAULT_EXPONENT = 2.0;
     
     public static final Vec2 ZERO_VECTOR = new Vec2(0.0f, 0.0f);
     
@@ -35,15 +35,15 @@ public class ForceManager {
     private String COM = "com";
     private String WALL = "wall";
     
-    HashMap<String, Boolean> toggleMap = new HashMap<String, Boolean>();
+    HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
     
     public ForceManager(Springies s, Gravity g, Viscosity v, COM com, List<WallRepulsion> walls) {
         mSpringies = s;
         mGravity = g;
         mViscosity = v;
         mCOM = com;
-        mWallRepulsionList = walls;
-        
+        mWallRepulsionList = walls;        
+        initForceToggleMap();
     }
     public ForceManager(Springies s, String filename) {
         mSpringies = s;
@@ -62,18 +62,26 @@ public class ForceManager {
         mViscosity = parser.getViscosity();
         mCOM = parser.getCOM();
         mWallRepulsionList = parser.getWallRepulsionList();
-        toggleMap.put(GRAV, true);
-    	toggleMap.put(VISC, true);
-    	toggleMap.put(COM, true);
-    	toggleMap.put(WALL, true);
+        initForceToggleMap();
     }
     
     public ForceManager(Springies s) {
         mSpringies = s;
         mGravity = new Gravity(this.DEFAULT_GRAVITY_MAGNITUDE);
         mViscosity = new Viscosity(this.DEFAULT_VISCOSITY_MAGNITUDE);
-        mCOM = new COM(this.DEFAULT_COM_MAGNITUDE, s.getMassList());
+        mCOM = new COM(this.DEFAULT_COM_MAGNITUDE, this.DEFAULT_EXPONENT, s.getMassList());
         mWallRepulsionList = makeFourWalls(); 
+        for (Mass m: mSpringies.getMassList()) {
+            System.out.printf("In Force Manager: Mass in mass list: %s\n", m.getName());
+        }
+        initForceToggleMap();
+    }
+    
+    private void initForceToggleMap() {
+        mToggleMap.put(GRAV, true);
+        mToggleMap.put(VISC, true);
+        mToggleMap.put(COM, true);
+        mToggleMap.put(WALL, true);
     }
     
     private List<WallRepulsion> makeFourWalls () {
@@ -93,31 +101,32 @@ public class ForceManager {
         wall_list.add(bottom_repulsion);
         wall_list.add(left_repulsion);
         wall_list.add(right_repulsion);
-        return null;
+        
+        return wall_list;
     }
     
     public void toggleForces(String forceid) {
-    	toggleMap.put(forceid, !toggleMap.get(forceid));
+    	mToggleMap.put(forceid, !mToggleMap.get(forceid));
     }
     
     public void doForces() {
         for (Mass mass: mSpringies.getMassList()) {
-            System.out.printf("Forces being applied on mass %s\n", mass.getAnimId());
             applyForce(GRAV, mGravity, mass);
             applyForce(VISC, mViscosity, mass);
             applyForce(COM, mCOM, mass);
             for (WallRepulsion w: mWallRepulsionList) {
                 applyForce(WALL, w, mass);
             }
+            // System.out.printf("Force applied on mass (%s): <%.2f, %.2f>\n", mass.getName(), mass.getBody().m_force.x, mass.getBody().m_force.y);
         }
     }
     
     public void applyForce(String force_id, Force force, Mass mass) {
-        if (toggleMap.get(force_id)) {
-            WorldManager.getWorld().setGravity(force.calculateForce(mass));
+        if (mToggleMap.get(force_id)) {
+            mass.applyForceVector(force.calculateForce(mass));        
         } 
         else {
-            WorldManager.getWorld().setGravity(ZERO_VECTOR);
+            mass.applyForceVector(ZERO_VECTOR);
         }
     }
 }

@@ -10,8 +10,10 @@ import jgame.JGColor;
 import jgame.JGObject;
 import jgame.platform.JGEngine;
 import org.jbox2d.common.Vec2;
+import Parsers.*;
 import forces.ForceManager;
 import springs.Spring;
+import masses.FixedMass;
 import masses.Mass;
 
 
@@ -28,9 +30,6 @@ public class Springies extends JGEngine
         int height = 480;
         double aspect = 16.0 / 9.0;
         initEngineComponent((int) (height * aspect), height);
-        
-        mMassList = new ArrayList<Mass>();
-        mSpringsList = new ArrayList<Spring>();
     }
 
     @Override
@@ -49,6 +48,9 @@ public class Springies extends JGEngine
     @Override
     public void initGame ()
     {
+        mMassList = new ArrayList<Mass>();
+        mSpringsList = new ArrayList<Spring>();
+        
         setFrameRate(60, 2);
         // NOTE:
         //   world coordinates have y pointing down
@@ -56,15 +58,42 @@ public class Springies extends JGEngine
         // so gravity is up in world coords and down in game coords
         // so set all directions (e.g., forces, velocities) in world coords
         WorldManager.initWorld(this);
-        WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.5f));
-        addTestSpring(); 
-        for (Mass m: mMassList) {
-            System.out.printf("Mass in mass list: %s\n", m.getAnimId());
-        }
-        mForceManager = new ForceManager(this);
+        
+        String model_filename = "assets/daintywalker.xml";
+        String environment_filename = "assets/myEnvironment.xml";
+        //addTestSpring();
+        testSpringForce();
+        makeModelFromXML(model_filename);
+        
+        //mForceManager = new ForceManager(this);
+        mForceManager = new ForceManager(this, environment_filename);
         // NEED TO ADD CODE SO WE CAN UPDATE FORCE MANAGER AS NEW MASSES ARE ADDED
     }
 
+    private void makeModelFromXML (String filename) {
+        XMLParserCaller caller = new XMLParserCaller();
+        ModelParser parser = new ModelParser(this);
+        try {
+            caller.call(filename, parser);
+        }
+        catch (Exception e) {
+            System.out.println("Error: Unable to parse XML file");
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    public void testSpringForce() {
+        double xpos = displayWidth() / 2;
+        double ypos = displayHeight() / 2;
+        addMass(xpos, ypos + 200);
+        addFixedMass(xpos, ypos);
+        Mass mass1 = this.mMassList.get(0);
+        Mass mass2 = this.mMassList.get(1);
+        Spring newSpring1 = new Spring (mass1, mass2, 150, 1);
+        this.mSpringsList.add(newSpring1);
+    }
+    
     public void addTestSpring() {
         double xpos = displayWidth() / 2;
         double ypos = displayHeight() / 2;
@@ -72,7 +101,6 @@ public class Springies extends JGEngine
         addMass(xpos + 100, ypos + 20);
         addMass(xpos + 100, ypos - 20);
         addMass(xpos - 100, ypos - 20);
-        addWalls();
         Mass mass1 = this.mMassList.get(0);
         Mass mass2 = this.mMassList.get(1);
         Mass mass3 = this.mMassList.get(2);
@@ -84,57 +112,18 @@ public class Springies extends JGEngine
         this.mSpringsList.add(newSpring1);
         this.mSpringsList.add(newSpring2);
         this.mSpringsList.add(newSpring3);
-        this.mSpringsList.add(newSpring4);
-        
+        this.mSpringsList.add(newSpring4); 
     }
     
     public void addMass (double xpos, double ypos)
     {
-        // add a bouncy ball
-        // NOTE: you could make this into a separate class, but I'm lazy
-        Mass ball = new Mass("m0", xpos, ypos) {
-        //PhysicalObject ball = new PhysicalObjectCircle("ball", 1, JGColor.blue, 10, 5) {
-            @Override
-            public void hit (JGObject other)
-            {
-                // we hit something! bounce off it!
-                Vec2 velocity = myBody.getLinearVelocity();
-                // is it a tall wall?
-                final double DAMPING_FACTOR = 0.8;
-                boolean isSide = other.getBBox().height > other.getBBox().width;
-                if (isSide) {
-                    velocity.x *= -DAMPING_FACTOR;
-                }
-                else {
-                    velocity.y *= -DAMPING_FACTOR;
-                }
-                // apply the change
-                myBody.setLinearVelocity(velocity);
-            }
-        };
+        Mass ball = new Mass("m0", xpos, ypos);
         this.mMassList.add(ball);
     }
-
-    private void addWalls ()
+    public void addFixedMass (double xpos, double ypos)
     {
-//        // add walls to bounce off of
-//        // NOTE: immovable objects must have no mass
-//        final double WALL_MARGIN = 10;
-//        final double WALL_THICKNESS = 10;
-//        final double WALL_WIDTH = displayWidth() - WALL_MARGIN * 2 + WALL_THICKNESS;
-//        final double WALL_HEIGHT = displayHeight() - WALL_MARGIN * 2 + WALL_THICKNESS;
-//        PhysicalObject wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-//                                                     WALL_WIDTH, WALL_THICKNESS);
-//        wall.setPos(displayWidth() / 2, WALL_MARGIN);
-//        wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-//                                      WALL_WIDTH, WALL_THICKNESS);
-//        wall.setPos(displayWidth() / 2, displayHeight() - WALL_MARGIN);
-//        wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-//                                      WALL_THICKNESS, WALL_HEIGHT);
-//        wall.setPos(WALL_MARGIN, displayHeight() / 2);
-//        wall = new PhysicalObjectRect("wall", 2, JGColor.green,
-//                                      WALL_THICKNESS, WALL_HEIGHT);
-//        wall.setPos(displayWidth() - WALL_MARGIN, displayHeight() / 2);
+        FixedMass ball = new FixedMass("m0", xpos, ypos);
+        this.mMassList.add(ball);
     }
 
     @Override

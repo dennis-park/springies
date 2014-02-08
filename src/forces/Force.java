@@ -18,7 +18,7 @@ public class Force {
     protected double mMagnitude;
     protected double mDirection;
     protected double mExponent;
-//    protected boolean forceOn;
+
     
     /**
      * calculateForce will take as input an x and y value that can represent

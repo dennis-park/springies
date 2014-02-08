@@ -18,6 +18,11 @@ public class ModelParser extends XMLParser {
         mSpringies = s;
         mMassList = s.getMassList();
         mSprings = s.getSpringsList();
+        initMassMap();
+    }
+
+    private void initMassMap () {
+        mMassMap = new HashMap<String, Mass>();
     }
 
     public void makeMassHashMap () {
@@ -80,7 +85,7 @@ public class ModelParser extends XMLParser {
     }
 
     private void checkSpringMasses (Attributes a) {
-        if (a.getValue("a") == null || a.getValue("b") == null || a.getValue("restlength") == null) {
+        if (a.getValue("a") == null || a.getValue("b") == null) {
             malformedXML(a);
         }
         if (!checkMassesExist(a.getValue("a")) || !checkMassesExist(a.getValue("b"))) {
@@ -117,7 +122,7 @@ public class ModelParser extends XMLParser {
         }
         String mass_id = id;
         double x_pos = Double.parseDouble(x);
-        double y_pos = Double.parseDouble(y);
+        double y_pos = mSpringies.displayHeight() - Double.parseDouble(y);
         double obj_mass = 0.0;
         if (mass != null) {
             obj_mass = Double.parseDouble(mass);
@@ -137,7 +142,7 @@ public class ModelParser extends XMLParser {
         }
         String mass_id = id;
         double x_pos = Double.parseDouble(x);
-        double y_pos = Double.parseDouble(y);
+        double y_pos = mSpringies.displayHeight() - Double.parseDouble(y);
 
         if (init_x == null && init_y == null && mass == null) { return new Mass(mass_id, x_pos,
                                                                                 y_pos); }
@@ -150,6 +155,8 @@ public class ModelParser extends XMLParser {
     }
 
     private Spring createSpringObj (String m1_id, String m2_id, String restlength, String constant) {
+        System.out.printf("Parsing ... : %s\t%s\t%s\t%s\n", m1_id, m2_id, restlength, constant);
+        
         Mass m1 = mMassMap.get(m1_id);
         Mass m2 = mMassMap.get(m2_id);
         
@@ -157,10 +164,12 @@ public class ModelParser extends XMLParser {
         if (restlength == null && constant == null) { 
             newSpring = new Spring(m1, m2); 
         }
-        if (constant == null) { 
+        else if (constant == null) { 
             newSpring = new Spring(m1, m2, Double.parseDouble(restlength)); 
         }
-        newSpring = new Spring(m1, m2, Double.parseDouble(restlength), Double.parseDouble(constant));
+        else {
+            newSpring = new Spring(m1, m2, Double.parseDouble(restlength), Double.parseDouble(constant));
+        }
         m1.connectSpring(newSpring);
         m2.connectSpring(newSpring);
         return newSpring;
