@@ -12,8 +12,8 @@ public class Spring extends PhysicalObject{
 	private double mLength;
 	private double mKval;
 	
-	private static final int DEFAULT_KVAL = 1;
-	private static JGColor DEFAULT_COLOR = JGColor.blue;
+	public static final int DEFAULT_KVAL = 1;
+	public static JGColor DEFAULT_COLOR = JGColor.blue;
 
 	/**
 	 * Spring constructor that sets private member attributes

@@ -1,5 +1,6 @@
 package forces;
 
+import masses.Mass;
 import org.jbox2d.common.Vec2;
 
 /**
@@ -17,7 +18,7 @@ public class Force {
     protected double mMagnitude;
     protected double mDirection;
     protected double mExponent;
-    protected boolean forceOn;
+//    protected boolean forceOn;
     
     /**
      * calculateForce will take as input an x and y value that can represent
@@ -44,14 +45,18 @@ public class Force {
     public Vec2 calculateForce() {
         return new Vec2(0.0f, 0.0f);
     }
-   
-    public void turnOn () {
-        forceOn = true;
-    }
     
-    public void turnOff () {
-        forceOn = false;
+    public Vec2 calculateForce (Mass mass) {
+        return new Vec2(0.0f, 0.0f);
     }
+   
+//    public void turnOn () {
+//        forceOn = true;
+//    }
+//    
+//    public void turnOff () {
+//        forceOn = false;
+//    }
     
     public void setMagnitude (double magnitude) {
         this.mMagnitude = magnitude;

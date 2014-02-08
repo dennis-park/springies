@@ -8,6 +8,7 @@ import jgame.JGColor;
 
 
 public class Mass extends PhysicalObjectCircle {
+    private static int mMassNumber;
     private double mMass;
     protected ArrayList<Spring> mSpringList = new ArrayList<Spring>();
 
@@ -41,6 +42,14 @@ public class Mass extends PhysicalObjectCircle {
 
     public Mass (String mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y, double mass) {
         super(mass_id, COLLISION_ID, DEFAULT_COLOR, DEFAULT_RADIUS, mass);
+        setPos(x_pos, y_pos);
+        xspeed = init_vel_x;
+        yspeed = init_vel_y;
+        System.out.printf("Ball's mass is %.2f\n", this.getBody().m_mass);
+    }
+    
+    public Mass (double x_pos, double y_pos, double init_vel_x, double init_vel_y, double mass) {
+        super(String.format("m%d", mMassNumber++), COLLISION_ID, DEFAULT_COLOR, DEFAULT_RADIUS, mass);
         setPos(x_pos, y_pos);
         xspeed = init_vel_x;
         yspeed = init_vel_y;

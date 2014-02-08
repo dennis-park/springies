@@ -1,6 +1,6 @@
 package forces;
 
-import java.util.Collection;
+import java.util.List;
 import masses.Mass;
 import org.jbox2d.common.Vec2;
 
@@ -8,7 +8,7 @@ import org.jbox2d.common.Vec2;
 public class COM extends Force {
     private static final double DEFAULT_MAGNITUDE = 50;
     private static final double DEFAULT_EXPONENT = 0.0;
-    private Collection<Mass> mList;
+    private List<Mass> mList;
     private double x_com_pt;
     private double y_com_pt;
 
@@ -22,22 +22,22 @@ public class COM extends Force {
      * 
      * @param magnitude
      */
-    public COM (double magnitude, double exponent, Collection<Mass> mass_list) {
+    public COM (double magnitude, double exponent, List<Mass> mass_list) {
         mMagnitude = magnitude;
         mExponent = exponent;
         mList = mass_list;
         calculateCOMPoint();
     }
 
-    public COM (double magnitude, Collection<Mass> mass_list) {
+    public COM (double magnitude, List<Mass> mass_list) {
         this(magnitude, DEFAULT_EXPONENT, mass_list);
     }
 
-    public COM (Collection<Mass> mass_list) {
+    public COM (List<Mass> mass_list) {
         this(DEFAULT_MAGNITUDE, DEFAULT_EXPONENT, mass_list);
     }
 
-    public void setMassList(Collection<Mass> mass_list) {
+    public void setMassList(List<Mass> mass_list) {
         if (mass_list != null && mass_list.size() > 0) {
             this.mList = mass_list;
             calculateCOMPoint();
@@ -71,10 +71,12 @@ public class COM extends Force {
      * Calculations of center of mass forces takes the x and y positions as input and returns a Vec2
      * object representing the center of mass force acting on the mass at that position.
      */
-    public Vec2 calculateForce (double x_pos, double y_pos) {
+    public Vec2 calculateForce (Mass mass) {
         if (mList == null) { throw new RuntimeException(
                                                         "call addMassList(List<Mass>) before calculateForce()!"); }
 
+        double x_pos = mass.x;
+        double y_pos = mass.y;
         float x_f = (float) (x_com_pt - x_pos);
         float y_f = (float) (y_com_pt - y_pos);
 

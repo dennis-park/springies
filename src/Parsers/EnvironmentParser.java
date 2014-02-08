@@ -1,17 +1,17 @@
 package Parsers;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import masses.Mass;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import springies.Springies;
 import forces.*;
+
 public class EnvironmentParser extends XMLParser {
     private Springies mSpringies;
     private Gravity mGravity; 
     private Viscosity mViscosity;
     private COM mCOM;
-    private ArrayList<WallRepulsion> mWallRepulsionList;
+    private List<WallRepulsion> mWallRepulsionList;
     
     protected static final String ID = "id";
     protected static final String MAGNITUDE = "magnitude";
@@ -63,7 +63,7 @@ public class EnvironmentParser extends XMLParser {
         }
         double mag = Double.parseDouble(a.getValue(MAGNITUDE));
         double exp = Double.parseDouble(a.getValue(EXPONENT));
-        Collection<Mass> mass_list = mSpringies.getMassMap().values();
+        List<Mass> mass_list = mSpringies.getMassList();
         mCOM = new COM(mag, exp, mass_list);
     }
 
@@ -108,7 +108,7 @@ public class EnvironmentParser extends XMLParser {
         return mCOM;
     }
     
-    public ArrayList<WallRepulsion> getWallRepulsionList() {
+    public List<WallRepulsion> getWallRepulsionList() {
         if (mWallRepulsionList == null) {
             System.out.println("Error. Wall repulsion has not been initialized yet.");
             System.exit(1);

@@ -1,14 +1,20 @@
 package forces;
 
+import masses.Mass;
 import org.jbox2d.common.Vec2;
 import walls.Wall;
 
 
 public class WallRepulsion extends Force {
-    private static final double TOP = 90.0;
-    private static final double RIGHT = 0.0;
-    private static final double BOTTOM = 90.0;
-    private static final double LEFT = 0.0;
+    public static final double TOP_DIRECTION = 90.0;
+    public static final double RIGHT_DIRECTION = 0.0;
+    public static final double BOTTOM_DIRECTION = 90.0;
+    public static final double LEFT_DIRECTION = 0.0;
+    
+    public static final int TOP_ID = 1;
+    public static final int RIGHT_ID = 2;
+    public static final int BOTTOM_ID = 3;
+    public static final int LEFT_ID = 4;
 
     private Wall mWall;
     private int mWallId;
@@ -25,17 +31,7 @@ public class WallRepulsion extends Force {
         mExponent = exponent;
         mWall = wall;
         mWallId = wall.getWallId();
-
-        switch (wall.getWallId()) {
-            case 1:
-                this.mDirection = TOP;
-            case 2:
-                this.mDirection = RIGHT;
-            case 3:
-                this.mDirection = BOTTOM;
-            case 4:
-                this.mDirection = LEFT;
-        }
+        setWallDirection(mWall.getWallId());
     }
 
     /**
@@ -50,16 +46,19 @@ public class WallRepulsion extends Force {
     public WallRepulsion (int wall_id, double magnitude, double exponent) {
         mMagnitude = magnitude;
         mExponent = exponent;
-
+        setWallDirection(wall_id);
+    }
+    
+    private void setWallDirection(int wall_id) {
         switch (wall_id) {
-            case 1:
-                this.mDirection = TOP;
-            case 2:
-                this.mDirection = RIGHT;
-            case 3:
-                this.mDirection = BOTTOM;
-            case 4:
-                this.mDirection = LEFT;
+            case TOP_ID:
+                this.mDirection = TOP_DIRECTION;
+            case RIGHT_ID:
+                this.mDirection = RIGHT_DIRECTION;
+            case BOTTOM_ID:
+                this.mDirection = BOTTOM_DIRECTION;
+            case LEFT_ID:
+                this.mDirection = LEFT_DIRECTION;
         }
     }
 
@@ -74,7 +73,9 @@ public class WallRepulsion extends Force {
      * Calculations of WallRepulsion forces takes the x and y position as input and returns a Vec2
      * vector which can be used to calculate the effects of wall repulsion.
      */
-    public Vec2 calculateForce (double x_pos, double y_pos) {
+    public Vec2 calculateForce (Mass mass) {
+        double x_pos = mass.x;
+        double y_pos = mass.y;
         float x_distance = (float) (x_pos - this.mWall.x);
         float y_distance = (float) (this.mWall.y - y_pos);
 

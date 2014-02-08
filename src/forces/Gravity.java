@@ -1,5 +1,6 @@
 package forces;
 
+import masses.Mass;
 import org.jbox2d.common.Vec2;
 
 public class Gravity extends Force {
@@ -16,7 +17,7 @@ public class Gravity extends Force {
     }
 
     @Override
-    public Vec2 calculateForce() {
+    public Vec2 calculateForce(Mass mass) {
         Vec2 gravity = new Vec2();
         float x_f = (float) (this.mMagnitude * Math.cos(mDirection));
         float y_f = (float) (this.mMagnitude * Math.sin(mDirection));

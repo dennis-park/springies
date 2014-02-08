@@ -1,5 +1,6 @@
 package forces;
 
+import masses.Mass;
 import org.jbox2d.common.Vec2;
 
 public class Viscosity extends Force {
@@ -21,7 +22,9 @@ public class Viscosity extends Force {
      * Calculations of viscosity forces takes the x and y velocities as input and returns a Vec2
      * vector which can be used to calculate their effects of moving objects.
      */
-    public Vec2 calculateForce (double x_velocity, double y_velocity) {
+    public Vec2 calculateForce (Mass mass) {
+        double x_velocity = mass.xspeed;
+        double y_velocity = mass.yspeed;
         float x_f = (float) (x_velocity);
         float y_f = (float) (y_velocity);
 
@@ -33,3 +36,5 @@ public class Viscosity extends Force {
         return viscosity.mul(scalar);
     }
 }
+
+
