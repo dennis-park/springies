@@ -39,6 +39,12 @@ public class Assembly implements Iterable{
 		return this.mSprings;
 	}
 	
+	public double getCOM() {
+		
+		return 0;
+		
+	}
+	
 	public Assembly getAssembly() {
 		return this;
 	}
