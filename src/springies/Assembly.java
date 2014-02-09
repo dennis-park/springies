@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import Parsers.ModelParser;
 import springs.Muscle;
 import springs.Spring;
 import masses.FixedMass;
 import masses.Mass;
-import factory.Factory;
-import factory.ModelFactory;
 
 public class Assembly implements Iterable{
 	private ArrayList<Mass> mMasses;
 	private ArrayList<Spring> mSprings;
-	private Factory mFactory;
 	
 	public Assembly() {
 		mMasses = new ArrayList<Mass>();
@@ -41,8 +39,9 @@ public class Assembly implements Iterable{
 		return this.mSprings;
 	}
 	
-	public void updateAssembly(Springies s) {
-		ModelFactory factory = new ModelFactory(s);
+	public void makeAssembly(Springies s) {
+		ModelParser factory = new ModelParser(s);
+		
 	}
 	
 	public Assembly getAssembly() {
