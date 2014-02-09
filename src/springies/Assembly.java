@@ -4,15 +4,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import springs.Muscle;
 import springs.Spring;
 import masses.FixedMass;
 import masses.Mass;
 import factory.Factory;
+import factory.ModelFactory;
 
 public class Assembly implements Iterable{
 	private ArrayList<Mass> mMasses;
 	private ArrayList<Spring> mSprings;
-	
 	private Factory mFactory;
 	
 	public Assembly() {
@@ -23,12 +24,15 @@ public class Assembly implements Iterable{
 	public void add(Mass mass) {
 		mMasses.add(mass);
 	}
-	public void add(FixedMass fixedMass) {
+	/*public void add(FixedMass fixedMass) {
 		mMasses.add(fixedMass);
-	}
+	}*/
 	public void add(Spring spring) {
 		mSprings.add(spring);
 	}
+	/*public void add(Muscle muscle) {
+		mSprings.add(muscle);
+	}*/
 	
 	public ArrayList<Mass> getMassList() {
 		return this.mMasses;
@@ -37,13 +41,12 @@ public class Assembly implements Iterable{
 		return this.mSprings;
 	}
 	
-	public Assembly makeAssembly() {
-		Assembly assembly = null;
-		Factory factory = new Factory();
-		factory.makeSprings();
-		factory.makeMuscles();
-		assembly = new Assembly();
-		return assembly;
+	public void updateAssembly(Springies s) {
+		ModelFactory factory = new ModelFactory(s);
+	}
+	
+	public Assembly getAssembly() {
+		return this;
 	}
 
 	@Override
