@@ -1,13 +1,7 @@
 package springies;
 
-import java.awt.FileDialog;
-import java.awt.Frame;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import jboxGlue.PhysicalObject;
 import jboxGlue.PhysicalObjectRect;
@@ -34,8 +28,6 @@ public class Springies extends JGEngine
     private HashMap<String, Mass> mMassMap;
     private ArrayList<Spring> mSpringsList;
     private Wall[] mWallArray;
-    private XMLParserCaller mCaller;
-    private static final String ASSETS = "assets/";
     
     //public ForceManager mFManager = new ForceManager();
     
@@ -149,39 +141,6 @@ public class Springies extends JGEngine
     
     public HashMap<String, Mass> getMassMap() {
         return mMassMap;
-    }
-    
-    public void addAssembly() {
-    	JFileChooser chooser = new JFileChooser();
-    	FileNameExtensionFilter filter = new FileNameExtensionFilter()(
-    			"XML documents", "xml");
-    	chooser.setFileFilter(filter);
-    	int returnVal = chooser.showOpenDialog(getParent());
-    	if (returnVal == JFileChooser.APPROVE_OPTION) {
-    		File file = chooser.getSelectedFile();
-    		if (file != null && file.getAbsolutePath().equals(ASSETS+"environment.xml")) {
-    			ModelParser factory = new ModelParser(this);
-    			try {
-    				mCaller.call(ASSETS+file.getPath(), factory);
-    				Assembly a = new Assembly();
-    				for (Mass mass : factory.getAssemblyMasses().values()) {
-    					a.add(mass);
-    				}
-    				for (Spring spring : factory.getAssemblySprings()) {
-    					a.add(spring);
-    				}
-    				//a.addMuscles(factory.getAssemblyMuscles());
-    			} catch (Exception e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}
-    		}
-    	}
-    }
-    public void clearAssembly() {
-    	/**
-    	 * TODO
-    	 */
     }
     
     public void addMassMap(HashMap<String, Mass> massList) {

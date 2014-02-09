@@ -2,9 +2,13 @@ package Parsers;
 
 import masses.*;
 import springs.*;
+import springies.Assembly;
 import springies.Springies;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -12,7 +16,9 @@ public class ModelParser extends XMLParser {
     protected Springies mSpringies;
     protected HashMap<String, Mass> mMasses;
     protected ArrayList<Spring> mSprings;
-
+	private XMLParserCaller mCaller;
+	private static final String ASSETS = "assets/";
+    
     public ModelParser (Springies s) {
         mSpringies = s;
         mMasses = s.getMassMap();
@@ -181,5 +187,25 @@ public class ModelParser extends XMLParser {
     }
     public ArrayList<Spring> getAssemblySprings() {
     	return mSprings;
+    }
+    
+    public void loadFile(File file) {
+    	if (file != null && file.getAbsolutePath().equals(ASSETS+"environment.xml")) {
+			ModelParser factory = new ModelParser(mSpringies);
+			try {
+				mCaller.call(ASSETS+file.getPath(), factory);
+				Assembly a = new Assembly();
+				for (Mass mass : factory.getAssemblyMasses().values()) {
+					a.add(mass);
+				}
+				for (Spring spring : factory.getAssemblySprings()) {
+					a.add(spring);
+				}
+				//a.addMuscles(factory.getAssemblyMuscles());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
     }
 }
