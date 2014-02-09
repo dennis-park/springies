@@ -4,10 +4,13 @@ import java.util.Collection;
 import masses.Mass;
 import org.jbox2d.common.Vec2;
 
-public class COM extends AbstractForce {
-    private static double DEFAULT_MAGNITUDE = 50;
-    private static double DEFAULT_EXPONENT = 0.0;
+
+public class COM extends Force {
+    private static final double DEFAULT_MAGNITUDE = 50;
+    private static final double DEFAULT_EXPONENT = 0.0;
     private Collection<Mass> mList;
+    private double x_com_pt;
+    private double y_com_pt;
 
     /**
      * This is an imaginary force which attracts all masses toward their calculated center of mass.
@@ -23,46 +26,65 @@ public class COM extends AbstractForce {
         mMagnitude = magnitude;
         mExponent = exponent;
         mList = mass_list;
+        calculateCOMPoint();
     }
 
     public COM (double magnitude, Collection<Mass> mass_list) {
         this(magnitude, DEFAULT_EXPONENT, mass_list);
     }
-    
+
     public COM (Collection<Mass> mass_list) {
         this(DEFAULT_MAGNITUDE, DEFAULT_EXPONENT, mass_list);
     }
 
-    /**
-     * Calculations of center of mass forces takes the x and y positions as input and returns a Vec2
-     * vector which can be used to calculate their effects of moving objects.
-     */
-    public Vec2 calculateForce (double x, double y) {
-        if (mList == null) { 
-            throw new RuntimeException("call addMassList(List<Mass>) before calculateForce()!"); 
+    public void setMassList(Collection<Mass> mass_list) {
+        if (mass_list != null && mass_list.size() > 0) {
+            this.mList = mass_list;
+            calculateCOMPoint();
         }
-        double x_total = 0.;
-        double y_total = 0.;
+    }
+    /**
+     * Calculations of the center of gravity point based on the list of all masses 
+     * R = (1/M) sum (m*r). 
+     */
+    public void calculateCOMPoint () {
+        if (mList == null || mList.size() == 0) { 
+            throw new RuntimeException("call addMassList(List<Mass>) with a MassList of size > 0!"); 
+        }
+
+        double sum_mass = 0.0;
+        double sum_mr_x = 0.0;
+        double sum_mr_y = 0.0;
 
         for (Mass m : mList) {
-            double mass_val = m.getMass();
-            
-            x_total += m.x;
-            y_total += m.y;
+            double mass = m.getMass();
+            sum_mr_x += mass * m.x;
+            sum_mr_y += mass * m.y;
+            sum_mass += mass;
         }
-        double x_com = x_total / mList.size();
-        double y_com = y_total / mList.size();
 
-        Vec2 com = new Vec2();
-        float x_f = (float) (x_com - x);
-        float y_f = (float) (y_com - y);
-        com.set(x_f, y_f);
-        com.normalize();
-        com =
-                com.mul((float) (mMagnitude / Math.pow(
-                                                       Math.sqrt(Math.pow(x_com - x, 2)
-                                                                 + Math.pow(y_com - y, 2)),
-                                                       mExponent)));
-        return com;
+        x_com_pt = (1 / sum_mass) * sum_mr_x;
+        y_com_pt = (1 / sum_mass) * sum_mr_y;
+    }
+
+    /**
+     * Calculations of center of mass forces takes the x and y positions as input and returns a Vec2
+     * object representing the center of mass force acting on the mass at that position.
+     */
+    public Vec2 calculateForce (double x_pos, double y_pos) {
+        if (mList == null) { throw new RuntimeException(
+                                                        "call addMassList(List<Mass>) before calculateForce()!"); }
+
+        float x_f = (float) (x_com_pt - x_pos);
+        float y_f = (float) (y_com_pt - y_pos);
+
+        Vec2 force = new Vec2();
+        force.set(x_f, y_f);
+
+        float distance = force.length();
+        float total_magnitude = (float) (mMagnitude / Math.pow(distance, mExponent));
+
+        force.normalize();
+        return force.mul(total_magnitude);
     }
 }
