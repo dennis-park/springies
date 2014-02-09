@@ -160,4 +160,9 @@ public class Springies extends JGEngine
     public void setSpringsList (ArrayList<Spring>  springList) {
         this.mSpringsList = springList;
     }
+
+	public void clearLoadedAssemblies() {
+		// TODO Auto-generated method stub
+		
+	}
 }
