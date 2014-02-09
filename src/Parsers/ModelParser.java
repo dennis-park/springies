@@ -176,4 +176,10 @@ public class ModelParser extends XMLParser {
         return newMuscle;
     }
 
+    public HashMap<String, Mass> getAssemblyMasses() {
+    	return mMasses;
+    }
+    public ArrayList<Spring> getAssemblySprings() {
+    	return mSprings;
+    }
 }

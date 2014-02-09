@@ -1,5 +1,7 @@
 package springies;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -12,16 +14,25 @@ import jgame.platform.JGEngine;
 
 import org.jbox2d.common.Vec2;
 
+import Parsers.ModelParser;
+import Parsers.XMLParserCaller;
 import forces.ForceManager;
 import springs.Spring;
+import walls.Wall;
 import masses.Mass;
 
 
 @SuppressWarnings("serial")
 public class Springies extends JGEngine
 {
+    public ArrayList<Assembly> assemblyList;
+ 
     private HashMap<String, Mass> mMassMap;
     private ArrayList<Spring> mSpringsList;
+    private Wall[] mWallArray;
+    private XMLParserCaller mCaller;
+    private static final String ASSETS = "assets/";
+    
     //public ForceManager mFManager = new ForceManager();
     
     public Springies ()
@@ -33,12 +44,12 @@ public class Springies extends JGEngine
         
         mMassMap = new HashMap<String, Mass>();
         mSpringsList = (new ArrayList<Spring>());
+        assemblyList = new ArrayList<Assembly>();
     }
 
     @Override
     public void initCanvas ()
     {
-        // I have no idea what tiles do...
         setCanvasSettings(1, // width of the canvas in tiles
                           1, // height of the canvas in tiles
                           displayWidth(), // width of one tile
@@ -121,31 +132,66 @@ public class Springies extends JGEngine
         WorldManager.getWorld().step(1f, 1);
         moveObjects();
         checkCollision(1 + 2, 1);
+        
         /**
          * iterate through massmap to do forcemanager.doforces
          */
     }
 
     @Override
-    public void paintFrame ()
-    {
-        // nothing to do
-        // the objects paint themselves
-    }
+    public void paintFrame () {}
+    
+    public Wall[] getWalls() {
+		return mWallArray;
+	}
     
     public HashMap<String, Mass> getMassMap() {
         return mMassMap;
     }
     
-    public void setMassMap(HashMap<String, Mass> mass_list) {
-        this.mMassMap = mass_list;
+    public void addAssembly() {
+    	FileDialog selector = new FileDialog(new Frame());
+		selector.setVisible(true);
+		if (selector.getFile() != null && !selector.getFile().equals("environment.xml")) {
+			ModelParser factory = new ModelParser(this);
+			try {
+				mCaller.call(ASSETS+selector.getFile(), factory);
+				Assembly a = new Assembly();
+				for (Mass mass : factory.getAssemblyMasses().values()) {
+					a.add(mass);
+				}
+				for (Spring spring : factory.getAssemblySprings()) {
+					a.add(spring);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			//a.addMuscles(factory.getAssemblyMuscles());
+		}
+    }
+    public void clearAssembly() {
+    	/**
+    	 * TODO
+    	 */
+    }
+    
+    public void addMassMap(HashMap<String, Mass> massList) {
+    	/**
+    	 * TODO
+    	 */
+    }
+    
+    public void setMassMap(HashMap<String, Mass> massList) {
+    	this.mMassMap = massList;
     }
 
     public ArrayList<Spring>  getSpringsList () {
         return mSpringsList;
     }
 
-    public void setSpringsList (ArrayList<Spring>  springs_list) {
-        this.mSpringsList = springs_list;
+    public void setSpringsList (ArrayList<Spring>  springList) {
+        this.mSpringsList = springList;
     }
 }

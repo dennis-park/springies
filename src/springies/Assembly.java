@@ -39,11 +39,6 @@ public class Assembly implements Iterable{
 		return this.mSprings;
 	}
 	
-	public void makeAssembly(Springies s) {
-		ModelParser factory = new ModelParser(s);
-		
-	}
-	
 	public Assembly getAssembly() {
 		return this;
 	}
