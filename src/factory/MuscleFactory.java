@@ -5,10 +5,10 @@ import springies.Springies;
 import springs.Muscle;
 
 public class MuscleFactory extends Factory{
-
+	
 	public MuscleFactory(Springies s) {
 		super(s);
-		// TODO Auto-generated constructor stub
+		mMasses = s.getMassMap();
 	}
 	public Muscle create (String m1_id, String m2_id, String restlength, String amplitude) {
         Mass m1 = mMasses.get(m1_id);

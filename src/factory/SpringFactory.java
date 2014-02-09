@@ -8,7 +8,6 @@ public class SpringFactory extends Factory{
 
 	public SpringFactory(Springies s) {
 		super(s);
-		// TODO Auto-generated constructor stub
 	}
 	private Spring create (String m1_id, String m2_id, String restlength, String constant) {
         Mass m1 = mMasses.get(m1_id);

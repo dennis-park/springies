@@ -19,7 +19,7 @@ public class Factory {
 	private static final String MUSCLE = "muscle";
 
 	// map with mass IDs
-	private HashMap<String, Mass> mMasses = new HashMap<String, Mass>();
+	protected HashMap<String, Mass> mMasses = new HashMap<String, Mass>();
 
 	private Assembly mAssembly = new Assembly();
 	
@@ -28,7 +28,6 @@ public class Factory {
 		mMasses = s.getMassMap();
 		mSprings = s.getSpringsList();
 	}
-	
 	
 	public void makeFixedMass (String id, String x, String y, String mass) {
 		if (id == null || x == null || y == null) {
