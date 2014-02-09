@@ -1,5 +1,6 @@
 package listeners;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -9,7 +10,7 @@ import Parsers.ModelParser;
 import springies.Springies;
 
 
-public class LoadNewAssemblyListener implements Listener{
+public class LoadNewAssemblyListener implements SpringiesListener{
 
 	private Springies mSpringies;
 
@@ -28,6 +29,24 @@ public class LoadNewAssemblyListener implements Listener{
 			File file = chooser.getSelectedFile();
 			new ModelParser(mSpringies).loadFile(file);
 		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
