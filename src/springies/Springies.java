@@ -1,6 +1,5 @@
 package springies;
 
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +23,7 @@ import org.jbox2d.common.Vec2;
 import springs.Spring;
 import walls.Wall;
 import Parsers.ModelParser;
+import forces.ForceManager;
 
 
 @SuppressWarnings("serial")
@@ -34,7 +34,7 @@ public class Springies extends JGEngine
     private ArrayList<Spring> mSpringsList;
     private Wall[] mWallArray;
     
-    //public ForceManager mFManager = new ForceManager();
+    public ForceManager mFManager;
     
     public Springies ()
     {
@@ -46,6 +46,7 @@ public class Springies extends JGEngine
         mMassMap = new HashMap<String, Mass>();
         mSpringsList = (new ArrayList<Spring>());
         assemblyList = new ArrayList<Assembly>();
+        //mFManager = new ForceManager();
     }
 
     @Override
