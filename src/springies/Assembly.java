@@ -10,7 +10,7 @@ import springs.Spring;
 import masses.FixedMass;
 import masses.Mass;
 
-public class Assembly implements Iterable{
+public class Assembly{
 	private ArrayList<Mass> mMasses;
 	private ArrayList<Spring> mSprings;
 	
@@ -48,11 +48,4 @@ public class Assembly implements Iterable{
 	public Assembly getAssembly() {
 		return this;
 	}
-
-	@Override
-	public Iterator iterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
