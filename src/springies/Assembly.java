@@ -1,13 +1,7 @@
 package springies;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import Parsers.ModelParser;
-import springs.Muscle;
 import springs.Spring;
-import masses.FixedMass;
 import masses.Mass;
 
 public class Assembly{

@@ -3,10 +3,12 @@ package forces;
 import masses.Mass;
 import org.jbox2d.common.Vec2;
 
-public class Gravity extends Force {
-
+public class Gravity implements Force {
     private static double GRAVITY_DIRECTION = Math.PI / 2; //90.0;
-
+    private double mMagnitude;
+	private double mExponent;
+	private double mDirection;
+	
     public Gravity (double magnitude) {
         this(magnitude, GRAVITY_DIRECTION);
     }
@@ -36,5 +38,15 @@ public class Gravity extends Force {
         System.out.printf("\tGravity vector: mag = %.2f, angle = %.2f, x = %.2f, y = %.2f\n", 
                           this.mMagnitude, this.mDirection, x_f, y_f);
     }
+
+	@Override
+	public Vec2 calculateForce(double x, double y) {
+		return null;
+	}
+
+	@Override
+	public Vec2 calculateForce() {
+		return null;
+	}
     
 }

@@ -5,11 +5,13 @@ import masses.Mass;
 import org.jbox2d.common.Vec2;
 
 
-public class COM extends Force {
+public class COM implements Force {
     private static final double DEFAULT_MAGNITUDE = 50;
     private static final double DEFAULT_EXPONENT = 0.0;
     private List<Mass> mList;
-    
+    private double mMagnitude;
+	private double mExponent;
+	
     /**
      * This is an imaginary force which attracts all masses toward their calculated center of mass.
      * In the data file, this force is indicated by the keyword centermass followed by a magnitude
@@ -104,4 +106,14 @@ public class COM extends Force {
         System.out.printf("\tCenter of Mass vector: mag = %.2f, exponent = %.2f, x = %.2f, y = %.2f\n", 
                           this.mMagnitude, this.mExponent, x_f, y_f);
     }
+
+	@Override
+	public Vec2 calculateForce(double x, double y) {
+		return null;
+	}
+
+	@Override
+	public Vec2 calculateForce() {
+		return null;
+	}
 }

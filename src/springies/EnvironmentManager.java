@@ -1,12 +1,19 @@
-package forces;
+package springies;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import masses.Mass;
+
 import org.jbox2d.common.Vec2;
+
+import forces.COM;
+import forces.Force;
+import forces.Gravity;
+import forces.Viscosity;
+import forces.WallRepulsion;
 import Parsers.*;
-import springies.Springies;
 import walls.Wall;
 
 public class EnvironmentManager {

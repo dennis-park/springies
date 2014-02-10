@@ -2,8 +2,8 @@ package listeners;
 
 import java.awt.event.KeyEvent;
 
+import springies.EnvironmentManager;
 import springies.Springies;
-import forces.EnvironmentManager;
 
 public class ToggleForceListener implements SpringiesListener{
 

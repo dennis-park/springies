@@ -22,7 +22,6 @@ import springs.Spring;
 import walls.Wall;
 import Parsers.ModelParser;
 import Parsers.XMLParserCaller;
-import forces.EnvironmentManager;
 
 @SuppressWarnings("serial")
 public class Springies extends JGEngine {
@@ -69,7 +68,7 @@ public class Springies extends JGEngine {
         // so gravity is up in world coords and down in game coords
         // so set all directions (e.g., forces, velocities) in world coords
         WorldManager.initWorld(this);
-        String model_filename = "assets/daintywalker.xml";
+        String model_filename = "assets/example.xml";
         String environment_filename = "assets/myEnvironment.xml";
         //addTestSpring();
         testSpringForce();
@@ -78,7 +77,6 @@ public class Springies extends JGEngine {
         mForceManager = new EnvironmentManager(this);
         //mForceManager = new EnvironmentManager(this, environment_filename);
         // NEED TO ADD CODE SO WE CAN UPDATE FORCE MANAGER AS NEW MASSES ARE ADDED
-        WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.5f));
         initListeners();
     }
 
