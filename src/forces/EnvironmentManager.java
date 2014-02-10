@@ -9,7 +9,7 @@ import Parsers.*;
 import springies.Springies;
 import walls.Wall;
 
-public class ForceManager {
+public class EnvironmentManager {
     protected Springies mSpringies;
     protected Gravity mGravity;
     protected Viscosity mViscosity;
@@ -36,7 +36,7 @@ public class ForceManager {
     
     HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
     
-    public ForceManager(Springies s, Gravity g, Viscosity v, COM com, List<WallRepulsion> walls) {
+    public EnvironmentManager(Springies s, Gravity g, Viscosity v, COM com, List<WallRepulsion> walls) {
         mSpringies = s;
         mGravity = g;
         mViscosity = v;
@@ -44,7 +44,7 @@ public class ForceManager {
         mWallRepulsionList = walls;        
         initForceToggleMap();
     }
-    public ForceManager(Springies s, String filename) {
+    public EnvironmentManager(Springies s, String filename) {
         mSpringies = s;
         XMLParserCaller caller = new XMLParserCaller();
         EnvironmentParser parser = new EnvironmentParser(mSpringies);
@@ -63,7 +63,7 @@ public class ForceManager {
         initForceToggleMap();
     }
     
-    public ForceManager(Springies s) {
+    public EnvironmentManager(Springies s) {
         mSpringies = s;
         mGravity = new Gravity(this.DEFAULT_GRAVITY_MAGNITUDE);
         mViscosity = new Viscosity(this.DEFAULT_VISCOSITY_MAGNITUDE);

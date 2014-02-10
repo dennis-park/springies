@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.jbox2d.common.Vec2;
 
-import forces.ForceManager;
+import forces.EnvironmentManager;
 import springs.Spring;
 import jboxGlue.*;
 import jgame.JGColor;

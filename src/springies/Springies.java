@@ -8,7 +8,7 @@ import jgame.*;
 import jgame.platform.JGEngine;
 import org.jbox2d.common.Vec2;
 import Parsers.*;
-import forces.ForceManager;
+import forces.EnvironmentManager;
 import springs.*;
 import walls.Wall;
 import masses.*;
@@ -21,7 +21,7 @@ public class Springies extends JGEngine {
     private ArrayList<Mass> mMassList;
     private ArrayList<Spring> mSpringsList;
     private Wall[] mWallArray;
-    private ForceManager mForceManager;
+    private EnvironmentManager mForceManager;
     
     public Springies () {
         // set the window size
@@ -66,7 +66,7 @@ public class Springies extends JGEngine {
         makeModelFromXML(model_filename);
         
         //mForceManager = new ForceManager(this);
-        mForceManager = new ForceManager(this, environment_filename);
+        mForceManager = new EnvironmentManager(this, environment_filename);
         // NEED TO ADD CODE SO WE CAN UPDATE FORCE MANAGER AS NEW MASSES ARE ADDED
     }
 
