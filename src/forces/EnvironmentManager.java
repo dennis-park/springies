@@ -115,7 +115,7 @@ public class EnvironmentManager {
             for (WallRepulsion w: mWallRepulsionList) {
                 applyForce(WALL, w, mass);
             }
-            // System.out.printf("Force applied on mass (%s): <%.2f, %.2f>\n", mass.getName(), mass.getBody().m_force.x, mass.getBody().m_force.y);
+            System.out.printf("Force applied on mass (%s): <%.2f, %.2f>\n", mass.getName(), mass.getBody().m_force.x, mass.getBody().m_force.y);
         }
     }
     

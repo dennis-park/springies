@@ -1,21 +1,31 @@
 package springies;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import jboxGlue.*;
-import jgame.*;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import jboxGlue.WorldManager;
 import jgame.platform.JGEngine;
+import listeners.ClearAssemblyListener;
+import listeners.LoadNewAssemblyListener;
+import listeners.ToggleForceListener;
+import masses.FixedMass;
+import masses.Mass;
+
 import org.jbox2d.common.Vec2;
-import Parsers.*;
-import forces.EnvironmentManager;
-import springs.*;
+
+import springs.Spring;
 import walls.Wall;
-import masses.*;
+import Parsers.ModelParser;
+import Parsers.XMLParserCaller;
+import forces.EnvironmentManager;
 
 @SuppressWarnings("serial")
 public class Springies extends JGEngine {
- 
     public ArrayList<Assembly> assemblyList;
     private HashMap<String, Mass> mMassMap;
     private ArrayList<Mass> mMassList;
@@ -31,6 +41,7 @@ public class Springies extends JGEngine {
         mMassMap = new HashMap<String, Mass>();
         mSpringsList = (new ArrayList<Spring>());
         assemblyList = new ArrayList<Assembly>();
+        //mFManager = new ForceManager();
     }
 
     @Override
@@ -58,16 +69,17 @@ public class Springies extends JGEngine {
         // so gravity is up in world coords and down in game coords
         // so set all directions (e.g., forces, velocities) in world coords
         WorldManager.initWorld(this);
-        
         String model_filename = "assets/daintywalker.xml";
         String environment_filename = "assets/myEnvironment.xml";
         //addTestSpring();
         testSpringForce();
         makeModelFromXML(model_filename);
         
-        //mForceManager = new ForceManager(this);
-        mForceManager = new EnvironmentManager(this, environment_filename);
+        mForceManager = new EnvironmentManager(this);
+        //mForceManager = new EnvironmentManager(this, environment_filename);
         // NEED TO ADD CODE SO WE CAN UPDATE FORCE MANAGER AS NEW MASSES ARE ADDED
+        WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.5f));
+        initListeners();
     }
 
     private void makeModelFromXML (String filename) {
@@ -150,11 +162,26 @@ public class Springies extends JGEngine {
     public List<Mass> getMassList() {
         return mMassList;
     }
-    
+    public void initListeners() {
+    	this.addKeyListener(new ClearAssemblyListener(this));
+    	this.addKeyListener(new LoadNewAssemblyListener(this));
+    	this.addKeyListener(new ToggleForceListener(this));
+    }
     public void addMassMap(HashMap<String, Mass> massList) {
     	/**
     	 * TODO
     	 */
+    }
+    public void makeAssembly() {
+    	JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"XML documents", "xml");
+		chooser.setFileFilter(filter);
+		int returnVal = chooser.showDialog(null, "new Assembly file");
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = chooser.getSelectedFile();
+			//new ModelParser(this).loadAssemblyFromFile(file);
+		}
     }
     
     public void setMassMap(HashMap<String, Mass> massList) {
@@ -172,7 +199,7 @@ public class Springies extends JGEngine {
     public void setSpringsList (ArrayList<Spring>  springList) {
         this.mSpringsList = springList;
     }
-    
+
 
 //    public HashMap<String, Mass> getAssemblyMasses() {
 //        return mMasses;
@@ -200,4 +227,7 @@ public class Springies extends JGEngine {
 //                        }
 //                }
 //    }
+	public void clearLoadedAssemblies() {
+		assemblyList = new ArrayList<Assembly>();
+	}
 }

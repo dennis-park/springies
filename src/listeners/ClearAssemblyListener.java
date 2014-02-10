@@ -1,20 +1,20 @@
 package listeners;
 
 import java.awt.event.KeyEvent;
-
 import springies.Springies;
-import forces.EnvironmentManager;
 
-public class ToggleForceListener implements SpringiesListener{
+
+public class ClearAssemblyListener implements SpringiesListener{
 
 	private Springies mSpringies;
-	
-	public ToggleForceListener(Springies s) {
+
+	public ClearAssemblyListener(Springies s) {
 		mSpringies = s;
 	}
-	
+
 	@Override
 	public void doAction() {
+		mSpringies.clearLoadedAssemblies();
 	}
 
 	@Override
@@ -32,14 +32,10 @@ public class ToggleForceListener implements SpringiesListener{
 	@Override
 	public void keyTyped(KeyEvent e) {
 		int key = e.getKeyChar();
-		switch (key) {
-		case 'g':
-			break;
-		case 'v':
-			break;
-		case 'm':
-			break;
+		if (key == 'c') {
+			doAction();
 		}
 		mSpringies.clearKey(key);
 	}
+
 }
