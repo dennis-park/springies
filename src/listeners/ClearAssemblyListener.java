@@ -1,19 +1,17 @@
 package listeners;
 
 import java.awt.event.KeyEvent;
-
 import springies.Springies;
+
 
 public class ClearAssemblyListener implements SpringiesListener{
 
 	private Springies mSpringies;
-	//private EnvironmentManager mEnv;
-	
+
 	public ClearAssemblyListener(Springies s) {
 		mSpringies = s;
-		//mEnv = manager;
 	}
-	
+
 	@Override
 	public void doAction() {
 		mSpringies.clearLoadedAssemblies();
@@ -33,8 +31,11 @@ public class ClearAssemblyListener implements SpringiesListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		int key = e.getKeyChar();
+		if (key == 'c') {
+			doAction();
+		}
+		mSpringies.clearKey(key);
 	}
 
 }

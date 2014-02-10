@@ -1,12 +1,6 @@
 package listeners;
 
 import java.awt.event.KeyEvent;
-import java.io.File;
-
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import Parsers.ModelParser;
 import springies.Springies;
 
 
@@ -20,15 +14,7 @@ public class LoadNewAssemblyListener implements SpringiesListener{
 
 	@Override
 	public void doAction() {
-		JFileChooser chooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				"XML documents", "xml");
-		chooser.setFileFilter(filter);
-		int returnVal = chooser.showDialog(null, "new Assembly file");
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File file = chooser.getSelectedFile();
-			new ModelParser(mSpringies).loadFile(file);
-		}
+		mSpringies.makeAssembly();
 	}
 
 	@Override
@@ -45,8 +31,11 @@ public class LoadNewAssemblyListener implements SpringiesListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		int key = e.getKeyChar();
+		if (key == 'n') {
+			doAction();
+		}
+		mSpringies.clearKey(key);
 	}
 
 }

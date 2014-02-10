@@ -188,9 +188,9 @@ public class ModelParser extends XMLParser {
     public ArrayList<Spring> getAssemblySprings() {
     	return mSprings;
     }
-    
-    public void loadFile(File file) {
-    	if (file != null && file.getAbsolutePath().equals(ASSETS+"environment.xml")) {
+
+	public void loadAssemblyFromFile(File file) {
+		if (file != null && file.getAbsolutePath().equals(ASSETS+"environment.xml")) {
 			ModelParser factory = new ModelParser(mSpringies);
 			try {
 				mCaller.call(ASSETS+file.getPath(), factory);
@@ -207,5 +207,6 @@ public class ModelParser extends XMLParser {
 				e.printStackTrace();
 			}
 		}
-    }
+		
+	}
 }

@@ -1,7 +1,12 @@
 package springies;
 
+import java.awt.event.KeyListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import jboxGlue.PhysicalObject;
 import jboxGlue.PhysicalObjectRect;
@@ -9,22 +14,22 @@ import jboxGlue.WorldManager;
 import jgame.JGColor;
 import jgame.JGObject;
 import jgame.platform.JGEngine;
+import listeners.ClearAssemblyListener;
+import listeners.LoadNewAssemblyListener;
+import listeners.ToggleForceListener;
+import masses.Mass;
 
 import org.jbox2d.common.Vec2;
 
-import Parsers.ModelParser;
-import Parsers.XMLParserCaller;
-import forces.ForceManager;
 import springs.Spring;
 import walls.Wall;
-import masses.Mass;
+import Parsers.ModelParser;
 
 
 @SuppressWarnings("serial")
 public class Springies extends JGEngine
 {
     public ArrayList<Assembly> assemblyList;
- 
     private HashMap<String, Mass> mMassMap;
     private ArrayList<Spring> mSpringsList;
     private Wall[] mWallArray;
@@ -68,6 +73,7 @@ public class Springies extends JGEngine
         WorldManager.getWorld().setGravity(new Vec2(0.0f, 0.5f));
         addBall();
         addWalls();
+        initListeners();
     }
 
     public void addBall ()
@@ -142,11 +148,26 @@ public class Springies extends JGEngine
     public HashMap<String, Mass> getMassMap() {
         return mMassMap;
     }
-    
+    public void initListeners() {
+    	this.addKeyListener(new ClearAssemblyListener(this));
+    	this.addKeyListener(new LoadNewAssemblyListener(this));
+    	this.addKeyListener(new ToggleForceListener(this));
+    }
     public void addMassMap(HashMap<String, Mass> massList) {
     	/**
     	 * TODO
     	 */
+    }
+    public void makeAssembly() {
+    	JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				"XML documents", "xml");
+		chooser.setFileFilter(filter);
+		int returnVal = chooser.showDialog(null, "new Assembly file");
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = chooser.getSelectedFile();
+			new ModelParser(this).loadAssemblyFromFile(file);
+		}
     }
     
     public void setMassMap(HashMap<String, Mass> massList) {
@@ -162,7 +183,6 @@ public class Springies extends JGEngine
     }
 
 	public void clearLoadedAssemblies() {
-		// TODO Auto-generated method stub
-		
+		assemblyList = new ArrayList<Assembly>();
 	}
 }
