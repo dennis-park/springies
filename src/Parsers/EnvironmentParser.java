@@ -1,17 +1,21 @@
 package Parsers;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import masses.Mass;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import springies.Springies;
+import walls.*;
 import forces.*;
+
 public class EnvironmentParser extends XMLParser {
     private Springies mSpringies;
     private Gravity mGravity; 
     private Viscosity mViscosity;
     private COM mCOM;
-    private ArrayList<WallRepulsion> mWallRepulsionList;
+    private List<WallRepulsion> mWallRepulsionList;
+    private HashMap<Integer, Wall> mWallList;
     
     protected static final String ID = "id";
     protected static final String MAGNITUDE = "magnitude";
@@ -20,8 +24,19 @@ public class EnvironmentParser extends XMLParser {
     
     public EnvironmentParser(Springies s) {
         mSpringies = s;
+        mWallRepulsionList = new ArrayList<WallRepulsion>();
+        mWallList = new HashMap<Integer, Wall>();
+        makeWalls();
     }
-    
+
+    private void makeWalls () {
+        mWallList.put(WallType.TOP_WALL, new Wall(WallType.TOP_WALL));
+        mWallList.put(WallType.BOTTOM_WALL, new Wall(WallType.BOTTOM_WALL));
+        mWallList.put(WallType.LEFT_WALL, new Wall(WallType.LEFT_WALL));
+        mWallList.put(WallType.RIGHT_WALL, new Wall(WallType.RIGHT_WALL));
+    }
+
+    @Override
     public void startElement (String namespaceURI,
                               String localName,
                               String qName,
@@ -50,10 +65,11 @@ public class EnvironmentParser extends XMLParser {
         if (a.getValue(ID) == null ||  a.getValue(MAGNITUDE) == null|| a.getValue(EXPONENT) == null) {
             this.malformedXML(a);
         }
+        
         int id = Integer.parseInt(a.getValue(ID));
         double mag = Double.parseDouble(a.getValue(MAGNITUDE));
         double exp = Double.parseDouble(a.getValue(EXPONENT));
-        WallRepulsion wall = new WallRepulsion(id, mag, exp);
+        WallRepulsion wall = new WallRepulsion(mWallList.get(id), mag, exp);
         mWallRepulsionList.add(wall);
     }
 
@@ -63,7 +79,7 @@ public class EnvironmentParser extends XMLParser {
         }
         double mag = Double.parseDouble(a.getValue(MAGNITUDE));
         double exp = Double.parseDouble(a.getValue(EXPONENT));
-        Collection<Mass> mass_list = mSpringies.getMassMap().values();
+        List<Mass> mass_list = mSpringies.getMassList();
         mCOM = new COM(mag, exp, mass_list);
     }
 
@@ -108,7 +124,7 @@ public class EnvironmentParser extends XMLParser {
         return mCOM;
     }
     
-    public ArrayList<WallRepulsion> getWallRepulsionList() {
+    public List<WallRepulsion> getWallRepulsionList() {
         if (mWallRepulsionList == null) {
             System.out.println("Error. Wall repulsion has not been initialized yet.");
             System.exit(1);

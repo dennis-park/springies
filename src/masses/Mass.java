@@ -8,20 +8,21 @@ import forces.ForceManager;
 import springs.Spring;
 import jboxGlue.*;
 import jgame.JGColor;
+import jgame.JGObject;
 
 
 public class Mass extends PhysicalObjectCircle {
-    private double mMass;
+    private static int mMassNumber;
     protected ArrayList<Spring> mSpringList = new ArrayList<Spring>();
 
-    private static final int COLLISION_ID = 1;
-    private static final int DEFAULT_RADIUS = 5;
-    private static final JGColor DEFAULT_COLOR = JGColor.white;
-    private static final double DEFAULT_XPOS = 0.0;
-    private static final double DEFAULT_YPOS = 0.0;
-    private static final double DEFAULT_XVEL = 0.0;
-    private static final double DEFAULT_YVEL = 0.0;
-    private static final double DEFAULT_MASS = 1.0 / (Math.PI * DEFAULT_RADIUS * DEFAULT_RADIUS);
+    protected static final int COLLISION_ID = 1;
+    protected static final int DEFAULT_RADIUS = 5;
+    protected static final JGColor DEFAULT_COLOR = JGColor.white;
+    protected static final double DEFAULT_XPOS = 0.0;
+    protected static final double DEFAULT_YPOS = 0.0;
+    protected static final double DEFAULT_XVEL = 0.0;
+    protected static final double DEFAULT_YVEL = 0.0;
+    protected static final double DEFAULT_MASS = 1.0 / (Math.PI * DEFAULT_RADIUS * DEFAULT_RADIUS);
     
     /**
      * This class represents the Mass objects in our Spring-Mass assemblies.
@@ -45,9 +46,8 @@ public class Mass extends PhysicalObjectCircle {
     public Mass (String mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y, double mass) {
         super(mass_id, COLLISION_ID, DEFAULT_COLOR, DEFAULT_RADIUS, mass);
         setPos(x_pos, y_pos);
-        xspeed = init_vel_x;
-        yspeed = init_vel_y;
-        System.out.printf("Ball's mass is %.2f\n", this.getBody().m_mass);
+        Vec2 initial_velocity = new Vec2((float) init_vel_x, (float) init_vel_y);
+        this.myBody.setLinearVelocity(initial_velocity);
     }
     public Mass (String mass_id, double x_pos, double y_pos, double init_vel_x, double init_vel_y) {
         this(mass_id, x_pos, y_pos, init_vel_x, init_vel_y, 1);
@@ -61,12 +61,15 @@ public class Mass extends PhysicalObjectCircle {
     public Mass (String mass_id) {
         this(mass_id, DEFAULT_XPOS, DEFAULT_YPOS, DEFAULT_XVEL, DEFAULT_YVEL, DEFAULT_MASS);
     }
-
-    /**
-     * The Physical Object class will copy all the JBox positions onto JGame positions
-     * applyAllWorldForces() will set the global force acting on the Mass object 
-     */
+    
+    @Override 
+    public void hit(JGObject other) {
+        // Do nothing 
+    }
+    
     public void move() {
+//        System.out.printf("Speed of mass (%s): <%.2f, %.2f>\n", 
+//                          this.getName(), this.getBody().m_linearVelocity.x, this.getBody().m_linearVelocity.y);
         super.move();
     }
     
@@ -80,9 +83,5 @@ public class Mass extends PhysicalObjectCircle {
     public void applyForceVector (Vec2 force)
     {
         myBody.applyForce(force, myBody.m_xf.position);
-    }
-    
-    public double getMass() {
-    	return this.mMass;
     }
 }

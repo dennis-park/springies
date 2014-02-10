@@ -40,6 +40,9 @@ public class XMLParser extends DefaultHandler{
     
     protected void malformedXML(Attributes a) {
         System.out.printf("Malformed XML file at node # %d\n", mNodeNum);
+        for (int i=0; i < a.getLength(); i++) {
+            System.out.printf("Attributes: (%s) - (%s)\n", a.getLocalName(i), a.getValue(i));
+        }
         System.exit(0);
     }
 }

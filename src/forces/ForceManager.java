@@ -2,39 +2,47 @@ package forces;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.List;
+import masses.Mass;
 import org.jbox2d.common.Vec2;
-
-import jboxGlue.WorldManager;
 import Parsers.*;
 import springies.Springies;
+import walls.Wall;
 
 public class ForceManager {
     protected Springies mSpringies;
     protected Gravity mGravity;
     protected Viscosity mViscosity;
     protected COM mCOM;
-    protected ArrayList<WallRepulsion> mWallRepulsionList;
+    protected List<WallRepulsion> mWallRepulsionList;
     
-    protected static final double DEFAULT_GRAVITY = 20.0;
-    protected static final double DEFAULT_VISCOSITY = 0.8;
-    protected static final double DEFAULT_COM_MAGNITUDE = 0.8;
-    protected static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 50;
+    public static final double DEFAULT_GRAVITY_MAGNITUDE = 0.1;
+    public static final double DEFAULT_VISCOSITY_MAGNITUDE = 0.05;
+    public static final double DEFAULT_COM_MAGNITUDE = 0.1;
+    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 0.1;
+    public static final double DEFAULT_EXPONENT = 2.0;
+    
+    public static final Vec2 ZERO_VECTOR = new Vec2(0.0f, 0.0f);
+    
+    public static final int TOP_ID = 1;
+    public static final int RIGHT_ID = 2;
+    public static final int BOTTOM_ID = 3;
+    public static final int LEFT_ID = 4;
     
     private String GRAV = "gravity";
     private String VISC = "viscosity";
     private String COM = "com";
     private String WALL = "wall";
     
-    HashMap<String, Boolean> toggleMap = new HashMap<String, Boolean>();
+    HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
     
-    public ForceManager(Springies s, Gravity g, Viscosity v, COM com, ArrayList<WallRepulsion> walls) {
+    public ForceManager(Springies s, Gravity g, Viscosity v, COM com, List<WallRepulsion> walls) {
         mSpringies = s;
         mGravity = g;
         mViscosity = v;
         mCOM = com;
-        mWallRepulsionList = walls;
-        
+        mWallRepulsionList = walls;        
+        initForceToggleMap();
     }
     public ForceManager(Springies s, String filename) {
         mSpringies = s;
@@ -52,52 +60,71 @@ public class ForceManager {
         mViscosity = parser.getViscosity();
         mCOM = parser.getCOM();
         mWallRepulsionList = parser.getWallRepulsionList();
-        toggleMap.put(GRAV, true);
-    	toggleMap.put(VISC, true);
-    	toggleMap.put(COM, true);
-    	toggleMap.put(WALL, true);
+        initForceToggleMap();
     }
     
-    public void toggleForces(String forceid) {
-    	toggleMap.put(forceid, !toggleMap.get(forceid));
+    public ForceManager(Springies s) {
+        mSpringies = s;
+        mGravity = new Gravity(this.DEFAULT_GRAVITY_MAGNITUDE);
+        mViscosity = new Viscosity(this.DEFAULT_VISCOSITY_MAGNITUDE);
+        mCOM = new COM(this.DEFAULT_COM_MAGNITUDE, this.DEFAULT_EXPONENT, s.getMassList());
+        mWallRepulsionList = makeFourWalls(); 
+        for (Mass m: mSpringies.getMassList()) {
+            System.out.printf("In Force Manager: Mass in mass list: %s\n", m.getName());
+        }
+        initForceToggleMap();
     }
-    public void doForces() {
-    	/**
-    	 * TODO: list all forces
-    	 * applyGravity()
-    	 * applyViscosity()
-    	 * applyCOM()
-    	 * applyWallRepulsion()
-    	 */
+    
+    private void initForceToggleMap() {
+        mToggleMap.put(GRAV, true);
+        mToggleMap.put(VISC, true);
+        mToggleMap.put(COM, true);
+        mToggleMap.put(WALL, true);
     }
-    public void applyGravity() {
-    	if (toggleMap.get(GRAV)) {
-    		WorldManager.getWorld().setGravity(mGravity.calculateForce());
-    	} else {
-    		WorldManager.getWorld().setGravity(new Vec2(0f,0f));
-    	}
-    }
-    public void applyViscosity() {
-    	if (toggleMap.get(VISC)) {
-    		/**
-    		 * TODO: iterate through hashmap of masses
-    		 */
-    	}
-    }
-    public void applyCOM() {
-    	if (toggleMap.get(COM)) {
-    		/**
-    		 * TODO: iterate through hashmap of masses
-    		 */
-    	}
-    }
-    public void applyWallRepulsion() {
-    	if (toggleMap.get(WALL)) {
-    		/**
-    		 * TODO: iterate through hashmap of masses
-    		 */
-    	}
+    
+    private List<WallRepulsion> makeFourWalls () {
+        // TODO Auto-generated method stub
+        Wall top_wall = new Wall(this.TOP_ID);
+        Wall bottom_wall = new Wall(this.BOTTOM_ID);
+        Wall left_wall = new Wall(this.LEFT_ID);
+        Wall right_wall = new Wall(this.RIGHT_ID);
+        
+        WallRepulsion top_repulsion = new WallRepulsion(top_wall, DEFAULT_WALL_REPULSION_MAGNITUDE, DEFAULT_EXPONENT);
+        WallRepulsion bottom_repulsion = new WallRepulsion(bottom_wall, DEFAULT_WALL_REPULSION_MAGNITUDE, DEFAULT_EXPONENT);
+        WallRepulsion left_repulsion = new WallRepulsion(left_wall, DEFAULT_WALL_REPULSION_MAGNITUDE, DEFAULT_EXPONENT);
+        WallRepulsion right_repulsion = new WallRepulsion(right_wall, DEFAULT_WALL_REPULSION_MAGNITUDE, DEFAULT_EXPONENT);
+        
+        ArrayList<WallRepulsion> wall_list= new ArrayList<WallRepulsion>();
+        wall_list.add(top_repulsion);
+        wall_list.add(bottom_repulsion);
+        wall_list.add(left_repulsion);
+        wall_list.add(right_repulsion);
+        
+        return wall_list;
     }
 
+    public void toggleForces(String forceid) {
+    	mToggleMap.put(forceid, !mToggleMap.get(forceid));
+    }
     
+    public void doForces() {
+        for (Mass mass: mSpringies.getMassList()) {
+            applyForce(GRAV, mGravity, mass);
+            applyForce(VISC, mViscosity, mass);
+            applyForce(COM, mCOM, mass);
+            for (WallRepulsion w: mWallRepulsionList) {
+                applyForce(WALL, w, mass);
+            }
+            // System.out.printf("Force applied on mass (%s): <%.2f, %.2f>\n", mass.getName(), mass.getBody().m_force.x, mass.getBody().m_force.y);
+        }
+    }
+    
+    public void applyForce(String force_id, Force force, Mass mass) {
+        if (mToggleMap.get(force_id)) {
+            mass.applyForceVector(force.calculateForce(mass));        
+        } 
+        else {
+            mass.applyForceVector(ZERO_VECTOR);
+        }
+    }
 }

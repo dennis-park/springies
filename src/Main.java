@@ -31,7 +31,9 @@ public class Main
         jb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent arg0) {
-                sp.addBall();
+                double xpos = sp.displayWidth() / 2;
+                double ypos = sp.displayHeight() / 2;
+                sp.addTestSpring();
             }
         });
         // container that will work with user's OS

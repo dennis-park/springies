@@ -4,27 +4,26 @@ import masses.*;
 import springs.*;
 import springies.Assembly;
 import springies.Springies;
-
-import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 public class ModelParser extends XMLParser {
     protected Springies mSpringies;
-    protected HashMap<String, Mass> mMasses;
-    protected ArrayList<Spring> mSprings;
-	private XMLParserCaller mCaller;
-	private static final String ASSETS = "assets/";
+    protected HashMap<String, Mass> mMassMap;
+    protected List<Mass> mMassList;
+    protected List<Spring> mSprings;
     
+
     public ModelParser (Springies s) {
         mSpringies = s;
-        mMasses = s.getMassMap();
+        mMassList = s.getMassList();
         mSprings = s.getSpringsList();
+        mMassMap = new HashMap<String, Mass>();
     }
-
+    
     public void startElement (String namespaceURI,
                               String localName,
                               String qName,
@@ -53,7 +52,7 @@ public class ModelParser extends XMLParser {
         checkIdXY(a);
         Mass newMass = createMassObj(a.getValue("id"), a.getValue("x"), a.getValue("y"),
                                      a.getValue("vx"), a.getValue("vy"), a.getValue("mass"));
-        mMasses.put(a.getValue("id"), newMass);
+        mMassMap.put(a.getValue("id"), newMass);
     }
 
     private void parseFixedMass (Attributes a) {
@@ -61,7 +60,7 @@ public class ModelParser extends XMLParser {
         FixedMass newMass =
                 createFixedMassObj(a.getValue("id"), a.getValue("x"), a.getValue("y"),
                                    a.getValue("mass"));
-        mMasses.put(a.getValue("id"), newMass);
+        mMassMap.put(a.getValue("id"), newMass);
     }
 
     private void parseSpring (Attributes a) {
@@ -81,7 +80,7 @@ public class ModelParser extends XMLParser {
     }
 
     private void checkSpringMasses (Attributes a) {
-        if (a.getValue("a") == null || a.getValue("b") == null || a.getValue("restlength") == null) {
+        if (a.getValue("a") == null || a.getValue("b") == null) {
             malformedXML(a);
         }
         if (!checkMassesExist(a.getValue("a")) || !checkMassesExist(a.getValue("b"))) {
@@ -91,7 +90,7 @@ public class ModelParser extends XMLParser {
 
     private boolean checkMassesExist (String mass_id) {
         boolean exist = false;
-        for (String m_id : mMasses.keySet()) {
+        for (String m_id : mMassMap.keySet()) {
             if (m_id.equals(mass_id)) {
                 exist = true;
                 break;
@@ -118,7 +117,7 @@ public class ModelParser extends XMLParser {
         }
         String mass_id = id;
         double x_pos = Double.parseDouble(x);
-        double y_pos = Double.parseDouble(y);
+        double y_pos = mSpringies.displayHeight() - Double.parseDouble(y);
         double obj_mass = 0.0;
         if (mass != null) {
             obj_mass = Double.parseDouble(mass);
@@ -138,7 +137,7 @@ public class ModelParser extends XMLParser {
         }
         String mass_id = id;
         double x_pos = Double.parseDouble(x);
-        double y_pos = Double.parseDouble(y);
+        double y_pos = mSpringies.displayHeight() - Double.parseDouble(y);
 
         if (init_x == null && init_y == null && mass == null) { return new Mass(mass_id, x_pos,
                                                                                 y_pos); }
@@ -151,25 +150,29 @@ public class ModelParser extends XMLParser {
     }
 
     private Spring createSpringObj (String m1_id, String m2_id, String restlength, String constant) {
-        Mass m1 = mMasses.get(m1_id);
-        Mass m2 = mMasses.get(m2_id);
+        System.out.printf("Parsing ... : %s\t%s\t%s\t%s\n", m1_id, m2_id, restlength, constant);
+        
+        Mass m1 = mMassMap.get(m1_id);
+        Mass m2 = mMassMap.get(m2_id);
         
         Spring newSpring;
         if (restlength == null && constant == null) { 
             newSpring = new Spring(m1, m2); 
         }
-        if (constant == null) { 
+        else if (constant == null) { 
             newSpring = new Spring(m1, m2, Double.parseDouble(restlength)); 
         }
-        newSpring = new Spring(m1, m2, Double.parseDouble(restlength), Double.parseDouble(constant));
+        else {
+            newSpring = new Spring(m1, m2, Double.parseDouble(restlength), Double.parseDouble(constant));
+        }
         m1.connectSpring(newSpring);
         m2.connectSpring(newSpring);
         return newSpring;
     }
 
     private Muscle createMuscleObj (String m1_id, String m2_id, String restlength, String amplitude) {
-        Mass m1 = mMasses.get(m1_id);
-        Mass m2 = mMasses.get(m2_id);
+        Mass m1 = mMassMap.get(m1_id);
+        Mass m2 = mMassMap.get(m2_id);
         double amp = Double.parseDouble(amplitude);
 
         Muscle newMuscle; 
@@ -182,30 +185,4 @@ public class ModelParser extends XMLParser {
         return newMuscle;
     }
 
-    public HashMap<String, Mass> getAssemblyMasses() {
-    	return mMasses;
-    }
-    public ArrayList<Spring> getAssemblySprings() {
-    	return mSprings;
-    }
-    
-    public void loadFile(File file) {
-    	if (file != null && file.getAbsolutePath().equals(ASSETS+"environment.xml")) {
-			ModelParser factory = new ModelParser(mSpringies);
-			try {
-				mCaller.call(ASSETS+file.getPath(), factory);
-				Assembly a = new Assembly();
-				for (Mass mass : factory.getAssemblyMasses().values()) {
-					a.add(mass);
-				}
-				for (Spring spring : factory.getAssemblySprings()) {
-					a.add(spring);
-				}
-				//a.addMuscles(factory.getAssemblyMuscles());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-    }
 }
