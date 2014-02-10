@@ -39,6 +39,8 @@ public class Wall extends PhysicalObjectRect {
     }
 
     public void createWallJGObject () {
+        int width;
+        int height;
         if (mWallId == TOP_ID) {
             init(WALL_WIDTH, DEFAULT_WALL_THICKNESS, WALL_MASS);
             setPos(eng.displayWidth() / 2, DEFAULT_WALL_MARGIN);
@@ -68,16 +70,21 @@ public class Wall extends PhysicalObjectRect {
 
         if (mToggleOut) {
             mToggleOut = false;
-            xpos += (Math.cos(mDirection) * PIXEL_MOVEMENT);
+            xpos += (-1 * Math.cos(mDirection) * PIXEL_MOVEMENT);
             ypos += (-1 * Math.sin(mDirection) * PIXEL_MOVEMENT);
             setPos(xpos, ypos);
+            
+            System.out.printf("Wall %d moved OUT to (%.2f, %.2f)\n", mWallId, xpos, ypos);
         }
         else if (mToggleIn) {
             mToggleIn = false;
-            xpos -= (Math.cos(mDirection) * PIXEL_MOVEMENT);
+            xpos -= (-1 * Math.cos(mDirection) * PIXEL_MOVEMENT);
             ypos -= (-1 * Math.sin(mDirection) * PIXEL_MOVEMENT);
             setPos(xpos, ypos);
+            
+            System.out.printf("Wall %d moved IN to (%.2f, %.2f)\n", mWallId, xpos, ypos);
         }
+        
     }
 
     public void toggleOut () {

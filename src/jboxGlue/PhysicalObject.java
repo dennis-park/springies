@@ -63,7 +63,7 @@ public abstract class PhysicalObject extends JGObject
     {
         myColor = val;
     }
-
+    
     @Override
     public void setBBox (int x, int y, int width, int height)
     {
