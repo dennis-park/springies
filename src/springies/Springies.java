@@ -149,11 +149,13 @@ public class Springies extends JGEngine {
 		}
 	}
 
-	
 	private void removeAllObjects() {
 		for (Assembly a : mAssemblyList) {
-			for (Mass m : a.getMassList()) {
-				removeObject(m);
+			for (Mass mass : a.getMassList()) {
+				removeObject(mass);
+			}
+			for (Spring spring : a.getSpringList()) {
+				removeObject(spring);
 			}
 		}
 	}
