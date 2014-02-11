@@ -43,14 +43,6 @@ public class EnvironmentManager {
     protected HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
     protected HashMap<Integer, Wall> mWallMap;
     
-    public EnvironmentManager(Springies s, Gravity g, Viscosity v, COM com, List<WallRepulsion> walls) {
-        mSpringies = s;
-        mGravity = g;
-        mViscosity = v;
-        mCOM = com;
-        mWallRepulsionList = walls;        
-        initForceToggleMap();
-    }
     public EnvironmentManager(Springies s, String filename) {
         mSpringies = s;
         XMLParserCaller caller = new XMLParserCaller();
