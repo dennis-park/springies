@@ -54,8 +54,8 @@ public class Springies extends JGEngine {
         // so set all directions (e.g., forces, velocities) in world coords
         WorldManager.initWorld(this);
         // addTestSpring();
-        testAssembly();
-
+        // testAssembly();
+        assemblyList = new ArrayList<Assembly>();
         mEnvironmentManager = new EnvironmentManager(this);
         // mForceManager = new EnvironmentManager(this, environment_filename);
         mActionListener = new JGameActionListener(mEnvironmentManager);
@@ -159,6 +159,9 @@ public class Springies extends JGEngine {
     }
 
     public List<Assembly> getAssemblyList () {
+        if (assemblyList.size() == 0) {
+            makeAssembly();
+        }
         return assemblyList;
     }
     

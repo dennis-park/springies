@@ -1,6 +1,7 @@
 package listeners;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import masses.Mass;
 import springies.EnvironmentManager;
 import springs.Spring;
@@ -39,11 +40,9 @@ public class JGameActionListener {
         }
         if (key == KeyEvent.VK_N) {
             System.out.printf("N key pressed %d\n", key);
-            // Clear assembly
         }
         if (key == KeyEvent.VK_C) {
             System.out.printf("C key pressed %d\n", key);
-            // Clear assembly
         }
         if (key == KeyEvent.VK_G) {
             System.out.printf("G key pressed %d\n", key);
@@ -94,31 +93,38 @@ public class JGameActionListener {
         if (left_mouse_just_pressed) {
             System.out.printf("Left mouse just pressed\n");
             leftMouseHeld = true;
-            // Make new mass (new_mass) at position: mouse_x and mouse_y
             mMouseMass.setPos(mouse_x_double, mouse_y_double);
-            // Make new spring connected to new_mass and nearest mass object
-            Mass nearest_mass = findNearestMass(mouse_x_double, mouse_y_double);
+            Mass nearest_mass = findNearestMass(mMouseMass);
             mMouseSpring = new Spring(mMouseMass, nearest_mass);
         }
         else if (left_mouse_released) {
             System.out.printf("Left mouse released\n");
             leftMouseHeld = false;
-            // remove new_mass
             mMouseMass.setPos(DEFAULT_MOUSE_MASS_XPOSITION, DEFAULT_MOUSE_MASS_YPOSITION);
-            // remove spring
             mMouseSpring.remove();
         }
         else if (left_mouse_held) {
             System.out.printf("Left mouse held and moved to (%.2f, %.2f)\n", mouse_x_double, mouse_y_double);
-            // drag new_mass with mouse_x and mouse_y
             mMouseMass.setPos(mouse_x_double, mouse_y_double);
             mMouseSpring.doSpringForce();
         }
     }
 
-    private Mass findNearestMass (double mouse_x_double, double mouse_y_double) {
-        // TODO Auto-generated method stub
-        return null;
+    private Mass findNearestMass (Mass mouse_mass) {
+        ArrayList<Mass> all_masses = mEnvironmentManager.getMassList();
+        if (all_masses.size() == 0) {
+            // THROW ERROR HERE
+        }
+        double shortest_distance = Double.POSITIVE_INFINITY;
+        Mass nearest_mass = all_masses.get(0);
+        for (Mass mass: all_masses) {
+            double current_distance = Spring.computeLength(mouse_mass, mass);
+            if (current_distance < shortest_distance) {
+                nearest_mass = mass;
+                shortest_distance = current_distance;
+            }
+        }
+        return nearest_mass;
     }
     
     

@@ -3,10 +3,9 @@ package springies;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import masses.Mass;
-
 import org.jbox2d.common.Vec2;
+import springs.Spring;
 import forces.COM;
 import forces.Force;
 import forces.Gravity;
@@ -149,5 +148,25 @@ public class EnvironmentManager {
     public void changeMuscleAmplitude (boolean increase) {
         // TODO Auto-generated method stub
         
+    }
+
+    public ArrayList<Mass> getMassList () {
+        ArrayList<Mass> all_masses = new ArrayList<Mass>(); 
+        for (Assembly assembly: mAssemblies) {
+            for (Mass mass: assembly.getMassList()) {
+                all_masses.add(mass);
+            }
+        }
+        return all_masses;
+    }
+    
+    public ArrayList<Spring> getSpringsList () {
+        ArrayList<Spring> all_springs = new ArrayList<Spring>(); 
+        for (Assembly assembly: mAssemblies) {
+            for (Spring spring: assembly.getSpringList()) {
+                all_springs.add(spring);
+            }
+        }
+        return all_springs;
     }
 }

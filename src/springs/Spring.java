@@ -37,7 +37,7 @@ public class Spring extends PhysicalObject implements Force{
     public Spring(Mass start, Mass end) {
         this(start, end, computeLength(start,end), DEFAULT_KVAL);
     }
-    private static double computeLength(Mass m1, Mass m2) {
+    public static double computeLength(Mass m1, Mass m2) {
 //        System.out.printf("Mass 1 (%.2f, %.2f), Mass 2 (%.2f, %.2f)\n", 
 //                          m1.getBody().getPosition().x, m1.getBody().getPosition().y, m2.getBody().getPosition().x, m2.getBody().getPosition().y);
         double m1_x = m1.getBody().getPosition().x;
