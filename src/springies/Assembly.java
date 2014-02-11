@@ -19,8 +19,6 @@ public class Assembly {
     /**
      * Structure contains list of masses and list of springs.
      * 
-     * @param 
-     * @return
      */
     public Assembly () {
         mMasses = new ArrayList<Mass>();
@@ -29,9 +27,7 @@ public class Assembly {
     
     /**
      * Adds specified mass object to assembly's member mass list.
-     * 
      * @param mass
-     * @return void
      */
     public void add (Mass mass) {
         mMasses.add(mass);
@@ -41,7 +37,6 @@ public class Assembly {
      * Adds specified spring object to assembly's member spring list.
      * 
      * @param spring
-     * @return void
      */
     public void add (Spring spring) {
         mSprings.add(spring);
@@ -50,7 +45,6 @@ public class Assembly {
     /**
      * Getter for this Assembly object's member mass list.
      * 
-     * @param 
      * @return mMasses
      */
     public ArrayList<Mass> getMassList () {
@@ -60,7 +54,6 @@ public class Assembly {
     /**
      * Getter for this Assembly object's member spring list.
      * 
-     * @param 
      * @return mSprings
      */
     public ArrayList<Spring> getSpringList () {
@@ -70,7 +63,6 @@ public class Assembly {
     /**
      * Getter for Assembly object created.
      * 
-     * @param 
      * @return this
      */
     public Assembly getAssembly () {

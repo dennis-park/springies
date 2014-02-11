@@ -11,7 +11,13 @@ import masses.Mass;
 import springs.Spring;
 
 
-
+/**
+ * This is the engine of Springies.  It initializes the canvas, 
+ * creates settings for the simulation, and 
+ * lends control to the EnvironmentManager, Factory, and Listener objects.
+ * 
+ * @author Thanh-Ha Nguyen & Dennis Park
+ */
 @SuppressWarnings("serial")
 public class Springies extends JGEngine {
 
@@ -24,6 +30,10 @@ public class Springies extends JGEngine {
     private static final int FPS = 10;
     private static final int FRAME_SKIP = 2;
 
+	/**
+     * Springies constructor that sets the window size and 
+     * overall components of the engine.
+     */
     public Springies () {
         // set the window size
         int height = 480;
@@ -31,7 +41,12 @@ public class Springies extends JGEngine {
         initEngineComponent((int) (height * aspect), height);
     }
 
+    
     @Override
+    /**
+     * Initializes the canvas by setting default settings.
+     *
+     */
     public void initCanvas () {
         setCanvasSettings(1, // width of the canvas in tiles
                           1, // height of the canvas in tiles
@@ -42,8 +57,13 @@ public class Springies extends JGEngine {
                           null); // standard font -> use default font
     }
 
-    
     @Override
+    /**
+     * Initializes simulation by calling WorldManager,
+     * creating a Factory for Assembly objects, and instantiating 
+     * listener objects that will communicate with the EnvironmentManager.
+     * Loads the environment based on the xml file in Assets.
+     */
     public void initGame () {
         setFrameRate(FPS, FRAME_SKIP);
         WorldManager.initWorld(this);
@@ -63,7 +83,6 @@ public class Springies extends JGEngine {
      * In each frame, Springies will check all the user input events and perform actions accordingly.
      * It will also iterate through all the masses and apply the Forces acting upon the masses at the 
      * moment. Then the JBox world will take 1 time step and update JGame accordingly.  
-     * 
      */
     public void doFrame () {
         doListenerEvents();
@@ -76,11 +95,11 @@ public class Springies extends JGEngine {
         }
     }
 
-    private static final String[] force_id = { Constants.GRAV_ID, Constants.VISC_ID, Constants.COM_ID,
+    /*private static final String[] force_id = { Constants.GRAV_ID, Constants.VISC_ID, Constants.COM_ID,
                                   Constants.WALL_ID };
 	private String[] force_view;
-	
-    /*private void toggleView () {
+
+    private void toggleView () {
     	force_view = new String[force_id.length];
     	for (int index = 0; index < force_id.length; index ++) {
     		int offset = index*10;
@@ -89,7 +108,8 @@ public class Springies extends JGEngine {
     		drawString(force_view[index], 20+offset, 20+offset, 0, JGFont.ITALIC, JGColor.green);
     	}	
     }
-*/
+     */
+    
     /**
      * This is a helper method to call the built in JEngine listeners. This way
      * we don't have to worry about coordinates, etc. This method will send the lastKeyPressed
@@ -104,6 +124,10 @@ public class Springies extends JGEngine {
                 .doMouseEvent(getMouseButton(1), getMouseButton(3), getMouseX(), getMouseY());
     }
 
+    /**
+     * This makes a new Assembly object by calling the already instantiated
+     * Factory object.  It then adds its product to the Assembly List.
+     */
     public void makeAssembly () {
         mFactory.loadAssembly();
         mAssemblyList.add(mFactory.getAssembly());
@@ -120,11 +144,23 @@ public class Springies extends JGEngine {
         }
     }
 
+    /**
+     * Clears the list of all Assemblies being stored in Springies. 
+     * Removes all objects from canvas.
+     * @param 
+     * @return 
+     */
     public void clearLoadedAssemblies () {
         removeAllObjects();
         mAssemblyList.clear();
     }
 
+    /**
+     * Getter for other classes to iterate through this list of 
+     * Assembly objects
+     * @param 
+     * @return mAssemblyList
+     */
     public ArrayList<Assembly> getAssemblyList () {
         return mAssemblyList;
     }

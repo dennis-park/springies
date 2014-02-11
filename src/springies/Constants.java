@@ -3,7 +3,12 @@ package springies;
 import jgame.JGColor;
 import org.jbox2d.common.Vec2;
 
-
+/**
+ * Global constants and defaults to be accessed by Springies components and classes
+ * 
+ * @author Thanh-Ha Nguyen & Dennis Park
+ *
+ */
 public class Constants {
     // Default environment forces
     public static final double DEFAULT_GRAVITY_MAGNITUDE = 1.0;

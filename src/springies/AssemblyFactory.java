@@ -27,8 +27,7 @@ public class AssemblyFactory {
      * Constructor for factory. Takes in Springies object 
      * and creates an instance of new Assembly object.
      * 
-     * @param Springies s
-     * @return
+     * @param s
      */
     public AssemblyFactory (Springies s) {
         mSpringies = s;
@@ -52,9 +51,6 @@ public class AssemblyFactory {
     /**
      * Opens a JFileChooser object that prompts user for file path
      * to be parsed.  Calls helper method loadFromFile(File file)
-     * 
-     * @param 
-     * @return void 
      */
     public void loadAssembly () {
         JFileChooser chooser = new JFileChooser();
@@ -73,7 +69,6 @@ public class AssemblyFactory {
      * parses through all models and stores in Assembly object.
      * 
      * @param file
-     * @return
      */
     public void loadFromFile (File file) {
         if (file != null) {
@@ -94,9 +89,6 @@ public class AssemblyFactory {
 
     /**
      * Getter for Assembly object created from file.
-     * 
-     * @param 
-     * @return this
      */
     public Assembly getAssembly () {
         return mAssembly;
