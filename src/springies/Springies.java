@@ -72,11 +72,12 @@ public class Springies extends JGEngine {
         }
     }
 
-    private String[] force_id = { Constants.GRAV_ID, Constants.VISC_ID, Constants.COM_ID,
+    private static final String[] force_id = { Constants.GRAV_ID, Constants.VISC_ID, Constants.COM_ID,
                                   Constants.WALL_ID };
 	private String[] force_view;
 	
     private void updateToggleView () {
+    	force_view = new String[force_id.length];
     	for (int index = 0; index < force_id.length; index ++) {
     		int offset = index*10;
     		force_view[index] = force_id[1] + " " +
