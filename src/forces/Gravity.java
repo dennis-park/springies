@@ -6,7 +6,6 @@ import org.jbox2d.common.Vec2;
 public class Gravity implements Force {
     private static double GRAVITY_DIRECTION = Math.PI / 2; //90.0;
     private double mMagnitude;
-	private double mExponent;
 	private double mDirection;
 	
     public Gravity (double magnitude) {
