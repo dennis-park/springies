@@ -2,12 +2,13 @@ package listeners;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
 import masses.Mass;
 import masses.MouseMass;
+import springies.Constants;
 import springies.EnvironmentManager;
 import springies.Springies;
 import springs.Spring;
-
 
 /**
  * This class implements a Key Listener in order to toggle walls in (towards center)
@@ -49,25 +50,25 @@ public class JGameActionListener {
                 mSpringies.clearLoadedAssemblies();
                 break;
             case KeyEvent.VK_G:
-                mEnvironmentManager.toggleForces(EnvironmentManager.GRAV_ID);
+                mEnvironmentManager.toggleForces(Constants.GRAV_ID);
                 break;
             case KeyEvent.VK_V:
-                mEnvironmentManager.toggleForces(EnvironmentManager.VISC_ID);
+                mEnvironmentManager.toggleForces(Constants.VISC_ID);
                 break;
             case KeyEvent.VK_M:
-                mEnvironmentManager.toggleForces(EnvironmentManager.COM_ID);
+                mEnvironmentManager.toggleForces(Constants.COM_ID);
                 break;
             case KeyEvent.VK_1:
-                mEnvironmentManager.toggleForces(EnvironmentManager.TOP_ID);
+                mEnvironmentManager.toggleWallForces(Constants.TOP_ID);
                 break;
             case KeyEvent.VK_2:
-                mEnvironmentManager.toggleForces(EnvironmentManager.RIGHT_ID);
+                mEnvironmentManager.toggleWallForces(Constants.RIGHT_ID);
                 break;
             case KeyEvent.VK_3:
-                mEnvironmentManager.toggleForces(EnvironmentManager.BOTTOM_ID);
+                mEnvironmentManager.toggleWallForces(Constants.BOTTOM_ID);
                 break;
             case KeyEvent.VK_4:
-                mEnvironmentManager.toggleForces(EnvironmentManager.LEFT_ID);
+                mEnvironmentManager.toggleWallForces(Constants.LEFT_ID);
                 break;
             case KeyEvent.VK_EQUALS:
                 mEnvironmentManager.changeMuscleAmplitude(true);
@@ -110,7 +111,7 @@ public class JGameActionListener {
 
     private Mass findNearestMass (Mass mouse_mass) {
         System.out.println("Finding nearest mass");
-        ArrayList<Mass> all_masses = mEnvironmentManager.getMassList();
+        List<Mass> all_masses = mEnvironmentManager.getMassList();
         if (all_masses.size() == 0) {
             // THROW ERROR HERE
             System.out.printf("Mass list is empty");

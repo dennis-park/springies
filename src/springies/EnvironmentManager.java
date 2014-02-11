@@ -5,48 +5,87 @@ import java.util.HashMap;
 import java.util.List;
 
 import masses.Mass;
-
 import org.jbox2d.common.Vec2;
-
 import springs.Spring;
-import forces.COM;
-import forces.Force;
-import forces.Gravity;
-import forces.Viscosity;
-import forces.WallRepulsion;
-import Parsers.*;
 import walls.Wall;
+import forces.*;
+import Parsers.*;
+
 
 public class EnvironmentManager {
     protected Springies mSpringies;
+    
     protected Gravity mGravity;
     protected Viscosity mViscosity;
-    protected List<WallRepulsion> mWallRepulsionList;
-    protected List<COM> mCOMList;
-    public static final double DEFAULT_GRAVITY_MAGNITUDE = 1;
-    public static final double DEFAULT_VISCOSITY_MAGNITUDE = 0.2;
-    public static final double DEFAULT_COM_MAGNITUDE = 0.1;
-    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 10;
-    public static final double DEFAULT_EXPONENT = 1.0;
+    protected List<COM> mCOMList = new ArrayList<COM>();
+    protected HashMap<Integer, Wall> mWallMap = new HashMap<Integer, Wall>();
+    protected HashMap<Integer, WallRepulsion> mWallRepulsionMap = new HashMap<Integer, WallRepulsion>();
     
-    public static final Vec2 ZERO_VECTOR = new Vec2(0.0f, 0.0f);
-    
-    public static final int TOP_ID = 1;
-    public static final int RIGHT_ID = 2;
-    public static final int BOTTOM_ID = 3;
-    public static final int LEFT_ID = 4;
-    
-    public static final String GRAV_ID = "g";
-    public static final String VISC_ID = "v";
-    public static final String COM_ID = "m";
-    public static final String WALL_ID = "w";
-    
+    protected double mGravityMag;
+    protected double mGravityDir;
+    protected double mViscosityMag;
+    protected double mCOMMag;
+    protected double mCOMExp;
+    protected HashMap<Integer, Double> mWallMagMap = new HashMap<Integer, Double>();
+    protected HashMap<Integer, Double> mWallExpMap = new HashMap<Integer, Double>();
+
     protected HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
-    protected HashMap<Integer, Wall> mWallMap;
+    protected HashMap<Integer, Boolean> mWallToggleMap = new HashMap<Integer, Boolean>();
  
+    public EnvironmentManager(Springies s) {
+        mSpringies = s;
+        
+        mGravityMag = Constants.DEFAULT_GRAVITY_MAGNITUDE;
+        mGravityDir = Constants.DEFAULT_GRAVITY_DIRECTION;
+        mViscosityMag = Constants.DEFAULT_VISCOSITY_MAGNITUDE;
+        mCOMMag = Constants.DEFAULT_COM_MAGNITUDE;
+        mCOMExp = Constants.DEFAULT_EXPONENT;
+        for (int i=1; i <= Constants.NUM_WALLS; i++) {
+            mWallMagMap.put(i, Constants.DEFAULT_WALL_REPULSION_MAGNITUDE);
+            mWallExpMap.put(i, Constants.DEFAULT_EXPONENT);
+        }
+        
+        initEnvironment();
+    }
     
     public EnvironmentManager(Springies s, String filename) {
         mSpringies = s;
+        EnvironmentParser parser = setEnvironmentFromParser(filename);
+        
+        mGravityMag = parser.getGravityMag();
+        mGravityDir = parser.getGravityDir();
+        mViscosityMag = parser.getViscosityMag();
+        mCOMMag = parser.getCOMMag();
+        mCOMExp = parser.getCOMExp();
+        mWallMagMap = parser.getWallMagMap();
+        mWallExpMap = parser.getWallExpMap();
+       
+        initEnvironment(); 
+    }
+    
+    private void initEnvironment() {
+        for (int i=1; i <= Constants.NUM_WALLS; i++) {
+            Wall new_wall = new Wall(i);
+            WallRepulsion new_wall_force = new WallRepulsion(new_wall, mWallMagMap.get(i), mWallExpMap.get(i));
+            mWallMap.put(i, new_wall);
+            mWallRepulsionMap.put(i, new_wall_force);
+        }
+        mGravity = new Gravity(mGravityMag, mGravityDir);
+        mViscosity = new Viscosity(mViscosityMag);
+        mToggleMap = initForceToggleMap();
+        mWallToggleMap = initWallToggleMap();
+    }
+    
+    private List<COM> makeCOMForAllAssemblies () {
+        List<COM> com_list = new ArrayList<COM>();
+        ArrayList<Assembly> assembly_list = mSpringies.getAssemblyList();
+        for (Assembly assembly: assembly_list) {
+            com_list.add(new COM(mCOMMag, assembly));
+        }
+        return com_list;
+    }
+    
+    private EnvironmentParser setEnvironmentFromParser (String filename) {
         XMLParserCaller caller = new XMLParserCaller();
         EnvironmentParser parser = new EnvironmentParser(mSpringies);
         try {
@@ -57,109 +96,63 @@ public class EnvironmentManager {
             e.printStackTrace();
             System.exit(1);
         }
-        mGravity = parser.getGravity();
-        mViscosity = parser.getViscosity();
-        mCOMList = parser.getCOMList();
-        mWallRepulsionList = parser.getWallRepulsionList();
-        mToggleMap = initForceToggleMap();
-    }
-    
-    public EnvironmentManager(Springies s) {
-        mSpringies = s;
-        mGravity = new Gravity(this.DEFAULT_GRAVITY_MAGNITUDE);
-        mViscosity = new Viscosity(this.DEFAULT_VISCOSITY_MAGNITUDE);
-        
-        /**
-         * replace getMassList with getAssemblyList
-         */
-        mCOMList = makeCOMForAllForces();
-        mWallRepulsionList = makeFourWallRepulsion(); 
-        mToggleMap = initForceToggleMap();
-    }
-    
-    private ArrayList<COM> makeCOMForAllForces () {
-        ArrayList<COM> com_list = new ArrayList<COM>();
-        ArrayList<Assembly> assembly_list = mSpringies.getAssemblyList();
-        for (Assembly assembly: assembly_list) {
-            com_list.add(new COM(DEFAULT_COM_MAGNITUDE, assembly));
-        }
-        return com_list;
+        return parser;
     }
 
     private HashMap<String, Boolean> initForceToggleMap() {
         HashMap<String, Boolean> toggle_map = new HashMap<String, Boolean>();
-        toggle_map.put(GRAV_ID, true);
-        toggle_map.put(VISC_ID, true);
-        toggle_map.put(COM_ID, true);
-        for (WallRepulsion w: mWallRepulsionList) {
-            toggle_map.put(String.format("%d", w.getWallId()), true);
-        }
+        toggle_map.put(Constants.GRAV_ID, true);
+        toggle_map.put(Constants.VISC_ID, true);
+        toggle_map.put(Constants.COM_ID, true);
         return toggle_map;
     }
     
-    /*private void toggle() {
-		HashMap<Character, String> forces = new HashMap<Character, String>();
-		forces.put(GRAV_ID, GRAV);
-		forces.put(VISC_ID, VISC);
-		forces.put(COM_ID, COM);
-
-		for (char c : forces.keySet()) {
-			if (mSpringies.getKey(c)) {
-				mSpringies.clearKey(c);
-				mEnvForces.toggle(forces.get(c));
-			}
-		}
-	}
-*/
+    private HashMap<Integer, Boolean> initWallToggleMap() {
+        HashMap<Integer, Boolean> toggle_map = new HashMap<Integer, Boolean>();
+        for (int i: mWallRepulsionMap.keySet()) {
+            toggle_map.put(i, true);
+        }
+        return toggle_map;
+    }
     public void toggleForces(String forceid) {
     	mToggleMap.put(forceid, !mToggleMap.get(forceid));
     }
-    public void toggleForces(int forceid) {
-        mToggleMap.put(String.format("%d", forceid), !mToggleMap.get(forceid));
-    }
-    private List<WallRepulsion> makeFourWallRepulsion () {
-        makeFourWalls();
-        
-        ArrayList<WallRepulsion> wall_repulsion_list= new ArrayList<WallRepulsion>();
-        
-        wall_repulsion_list.add(new WallRepulsion(mWallMap.get(TOP_ID)));
-        wall_repulsion_list.add(new WallRepulsion(mWallMap.get(BOTTOM_ID)));
-        wall_repulsion_list.add(new WallRepulsion(mWallMap.get(LEFT_ID)));
-        wall_repulsion_list.add(new WallRepulsion(mWallMap.get(RIGHT_ID)));
-        
-        return wall_repulsion_list;
+    public void toggleWallForces(int wall_id) {
+        mWallToggleMap.put(wall_id, !mWallToggleMap.get(wall_id));
     }
     
-    private void makeFourWalls() {
-        mWallMap = new HashMap<Integer, Wall>();
-        mWallMap.put(TOP_ID, new Wall(this.TOP_ID));
-        mWallMap.put(BOTTOM_ID, new Wall(this.BOTTOM_ID));
-        mWallMap.put(LEFT_ID, new Wall(this.LEFT_ID));
-        mWallMap.put(RIGHT_ID, new Wall(this.RIGHT_ID));
-    }
-
     public void doForces() {
-    	for (Assembly assembly : mSpringies.getAssemblyList()) {
-    		for (Mass mass : assembly.getMassList()) {
-                applyForce(GRAV_ID, mGravity, mass);
-                applyForce(VISC_ID, mViscosity, mass);
+
+        for (Assembly assembly: mSpringies.getAssemblyList()) {
+            for (Mass mass: assembly.getMassList()) {
+                applyForce(Constants.GRAV_ID, mGravity, mass);
+                applyForce(Constants.VISC_ID, mViscosity, mass);
                 for (COM c: mCOMList) {
-                    applyForce(COM_ID, c, mass);
+                    applyForce(Constants.COM_ID, c, mass);
                 }
-                for (WallRepulsion w : mWallRepulsionList) {
-                    applyForce(String.format("%d", w.getWallId()), w, mass);
+                for (int i: mWallRepulsionMap.keySet()) {
+                    applyWallForce(i, mass);
                 }
             }
-    	}
-        
+        }
     }
     
+    private void applyWallForce (int wallId, Mass mass) {
+        if (mWallToggleMap.get(wallId)) {
+            WallRepulsion force = mWallRepulsionMap.get(wallId);
+            mass.applyForceVector(force.calculateForce(mass));        
+        } 
+        else {
+            mass.applyForceVector(Constants.ZERO_VECTOR);
+        }
+    }
+
     public void applyForce(String force_id, Force force, Mass mass) {
         if (mToggleMap.get(force_id)) {
             mass.applyForceVector(force.calculateForce(mass));        
         } 
         else {
-            mass.applyForceVector(ZERO_VECTOR);
+            mass.applyForceVector(Constants.ZERO_VECTOR);
         }
     }
     
@@ -174,17 +167,21 @@ public class EnvironmentManager {
         }
     }
     public void changeMuscleAmplitude (boolean increase) {
-        ArrayList<Spring> spring_list = getSpringsList();
+        List<Spring> spring_list = getSpringsList();
         for (Spring s: spring_list) {
             s.changeAmplitude(increase);
         }
     }
     
-    public ArrayList<Mass> getMassList () {
-        ArrayList<Mass> all_masses = new ArrayList<Mass>();
-        ArrayList<Assembly> all_assemblies = mSpringies.getAssemblyList();
+    public void updateCOM () {
+        mCOMList = makeCOMForAllAssemblies();
+    }
+    
+    public List<Mass> getMassList () {
+        List<Mass> all_masses = new ArrayList<Mass>();
+        List<Assembly> all_assemblies = mSpringies.getAssemblyList();
         for (Assembly assembly: all_assemblies) {
-            ArrayList<Mass> mass_list = assembly.getMassList(); 
+            List<Mass> mass_list = assembly.getMassList(); 
             for (Mass mass: mass_list) {
                 all_masses.add(mass);
             }
@@ -192,20 +189,15 @@ public class EnvironmentManager {
         return all_masses;
     }
     
-    public ArrayList<Spring> getSpringsList () {
-        ArrayList<Spring> all_springs = new ArrayList<Spring>(); 
-        ArrayList<Assembly> all_assemblies = mSpringies.getAssemblyList();
+    public List<Spring> getSpringsList () {
+        List<Spring> all_springs = new ArrayList<Spring>(); 
+        List<Assembly> all_assemblies = mSpringies.getAssemblyList();
         for (Assembly assembly: all_assemblies) {
-            ArrayList<Spring> springs_list = assembly.getSpringList(); 
+            List<Spring> springs_list = assembly.getSpringList(); 
             for (Spring springs: springs_list) {
                 all_springs.add(springs);
             }
         }
         return all_springs;
-    }
-
-    public void updateCOM (Assembly a) {
-        COM new_com = new COM(a);
-        mCOMList.add(new_com);
     }
 }
