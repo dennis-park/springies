@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import masses.Mass;
-import org.jbox2d.common.Vec2;
 import springs.Spring;
 import walls.Wall;
 import forces.*;
@@ -118,6 +117,10 @@ public class EnvironmentManager {
             toggle_map.put(i, true);
         }
         return toggle_map;
+    }
+    
+    public HashMap<String, Boolean> getToggleMap () {
+    	return mToggleMap;
     }
 
     public void toggleForces (String forceid) {

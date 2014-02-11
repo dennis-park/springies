@@ -5,7 +5,6 @@ import org.jbox2d.common.Vec2;
 import springies.Constants;
 import forces.Force;
 import jboxGlue.PhysicalObject;
-import jgame.JGColor;
 import jgame.JGObject;
 import masses.Mass;
 
@@ -63,13 +62,13 @@ public class Spring extends PhysicalObject implements Force {
      * @param y
      * @return spring force vector
      */
-    private Vec2 computeNormalizedForce () {
-        float x = mEnd.getBody().getPosition().x - mStart.getBody().getPosition().x;
-        float y = mEnd.getBody().getPosition().y - mStart.getBody().getPosition().y;
-        Vec2 force = new Vec2(x, y);
-        force.normalize();
-        return force;
-    }
+//    private Vec2 computeNormalizedForce () {
+//        float x = mEnd.getBody().getPosition().x - mStart.getBody().getPosition().x;
+//        float y = mEnd.getBody().getPosition().y - mStart.getBody().getPosition().y;
+//        Vec2 force = new Vec2(x, y);
+//        force.normalize();
+//        return force;
+//    }
 
     @Override
     public Vec2 calculateForce () {

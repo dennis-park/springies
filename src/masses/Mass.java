@@ -5,7 +5,6 @@ import org.jbox2d.common.Vec2;
 import springies.Constants;
 import springs.Spring;
 import jboxGlue.*;
-import jgame.JGColor;
 import jgame.JGObject;
 
 

@@ -13,7 +13,6 @@ public class Viscosity implements Force {
      * @param magnitude
      */
     private double mMagnitude;
-    private double mDirection;
 
     public Viscosity (double magnitude) {
         this.mMagnitude = magnitude;
@@ -34,7 +33,6 @@ public class Viscosity implements Force {
 
         viscosity.normalize();
 
-        // testViscosityCalculations(mass, viscosity, scalar);
         return viscosity.mul(scalar);
     }
 

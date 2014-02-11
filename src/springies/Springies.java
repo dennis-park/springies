@@ -8,7 +8,6 @@ import listeners.OnKeyListener;
 import masses.Mass;
 import springs.Spring;
 
-
 @SuppressWarnings("serial")
 public class Springies extends JGEngine {
 
@@ -78,16 +77,17 @@ public class Springies extends JGEngine {
      * }
      */
 
-    private String[] forceView = { Constants.GRAV_ID, Constants.VISC_ID, Constants.COM_ID,
+    private String[] force_id = { Constants.GRAV_ID, Constants.VISC_ID, Constants.COM_ID,
                                   Constants.WALL_ID };
-
+	private String[] force_view;
+	
     private void updateToggleView () {
-    	
-        for (String symbol : forceView) {
-            // String toggleString = symbol + " " + (getToggleMap().get(symbol)).toString();
-            this.drawString(symbol, x, y, 1);
-            // System.out.print(forceString + ", ");
-        }
+    	for (int index = 0; index < force_id.length; index ++) {
+    		int offset = index*10;
+    		force_view[index] = force_id[1] + " " +
+    				(mEnvironmentManager.getToggleMap().get(force_id[1])).toString().charAt(0);
+    		this.drawString(force_view[index], 20+offset, 20+offset, 0);
+    	}	
     }
 
     /**
