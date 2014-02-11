@@ -3,6 +3,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 
+
 /**
  * Creates window that can be moved, resized, and closed by the user.
  * 

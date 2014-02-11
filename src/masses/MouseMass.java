@@ -3,6 +3,7 @@ package masses;
 import jgame.JGColor;
 import org.jbox2d.common.Vec2;
 
+
 public class MouseMass extends FixedMass {
 
     public MouseMass (String id, double x, double y) {

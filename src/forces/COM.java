@@ -6,6 +6,7 @@ import org.jbox2d.common.Vec2;
 import springies.Assembly;
 import springies.Constants;
 
+
 public class COM implements Force {
     private List<Mass> mList;
     private double mMagnitude;

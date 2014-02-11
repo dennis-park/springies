@@ -3,23 +3,23 @@ package springies;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import masses.Mass;
 import springs.Spring;
 import Parsers.ModelParser;
 import Parsers.XMLParserCaller;
 
+
 public class AssemblyFactory {
-	
-	private Springies mSpringies;
-	private Assembly mAssembly;
-	
-	public AssemblyFactory(Springies s) {
-		mSpringies = s;
-		mAssembly = new Assembly();
-	}
-	
-	private ModelParser makeModelFromXML (String filename) {
+
+    private Springies mSpringies;
+    private Assembly mAssembly;
+
+    public AssemblyFactory (Springies s) {
+        mSpringies = s;
+        mAssembly = new Assembly();
+    }
+
+    private ModelParser makeModelFromXML (String filename) {
         XMLParserCaller caller = new XMLParserCaller();
         ModelParser parser = new ModelParser(mSpringies);
         try {
@@ -32,7 +32,7 @@ public class AssemblyFactory {
         }
         return parser;
     }
-	
+
     public void loadAssembly () {
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter XMLfilter = new FileNameExtensionFilter("XML documents", "xml");
@@ -54,16 +54,16 @@ public class AssemblyFactory {
                 for (Spring spring : factory.getSprings()) {
                     mAssembly.add(spring);
                 }
-                //mEnvironmentManager.updateCOM(a);
+                // mEnvironmentManager.updateCOM(a);
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-    
-    public Assembly getAssembly() {
-    	return mAssembly;
+
+    public Assembly getAssembly () {
+        return mAssembly;
     }
-    
+
 }

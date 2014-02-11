@@ -11,10 +11,10 @@ public class Wall extends PhysicalObjectRect {
     public final static double DEFAULT_WALL_WIDTH = 1;  // In order to initialize w/o a calculated
     // width/height
     private final double WALL_WIDTH = eng.displayWidth() - Constants.DEFAULT_WALL_MARGIN * 2 +
-                                            Constants.DEFAULT_WALL_THICKNESS;
+                                      Constants.DEFAULT_WALL_THICKNESS;
     private final double WALL_HEIGHT = eng.displayHeight() - Constants.DEFAULT_WALL_MARGIN *
-                                             2 +
-                                             Constants.DEFAULT_WALL_THICKNESS;
+                                       2 +
+                                       Constants.DEFAULT_WALL_THICKNESS;
 
     protected int mWallId;
     protected double mDirection;

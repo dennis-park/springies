@@ -5,6 +5,7 @@ import springies.Constants;
 import springies.EnvironmentManager;
 import springies.Springies;
 
+
 /**
  * This class implements a Key Listener in order to toggle walls in (towards center)
  * and out (away from center) in Springies.
@@ -12,7 +13,7 @@ import springies.Springies;
  * @author Thanh-Ha Nguyen & Dennis Park
  * 
  */
-public class OnKeyListener{
+public class OnKeyListener {
     private Springies mSpringies;
     private EnvironmentManager mEnvironmentManager;
 
