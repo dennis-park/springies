@@ -63,11 +63,20 @@ public class Springies extends JGEngine {
 		// so gravity is up in world coords and down in game coords
 		// so set all directions (e.g., forces, velocities) in world coords
 		WorldManager.initWorld(this);
-		String model_filename = "assets/lamp.xml";
-		String model_filename2 = "assets/daintywalker.xml";
-		String environment_filename = "assets/myEnvironment.xml";
+		
 		//addTestSpring();
 		testSpringForce();
+		testAssembly();
+
+		String environment_filename = "assets/myEnvironment.xml";
+		mEnvironmentManager = new EnvironmentManager(this);
+		//mForceManager = new EnvironmentManager(this, environment_filename);
+		mActionListener = new JGameActionListener(mEnvironmentManager);
+	}
+	
+	private void testAssembly() {
+		String model_filename = "assets/lamp.xml";
+		String model_filename2 = "assets/daintywalker.xml";
 		makeModelFromXML(model_filename);
 		try {
 			Thread.sleep(1000);
@@ -77,14 +86,7 @@ public class Springies extends JGEngine {
 			e.printStackTrace();
 		}
 		makeModelFromXML(model_filename2);
-
-		mEnvironmentManager = new EnvironmentManager(this);
-		//mForceManager = new EnvironmentManager(this, environment_filename);
-		// NEED TO ADD CODE SO WE CAN UPDATE FORCE MANAGER AS NEW MASSES ARE ADDED
-
-		mActionListener = new JGameActionListener(mEnvironmentManager);
 	}
-
 	private void makeModelFromXML (String filename) {
 		XMLParserCaller caller = new XMLParserCaller();
 		ModelParser parser = new ModelParser(this);
@@ -198,7 +200,7 @@ public class Springies extends JGEngine {
 		if (file != null && file.getAbsolutePath().equals(ASSETS+"environment.xml")) {
 			ModelParser factory = new ModelParser(this);
 			try {
-				new XMLParserCaller().call(ASSETS+file.getPath(), factory);
+				makeModelFromXML(ASSETS+file.getPath());
 				Assembly a = new Assembly();
 				for (Mass mass : factory.getMasses()) {
 					a.add(mass);
@@ -208,7 +210,6 @@ public class Springies extends JGEngine {
 				}
 				//a.addMuscles(factory.getAssemblyMuscles());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
