@@ -72,12 +72,6 @@ public class Springies extends JGEngine {
         }
     }
 
-    /**
-     * public HashMap<String, Boolean> getToggleMap() {
-     * return mToggleMap;
-     * }
-     */
-
     private String[] force_id = { Constants.GRAV_ID, Constants.VISC_ID, Constants.COM_ID,
                                   Constants.WALL_ID };
 	private String[] force_view;
