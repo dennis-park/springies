@@ -97,7 +97,9 @@ public class EnvironmentManager {
     public void toggleForces(String forceid) {
     	mToggleMap.put(forceid, !mToggleMap.get(forceid));
     }
-    
+    public void toggleForces(int forceid) {
+        mToggleMap.put(String.format("%d", forceid), !mToggleMap.get(forceid));
+    }
     private List<WallRepulsion> makeFourWallRepulsion () {
         makeFourWalls();
         
@@ -181,5 +183,10 @@ public class EnvironmentManager {
             }
         }
         return all_springs;
+    }
+
+    public void updateCOM (Assembly a) {
+        COM new_com = new COM(a);
+        mCOMList.add(new_com);
     }
 }

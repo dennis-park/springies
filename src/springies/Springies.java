@@ -54,17 +54,13 @@ public class Springies extends JGEngine {
         WorldManager.initWorld(this);
         assemblyList = new ArrayList<Assembly>();
         // makeAssembly();
-        loadAssemblyFromFile(new File("assets/daintywalker.xml"));
-        mEnvironmentManager = new EnvironmentManager(this);
-        // mForceManager = new EnvironmentManager(this, environment_filename);
+        String environment_filename = "assets/environment.xml";
+        loadAssemblyFromFile(new File("assets/example.xml"));
+        //mEnvironmentManager = new EnvironmentManager(this);
+        mEnvironmentManager = new EnvironmentManager(this, environment_filename);
         mActionListener = new JGameActionListener(this, mEnvironmentManager);
 
         setFrameRate(5, 2);
-    }
-
-    private void testAssembly () {
-        String model_filename = "assets/daintywalker.xml";
-        makeModelFromXML(model_filename);
     }
 
     private ModelParser makeModelFromXML (String filename) {
@@ -137,7 +133,7 @@ public class Springies extends JGEngine {
                     a.add(spring);
                 }
                 assemblyList.add(a);
-                // a.addMuscles(factory.getAssemblyMuscles());
+                mEnvironmentManager.updateCOM(a);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -146,9 +142,6 @@ public class Springies extends JGEngine {
     }
 
     public ArrayList<Assembly> getAssemblyList () {
-        if (assemblyList.size() == 0) {
-            makeAssembly();
-        }
         return assemblyList;
     }
     
@@ -157,6 +150,16 @@ public class Springies extends JGEngine {
     }
 
     public void clearLoadedAssemblies () {
+        for (Assembly a: assemblyList) {
+            ArrayList<Mass> mass_list = a.getMassList();
+            ArrayList<Spring> spring_list = a.getSpringList();
+            for (Mass m: mass_list) {
+                m.remove();
+            }
+            for (Spring s: spring_list) {
+                s.remove();
+            }
+        }
         assemblyList.clear();
     }
 }
