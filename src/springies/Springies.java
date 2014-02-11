@@ -124,12 +124,9 @@ public class Springies extends JGEngine {
         return mWallArray;
     }
 
-    private static final String ASSETS = "assets/";
-
     public void makeAssembly () {
         JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                                                                     "XML documents", "xml");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("XML documents", "xml");
         chooser.setFileFilter(filter);
         int returnVal = chooser.showDialog(null, "Load new Assembly file");
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -142,7 +139,7 @@ public class Springies extends JGEngine {
         if (file != null) {
             ModelParser factory = new ModelParser(this);
             try {
-                makeModelFromXML(ASSETS + file.getPath());
+                makeModelFromXML(file.getAbsolutePath());
                 Assembly a = new Assembly();
                 for (Mass mass : factory.getMasses()) {
                     a.add(mass);
