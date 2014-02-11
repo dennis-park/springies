@@ -58,16 +58,16 @@ public class JGameActionListener {
                 mEnvironmentManager.toggleForces(EnvironmentManager.COM_ID);
                 break;
             case KeyEvent.VK_1:
-                mEnvironmentManager.toggleForces(EnvironmentManager.TOP_ID);
+                mEnvironmentManager.toggleWallForces(EnvironmentManager.TOP_ID);
                 break;
             case KeyEvent.VK_2:
-                mEnvironmentManager.toggleForces(EnvironmentManager.RIGHT_ID);
+                mEnvironmentManager.toggleWallForces(EnvironmentManager.RIGHT_ID);
                 break;
             case KeyEvent.VK_3:
-                mEnvironmentManager.toggleForces(EnvironmentManager.BOTTOM_ID);
+                mEnvironmentManager.toggleWallForces(EnvironmentManager.BOTTOM_ID);
                 break;
             case KeyEvent.VK_4:
-                mEnvironmentManager.toggleForces(EnvironmentManager.LEFT_ID);
+                mEnvironmentManager.toggleWallForces(EnvironmentManager.LEFT_ID);
                 break;
             case KeyEvent.VK_EQUALS:
                 mEnvironmentManager.changeMuscleAmplitude(true);

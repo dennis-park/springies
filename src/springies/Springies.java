@@ -23,8 +23,8 @@ public class Springies extends JGEngine {
     private JGameActionListener mActionListener;
 
     private final int FPS = 40;
-	private final int FRAME_SKIP = 2;
-	
+    private final int FRAME_SKIP = 2;
+
     public Springies () {
         // set the window size
         int height = 480;
@@ -46,17 +46,17 @@ public class Springies extends JGEngine {
     }
 
     @Override
-	public void initGame () {
-		setFrameRate(FPS, FRAME_SKIP);
-		  WorldManager.initWorld(this);
-	        mAssemblyList = new ArrayList<Assembly>();
-	        // makeAssembly();
-	        String environment_filename = "assets/environment.xml";
-	        loadAssemblyFromFile(new File("assets/example.xml"));
-	        //mEnvironmentManager = new EnvironmentManager(this);
-	        mEnvironmentManager = new EnvironmentManager(this, environment_filename);
-	        mActionListener = new JGameActionListener(this, mEnvironmentManager);
-	}
+    public void initGame () {
+        setFrameRate(FPS, FRAME_SKIP);
+        WorldManager.initWorld(this);
+        mAssemblyList = new ArrayList<Assembly>();
+        // makeAssembly();
+        String environment_filename = "assets/environment.xml";
+        loadAssemblyFromFile(new File("assets/example.xml"));
+        // mEnvironmentManager = new EnvironmentManager(this);
+        mEnvironmentManager = new EnvironmentManager(this, environment_filename);
+        mActionListener = new JGameActionListener(this, mEnvironmentManager);
+    }
 
     private ModelParser makeModelFromXML (String filename) {
         XMLParserCaller caller = new XMLParserCaller();
@@ -84,11 +84,11 @@ public class Springies extends JGEngine {
         doListenerEvents();
         // update game objects
         if (!mAssemblyList.isEmpty()) {
-			mEnvironmentManager.doForces();
-			WorldManager.getWorld().step(1f, 1);
-			moveObjects();
-			checkCollision(1 + 2, 1);
-		}
+            mEnvironmentManager.doForces();
+            WorldManager.getWorld().step(1f, 1);
+            moveObjects();
+            checkCollision(1 + 2, 1);
+        }
     }
 
     // This is a helper method to call the built in JEngine listeners. This way
@@ -138,24 +138,24 @@ public class Springies extends JGEngine {
         }
     }
 
-	private void removeAllObjects() {
-		for (Assembly a : mAssemblyList) {
-			for (Mass mass : a.getMassList()) {
-				removeObject(mass);
-			}
-			for (Spring spring : a.getSpringList()) {
-				removeObject(spring);
-			}
-		}
-	}
+    private void removeAllObjects () {
+        for (Assembly a : mAssemblyList) {
+            for (Mass mass : a.getMassList()) {
+                removeObject(mass);
+            }
+            for (Spring spring : a.getSpringList()) {
+                removeObject(spring);
+            }
+        }
+    }
 
-	public void clearLoadedAssemblies () {
-		removeAllObjects();
-		mAssemblyList.clear();
-	}
+    public void clearLoadedAssemblies () {
+        removeAllObjects();
+        mAssemblyList.clear();
+    }
 
-	public ArrayList<Assembly> getAssemblyList() {
-		return mAssemblyList;
-	}
+    public ArrayList<Assembly> getAssemblyList () {
+        return mAssemblyList;
+    }
 
 }

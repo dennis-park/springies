@@ -39,6 +39,7 @@ public class EnvironmentManager {
     public static final String WALL_ID = "wall";
     
     protected HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
+    protected HashMap<Integer, Boolean> mWallToggleMap = new HashMap<Integer, Boolean>();
     protected HashMap<Integer, Wall> mWallMap;
  
     
@@ -57,8 +58,10 @@ public class EnvironmentManager {
         mGravity = parser.getGravity();
         mViscosity = parser.getViscosity();
         mCOMList = parser.getCOMList();
+        mWallMap = parser.getWallMap();
         mWallRepulsionList = parser.getWallRepulsionList();
         mToggleMap = initForceToggleMap();
+        mWallToggleMap = initWallToggleMap();
     }
     
     public EnvironmentManager(Springies s) {
@@ -72,6 +75,7 @@ public class EnvironmentManager {
         mCOMList = makeCOMForAllForces();
         mWallRepulsionList = makeFourWallRepulsion(); 
         mToggleMap = initForceToggleMap();
+        mWallToggleMap = initWallToggleMap();
     }
     
     private ArrayList<COM> makeCOMForAllForces () {
@@ -88,8 +92,13 @@ public class EnvironmentManager {
         toggle_map.put(GRAV_ID, true);
         toggle_map.put(VISC_ID, true);
         toggle_map.put(COM_ID, true);
+        return toggle_map;
+    }
+    
+    private HashMap<Integer, Boolean> initWallToggleMap() {
+        HashMap<Integer, Boolean> toggle_map = new HashMap<Integer, Boolean>();
         for (WallRepulsion w: mWallRepulsionList) {
-            toggle_map.put(String.format("%d", w.getWallId()), true);
+            toggle_map.put(w.getWallId(), true);
         }
         return toggle_map;
     }
@@ -97,8 +106,8 @@ public class EnvironmentManager {
     public void toggleForces(String forceid) {
     	mToggleMap.put(forceid, !mToggleMap.get(forceid));
     }
-    public void toggleForces(int forceid) {
-        mToggleMap.put(String.format("%d", forceid), !mToggleMap.get(forceid));
+    public void toggleWallForces(int forceid) {
+        mWallToggleMap.put(forceid, !mToggleMap.get(forceid));
     }
     private List<WallRepulsion> makeFourWallRepulsion () {
         makeFourWalls();
@@ -130,11 +139,20 @@ public class EnvironmentManager {
                 applyForce(COM_ID, c, mass);
             }
             for (WallRepulsion w : mWallRepulsionList) {
-                applyForce(String.format("%d", w.getWallId()), w, mass);
+                applyWallForce(w.getWallId(), w, mass);
             }
         }
     }
     
+    private void applyWallForce (int wallId, WallRepulsion w, Mass mass) {
+        if (mWallToggleMap.get(wallId)) {
+            mass.applyForceVector(w.calculateForce(mass));        
+        } 
+        else {
+            mass.applyForceVector(ZERO_VECTOR);
+        }
+    }
+
     public void applyForce(String force_id, Force force, Mass mass) {
         if (mToggleMap.get(force_id)) {
             mass.applyForceVector(force.calculateForce(mass));        

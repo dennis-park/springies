@@ -21,7 +21,7 @@ public class EnvironmentParser extends XMLParser {
     private Viscosity mViscosity;
     private List<WallRepulsion> mWallRepulsionList;
     private ArrayList<COM> mCOMList;
-    private HashMap<Integer, Wall> mWallList;
+    private HashMap<Integer, Wall> mWallMap;
     
     protected static final String ID = "id";
     protected static final String MAGNITUDE = "magnitude";
@@ -31,16 +31,16 @@ public class EnvironmentParser extends XMLParser {
     public EnvironmentParser(Springies s) {
         mSpringies = s;
         mWallRepulsionList = new ArrayList<WallRepulsion>();
-        mWallList = new HashMap<Integer, Wall>();
+        mWallMap = new HashMap<Integer, Wall>();
         mCOMList = new ArrayList<COM>();
         makeWalls();
     }
 
     private void makeWalls () {
-        mWallList.put(WallType.TOP_WALL, new Wall(WallType.TOP_WALL));
-        mWallList.put(WallType.BOTTOM_WALL, new Wall(WallType.BOTTOM_WALL));
-        mWallList.put(WallType.LEFT_WALL, new Wall(WallType.LEFT_WALL));
-        mWallList.put(WallType.RIGHT_WALL, new Wall(WallType.RIGHT_WALL));
+        mWallMap.put(WallType.TOP_WALL, new Wall(WallType.TOP_WALL));
+        mWallMap.put(WallType.BOTTOM_WALL, new Wall(WallType.BOTTOM_WALL));
+        mWallMap.put(WallType.LEFT_WALL, new Wall(WallType.LEFT_WALL));
+        mWallMap.put(WallType.RIGHT_WALL, new Wall(WallType.RIGHT_WALL));
     }
 
     @Override
@@ -76,7 +76,7 @@ public class EnvironmentParser extends XMLParser {
         int id = Integer.parseInt(a.getValue(ID));
         double mag = Double.parseDouble(a.getValue(MAGNITUDE));
         double exp = Double.parseDouble(a.getValue(EXPONENT));
-        WallRepulsion wall = new WallRepulsion(mWallList.get(id), mag, exp);
+        WallRepulsion wall = new WallRepulsion(mWallMap.get(id), mag, exp);
         mWallRepulsionList.add(wall);
     }
 
@@ -131,7 +131,7 @@ public class EnvironmentParser extends XMLParser {
         return mViscosity;
     }
     
-    public ArrayList<COM> getCOMList() {
+    public List<COM> getCOMList() {
         if (mCOMList == null) {
             System.out.println("Error. Center of mass has not been initialized yet.");
             System.exit(1);
@@ -145,5 +145,9 @@ public class EnvironmentParser extends XMLParser {
             System.exit(1);
         }
         return mWallRepulsionList;
+    }
+    
+    public HashMap<Integer, Wall> getWallMap() {
+        return mWallMap;
     }
 }
