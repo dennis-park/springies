@@ -157,10 +157,6 @@ public class Springies extends JGEngine {
 		WorldManager.getWorld().step(1f, 1);
 		moveObjects();
 		checkCollision(1 + 2, 1);
-
-		/**
-		 * iterate through massmap to do forcemanager.doforces
-		 */
 	}
 
 	// This is a helper method to call the built in JEngine listeners. This way 
@@ -208,6 +204,7 @@ public class Springies extends JGEngine {
 				for (Spring spring : factory.getSprings()) {
 					a.add(spring);
 				}
+				assemblyList.add(a);
 				//a.addMuscles(factory.getAssemblyMuscles());
 			} catch (Exception e) {
 				e.printStackTrace();
