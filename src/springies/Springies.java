@@ -220,12 +220,16 @@ public class Springies extends JGEngine {
 		this.mMassList = mass_list;
 	}
 
-	public ArrayList<Spring>  getSpringsList () {
-		return mSpringsList;
+	public void setSpringsList (ArrayList<Spring> springList) {
+		this.mSpringsList = springList;
 	}
 
-	public void setSpringsList (ArrayList<Spring>  springList) {
-		this.mSpringsList = springList;
+	public List<Spring>  getSpringsList () {
+		return mSpringsList;
+	}
+	
+	public List<Assembly> getAssembly() {
+		return assemblyList;
 	}
 
 	public void clearLoadedAssemblies() {
