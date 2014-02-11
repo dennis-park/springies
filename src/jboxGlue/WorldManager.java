@@ -5,7 +5,12 @@ import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
-
+/**
+ * This is the default WorldManager given in the Springies source code. Set Gravity = <0, 0>
+ * 
+ * @author CS308 - Spring 2014
+ *
+ */
 public class WorldManager
 {
     public static World ourWorld;
@@ -20,6 +25,10 @@ public class WorldManager
         return ourWorld;
     }
 
+    /**
+     * 
+     * @param engine
+     */
     public static void initWorld (JGEngine engine)
     {
         AABB worldBounds = new AABB(new Vec2(0, 0),

@@ -7,25 +7,49 @@ import springies.Assembly;
 import springies.Constants;
 
 
+/**
+ * <p>
+ * This is an imaginary force which attracts all masses toward their calculated center of mass. In
+ * the data file, this force is indicated by the keyword centermass followed by a magnitude and an
+ * exponent value. An exponent value of 2.0 means inverse-square force (the force is inversely
+ * proportional to the distance squared). A value of 0.0 is a constant force independent of
+ * position. If the magnitude of this force is negative, it becomes a repulsion force.
+ * <p>
+ * <p>
+ * This Force assumes that its associated Assembly object is a valid assembly object. If the
+ * Assembly object is removed during the course of the simulation, the COM force will fail.
+ * </p>
+ * 
+ * @author Thanh-Ha Nguyen
+ * 
+ */
 public class COM implements Force {
+    private Assembly mAssembly;
     private List<Mass> mList;
     private double mMagnitude;
     private double mExponent;
 
     /**
-     * This is an imaginary force which attracts all masses toward their calculated center of mass.
-     * In the data file, this force is indicated by the keyword centermass followed by a magnitude
-     * and an exponent value. An exponent value of 2.0 means inverse-square force (the force is
-     * inversely proportional to the distance squared). A value of 0.0 is a constant force
-     * independent of position. If the magnitude of this force is negative, it becomes a repulsion
-     * force.
+     * Constructor for the COM force.
      * 
      * @param magnitude
+     * @param exponent
+     * @param assembly
      */
     public COM (double magnitude, double exponent, Assembly assembly) {
+        checkValidAssembly();
         mMagnitude = magnitude;
         mExponent = exponent;
-        mList = assembly.getMassList();
+        mAssembly = assembly;
+    }
+
+    /**
+     * Can be called by user to update the COM's mass list (i.e. if the Assembly was changed in the
+     * course of the simulation)
+     */
+    public void updateMassList () {
+        checkValidAssembly();
+        mList = mAssembly.getMassList();
     }
 
     public COM (double magnitude, Assembly assembly) {
@@ -36,19 +60,15 @@ public class COM implements Force {
         this(Constants.DEFAULT_COM_MAGNITUDE, Constants.DEFAULT_EXPONENT, assembly);
     }
 
-    public void setMassList (List<Mass> mass_list) {
-        if (mass_list != null && mass_list.size() > 0) {
-            this.mList = mass_list;
-        }
-    }
-
     /**
      * Calculations of the center of gravity point based on the list of all masses
      * R = (1/M) sum (m*r).
      */
     public Vec2 calculateCOMPoint () {
-        if (mList == null || mList.size() == 0) { throw new RuntimeException(
-                                                                             "call addMassList(List<Mass>) with a MassList of size > 0!"); }
+        checkValidAssembly();
+        updateMassList();
+        if (mList.size() == 0) { throw new RuntimeException(
+                                                            "Assembly given to this force has no masses"); }
 
         double sum_mass = 0.0;
         double sum_mr_x = 0.0;
@@ -71,11 +91,11 @@ public class COM implements Force {
     /**
      * Calculations of center of mass forces takes the x and y positions as input and returns a Vec2
      * object representing the center of mass force acting on the mass at that position.
+     * 
+     * @param Mass mass
+     * @return Vec2 force
      */
     public Vec2 calculateForce (Mass mass) {
-        if (mList == null) { throw new RuntimeException(
-                                                        "call addMassList(List<Mass>) before calculateForce()!"); }
-
         Vec2 com_point = calculateCOMPoint();
         Vec2 mass_position = mass.getBody().getPosition();
         double x_pos = mass_position.x;
@@ -94,14 +114,15 @@ public class COM implements Force {
     }
 
     @Override
-    public Vec2 calculateForce (double x, double y) {
-        // TODO Auto-generated method stub
+    /**
+     * If calculateForce is not given an argument it will return a <0,0> force Vec2
+     */
+    public Vec2 calculateForce () {
         return null;
     }
-
-    @Override
-    public Vec2 calculateForce () {
-        // TODO Auto-generated method stub
-        return null;
+    
+    private void checkValidAssembly() {
+        if (mAssembly == null) { throw new RuntimeException(
+                "Assembly given to this force is no longer valid"); }
     }
 }

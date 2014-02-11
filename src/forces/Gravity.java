@@ -5,6 +5,17 @@ import org.jbox2d.common.Vec2;
 import springies.Constants;
 
 
+/**
+ * This is a constant force in a given direction (usually down). The magnitude of the force due to
+ * gravity is proportional to the mass of an element. In the data file, this force is indicated by
+ * the keyword gravity followed by a direction (in degrees) and a magnitude (in pixels per second)
+ * 
+ * This class will add to the existing Gravity set by the JBox game. In order for the simulation to
+ * work properly, the developer must set the JBox World gravity to <0, 0>
+ * 
+ * @author Thanh-Ha Nguyen
+ * 
+ */
 public class Gravity implements Force {
     private double mMagnitude;
     private double mDirection;
@@ -27,11 +38,6 @@ public class Gravity implements Force {
         // testGravityCalculations();
         gravity.set(x_f, y_f);
         return gravity;
-    }
-
-    @Override
-    public Vec2 calculateForce (double x, double y) {
-        return null;
     }
 
     @Override

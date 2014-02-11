@@ -4,11 +4,23 @@ import masses.Mass;
 import org.jbox2d.common.Vec2;
 
 
+/**
+ * This is a viscous drag force which applies a resistive force on masses proportional to their
+ * velocity. In the data file, this force is indicated by the keyword viscosity followed by a
+ * scale value
+ * 
+ * @author Thanh-Ha
+ * 
+ */
 public class Viscosity implements Force {
     /**
-     * This is a viscous drag force which applies a resistive force on masses proportional to their
-     * velocity. In the data file, this force is indicated by the keyword viscosity followed by a
-     * scale value
+     * <p>
+     * Viscosity constructor takes a magnitude as an input and will set a force proportional to the
+     * velocity of the object (acting against the movement of the object).
+     * </p>
+     * <p>
+     * Viscosity my_viscosity = new Viscosity(0.1);
+     * </p>
      * 
      * @param magnitude
      */
@@ -34,11 +46,6 @@ public class Viscosity implements Force {
         viscosity.normalize();
 
         return viscosity.mul(scalar);
-    }
-
-    @Override
-    public Vec2 calculateForce (double x, double y) {
-        return null;
     }
 
     @Override

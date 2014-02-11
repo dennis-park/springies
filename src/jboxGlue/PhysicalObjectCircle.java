@@ -48,11 +48,11 @@ public class PhysicalObjectCircle extends PhysicalObject
     {
         // save arguments
         myRadius = radius;
-        int intRadius = (int)radius;
+        int intRadius = (int) radius;
         // make it a circle
         CircleDef shape = new CircleDef();
-        shape.radius = (float)radius;
-        shape.density = (float)mass;
+        shape.radius = (float) radius;
+        shape.density = (float) mass;
         createBody(shape);
         setBBox(-intRadius, -intRadius, 2 * intRadius, 2 * intRadius);
     }
@@ -61,6 +61,6 @@ public class PhysicalObjectCircle extends PhysicalObject
     public void paintShape ()
     {
         myEngine.setColor(myColor);
-        myEngine.drawOval(x, y, (float)myRadius * 2, (float)myRadius * 2, true, true);
+        myEngine.drawOval(x, y, (float) myRadius * 2, (float) myRadius * 2, true, true);
     }
 }

@@ -2,6 +2,7 @@ package springies;
 
 //import jgame.JGColor;
 //import jgame.JGFont;
+import java.io.File;
 import java.util.ArrayList;
 import jboxGlue.WorldManager;
 import jgame.platform.JGEngine;
@@ -70,7 +71,6 @@ public class Springies extends JGEngine {
         mAssemblyList = new ArrayList<Assembly>();
         mFactory = new AssemblyFactory(this);
         String environment_filename = "assets/environment.xml";
-        // mFactory.loadAssemblyFromFile(new File("assets/daintywalker.xml"));
         // mEnvironmentManager = new EnvironmentManager(this);
         mEnvironmentManager = new EnvironmentManager(this, environment_filename);
         mKeyListener = new OnKeyListener(this, mEnvironmentManager);
@@ -130,6 +130,7 @@ public class Springies extends JGEngine {
      */
     public void makeAssembly () {
         mFactory.loadAssembly();
+        //mFactory.loadFromFile(new File("assets/daintywalker.xml"));
         mAssemblyList.add(mFactory.getAssembly());
     }
 

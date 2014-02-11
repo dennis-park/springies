@@ -99,18 +99,6 @@ public class Spring extends PhysicalObject implements Force {
     /**
      * Computes Hooke's Law
      * 
-     * @param x
-     * @param y
-     * @return spring force vector
-     */
-    public Vec2 calculateForce (double x, double y) {
-        return null;
-    }
-
-    @Override
-    /**
-     * Computes Hooke's Law
-     * 
      * @param mass
      * @return spring force vector
      */
