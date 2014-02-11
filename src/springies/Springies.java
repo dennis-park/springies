@@ -47,21 +47,12 @@ public class Springies extends JGEngine {
 
     @Override
     public void initGame () {
-        // setFrameRate(60, 2); // given
-        setFrameRate(5, 2);
-
-        // NOTE:
-        // world coordinates have y pointing down
-        // game coordinates have y pointing up
-        // so gravity is up in world coords and down in game coords
-        // so set all directions (e.g., forces, velocities) in world coords
+        setFrameRate(FPS, FRAME_SKIP);
         WorldManager.initWorld(this);
         mAssemblyList = new ArrayList<Assembly>();
-        makeAssembly();
         mEnvironmentManager = new EnvironmentManager(this);
         // mForceManager = new EnvironmentManager(this, environment_filename);
         mActionListener = new JGameActionListener(this, mEnvironmentManager);
-        setFrameRate(FPS, FRAME_SKIP);
     }
 
     private void testAssembly() {
@@ -165,6 +156,6 @@ public class Springies extends JGEngine {
     }
 
     public void clearLoadedAssemblies () {
-        mAssemblyList = new ArrayList<Assembly>();
+        mAssemblyList.clear();
     }
 }
