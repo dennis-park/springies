@@ -58,19 +58,6 @@ public class Springies extends JGEngine {
 	        mActionListener = new JGameActionListener(this, mEnvironmentManager);
 	}
 
-    private void testAssembly() {
-		String model_filename = "assets/lamp.xml";
-		String model_filename2 = "assets/daintywalker.xml";
-		makeModelFromXML(model_filename);
-		try {
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		makeModelFromXML(model_filename2);
-	}
-
     private ModelParser makeModelFromXML (String filename) {
         XMLParserCaller caller = new XMLParserCaller();
         ModelParser parser = new ModelParser(this);
