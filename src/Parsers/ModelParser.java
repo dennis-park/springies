@@ -9,19 +9,20 @@ import java.util.HashMap;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+
 public class ModelParser extends XMLParser {
     protected Springies mSpringies;
     protected HashMap<String, Mass> mMassMap;
     protected List<Mass> mMassList;
     protected List<Spring> mSpringList;
-    
+
     public ModelParser (Springies s) {
         mSpringies = s;
         mMassList = new ArrayList<Mass>();
         mSpringList = new ArrayList<Spring>();
         mMassMap = new HashMap<String, Mass>();
     }
-    
+
     public void startElement (String namespaceURI,
                               String localName,
                               String qName,
@@ -117,20 +118,19 @@ public class ModelParser extends XMLParser {
     }
 
     private Spring createSpringObj (String m1_id, String m2_id, String restlength, String constant) {
-        System.out.printf("Parsing ... : %s\t%s\t%s\t%s\n", m1_id, m2_id, restlength, constant);
-        
         Mass m1 = mMassMap.get(m1_id);
         Mass m2 = mMassMap.get(m2_id);
-        
+
         Spring newSpring;
-        if (restlength == null && constant == null) { 
-            newSpring = new Spring(m1, m2); 
+        if (restlength == null && constant == null) {
+            newSpring = new Spring(m1, m2);
         }
-        else if (constant == null) { 
-            newSpring = new Spring(m1, m2, Double.parseDouble(restlength)); 
+        else if (constant == null) {
+            newSpring = new Spring(m1, m2, Double.parseDouble(restlength));
         }
         else {
-            newSpring = new Spring(m1, m2, Double.parseDouble(restlength), Double.parseDouble(constant));
+            newSpring =
+                    new Spring(m1, m2, Double.parseDouble(restlength), Double.parseDouble(constant));
         }
         return newSpring;
     }
@@ -140,14 +140,13 @@ public class ModelParser extends XMLParser {
         Mass m2 = mMassMap.get(m2_id);
         double amp = Double.parseDouble(amplitude);
 
-        Muscle newMuscle; 
-        if (restlength == null) { 
-            newMuscle = new Muscle(m1, m2, amp); 
+        Muscle newMuscle;
+        if (restlength == null) {
+            newMuscle = new Muscle(m1, m2, amp);
         }
         newMuscle = new Muscle(m1, m2, Double.parseDouble(restlength), amp);
         return newMuscle;
     }
-    
 
     private void parseMass (Attributes a) {
         checkIdXY(a);
@@ -181,10 +180,12 @@ public class ModelParser extends XMLParser {
                                 a.getValue("amplitude"));
         mSpringList.add(newMuscle);
     }
-    public List<Mass> getMasses() {
-    	return mMassList;
+
+    public List<Mass> getMasses () {
+        return mMassList;
     }
-    public List<Spring> getSprings() {
-    	return mSpringList;
+
+    public List<Spring> getSprings () {
+        return mSpringList;
     }
 }

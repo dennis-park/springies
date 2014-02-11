@@ -16,9 +16,7 @@ public class WorldManager
     public static World getWorld ()
     {
         // make sure we have a world, just in case...
-        if (ourWorld == null) {
-            throw new RuntimeException("call initWorld() before getWorld()!");
-        }
+        if (ourWorld == null) { throw new RuntimeException("call initWorld() before getWorld()!"); }
         return ourWorld;
     }
 
