@@ -173,11 +173,18 @@ public class EnvironmentManager {
             }
         }
     }
+    
     public void changeMuscleAmplitude (boolean increase) {
         ArrayList<Spring> spring_list = getSpringsList();
         for (Spring s: spring_list) {
             s.changeAmplitude(increase);
         }
+    }
+    
+
+    public void updateCOM (Assembly a) {
+        COM new_com = new COM(a);
+        mCOMList.add(new_com);
     }
     
     public ArrayList<Mass> getMassList () {
@@ -204,8 +211,4 @@ public class EnvironmentManager {
         return all_springs;
     }
 
-    public void updateCOM (Assembly a) {
-        COM new_com = new COM(a);
-        mCOMList.add(new_com);
-    }
 }

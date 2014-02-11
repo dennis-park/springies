@@ -2,11 +2,14 @@ package springies;
 
 import java.io.File;
 import java.util.ArrayList;
+
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import jboxGlue.WorldManager;
 import jgame.platform.JGEngine;
-import listeners.JGameActionListener;
+import listeners.OnClickListener;
+import listeners.OnKeyListener;
 import masses.Mass;
 import springs.Spring;
 import walls.Wall;
@@ -20,7 +23,8 @@ public class Springies extends JGEngine {
     public ArrayList<Assembly> mAssemblyList;
     private Wall[] mWallArray;
     private EnvironmentManager mEnvironmentManager;
-    private JGameActionListener mActionListener;
+    private OnClickListener mMouseListener;
+    private OnKeyListener mKeyListener;
 
     private final int FPS = 40;
 	private final int FRAME_SKIP = 2;
@@ -54,7 +58,8 @@ public class Springies extends JGEngine {
 	        loadAssemblyFromFile(new File("assets/example.xml"));
 	        //mEnvironmentManager = new EnvironmentManager(this);
 	        mEnvironmentManager = new EnvironmentManager(this, environment_filename);
-	        mActionListener = new JGameActionListener(this, mEnvironmentManager);
+	        mKeyListener = new OnKeyListener(this, mEnvironmentManager);
+	        mMouseListener = new OnClickListener(mEnvironmentManager);
 	}
 
     private ModelParser makeModelFromXML (String filename) {
@@ -96,8 +101,8 @@ public class Springies extends JGEngine {
     private void doListenerEvents () {
         int last_key = getLastKey();
         clearLastKey(); // last key has to be cleared every time
-        mActionListener.doKeyEvent(last_key);
-        mActionListener
+        mKeyListener.doKeyEvent(last_key);
+        mMouseListener
                 .doMouseEvent(getMouseButton(1), getMouseButton(3), getMouseX(), getMouseY());
     }
 
