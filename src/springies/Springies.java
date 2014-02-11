@@ -17,17 +17,20 @@ import Parsers.XMLParserCaller;
 
 @SuppressWarnings("serial")
 public class Springies extends JGEngine {
-    public ArrayList<Assembly> assemblyList;
+    public ArrayList<Assembly> mAssemblyList;
     private Wall[] mWallArray;
     private EnvironmentManager mEnvironmentManager;
     private JGameActionListener mActionListener;
 
+    private final int FPS = 40;
+    private final int FRAME_SKIP = 2;
+    
     public Springies () {
         // set the window size
         int height = 480;
         double aspect = 16.0 / 9.0;
         initEngineComponent((int) (height * aspect), height);
-        assemblyList = new ArrayList<Assembly>();
+        mAssemblyList = new ArrayList<Assembly>();
     }
 
     @Override
@@ -53,13 +56,12 @@ public class Springies extends JGEngine {
         // so gravity is up in world coords and down in game coords
         // so set all directions (e.g., forces, velocities) in world coords
         WorldManager.initWorld(this);
-        assemblyList = new ArrayList<Assembly>();
+        mAssemblyList = new ArrayList<Assembly>();
         makeAssembly();
         mEnvironmentManager = new EnvironmentManager(this);
         // mForceManager = new EnvironmentManager(this, environment_filename);
         mActionListener = new JGameActionListener(this, mEnvironmentManager);
-
-        setFrameRate(5, 2);
+        setFrameRate(FPS, FRAME_SKIP);
     }
 
     private void testAssembly () {
@@ -145,7 +147,7 @@ public class Springies extends JGEngine {
                 for (Spring spring : factory.getSprings()) {
                     a.add(spring);
                 }
-                assemblyList.add(a);
+                mAssemblyList.add(a);
                 // a.addMuscles(factory.getAssemblyMuscles());
             }
             catch (Exception e) {
@@ -155,17 +157,17 @@ public class Springies extends JGEngine {
     }
 
     public List<Assembly> getAssemblyList () {
-        if (assemblyList.size() == 0) {
-            makeAssembly();
-        }
-        return assemblyList;
+//        if (mAssemblyList.size() == 0) {
+//            makeAssembly();
+//        }
+        return mAssemblyList;
     }
     
     public Assembly getAssembly(int index) {
-        return assemblyList.get(index);
+        return mAssemblyList.get(index);
     }
 
     public void clearLoadedAssemblies () {
-        assemblyList.clear();
+        mAssemblyList.clear();
     }
 }
