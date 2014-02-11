@@ -9,11 +9,27 @@ import Parsers.ModelParser;
 import Parsers.XMLParserCaller;
 
 
+/**
+ * This class implements a factory for creating assemblies.
+ * It loads (xml) files into a new Assembly object and returns 
+ * an instance of it.
+ * 
+ * @author Thanh-Ha Nguyen & Dennis Park
+ * 
+ */
+
 public class AssemblyFactory {
 
     private Springies mSpringies;
     private Assembly mAssembly;
 
+    /**
+     * Constructor for factory. Takes in Springies object 
+     * and creates an instance of new Assembly object.
+     * 
+     * @param Springies s
+     * @return
+     */
     public AssemblyFactory (Springies s) {
         mSpringies = s;
         mAssembly = new Assembly();
@@ -33,6 +49,13 @@ public class AssemblyFactory {
         return parser;
     }
 
+    /**
+     * Opens a JFileChooser object that prompts user for file path
+     * to be parsed.  Calls helper method loadFromFile(File file)
+     * 
+     * @param 
+     * @return void 
+     */
     public void loadAssembly () {
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter XMLfilter = new FileNameExtensionFilter("XML documents", "xml");
@@ -44,6 +67,14 @@ public class AssemblyFactory {
         }
     }
 
+    /**
+     * Helper method to loadAssembly().
+     * Loads XML document from file, calls a factory that 
+     * parses through all models and stores in Assembly object.
+     * 
+     * @param file
+     * @return
+     */
     public void loadFromFile (File file) {
         if (file != null) {
             try {
@@ -54,7 +85,6 @@ public class AssemblyFactory {
                 for (Spring spring : factory.getSprings()) {
                     mAssembly.add(spring);
                 }
-                // mEnvironmentManager.updateCOM(a);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -62,6 +92,12 @@ public class AssemblyFactory {
         }
     }
 
+    /**
+     * Getter for Assembly object created from file.
+     * 
+     * @param 
+     * @return this
+     */
     public Assembly getAssembly () {
         return mAssembly;
     }

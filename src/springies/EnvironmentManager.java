@@ -9,7 +9,16 @@ import walls.Wall;
 import forces.*;
 import Parsers.*;
 
-
+/**
+ * This class is a manager for the environment specified by
+ * either default values or those parsed in the environment XML.
+ * It organizes forces, applies their computed values to objects 
+ * living in the Springies environment, and toggles them based on 
+ * user input.
+ * 
+ * @param 
+ * @return 
+ */
 public class EnvironmentManager {
     protected Springies mSpringies;
 
@@ -31,6 +40,14 @@ public class EnvironmentManager {
     protected HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
     protected HashMap<Integer, Boolean> mWallToggleMap = new HashMap<Integer, Boolean>();
 
+    /**
+     * Constructor for EnvironmentManager.
+     * Copies Springies object and sets default values for forces.
+     * Calls helper method to initialize environment.
+     * 
+     * @param Springies s
+     * @return 
+     */
     public EnvironmentManager (Springies s) {
         mSpringies = s;
 
@@ -47,6 +64,15 @@ public class EnvironmentManager {
         initEnvironment();
     }
 
+    /**
+     * Constructor for EnvironmentManager.
+     * Copies Springies object and sets values for forces as 
+     * defined by the XML document from the specified file path.
+     * Calls helper method to initialize environment.
+     * 
+     * @param s, filename
+     * @return 
+     */
     public EnvironmentManager (Springies s, String filename) {
         mSpringies = s;
         EnvironmentParser parser = setEnvironmentFromParser(filename);
@@ -61,7 +87,7 @@ public class EnvironmentManager {
 
         initEnvironment();
     }
-
+    
     private void initEnvironment () {
         for (int i = 1; i <= Constants.NUM_WALLS; i++) {
             Wall new_wall = new Wall(i);
@@ -76,10 +102,16 @@ public class EnvironmentManager {
         mWallToggleMap = initWallToggleMap();
     }
 
+    /**
+     * Updates Center of Mass force for all Assembly objects.
+     * 
+     * @param 
+     * @return 
+     */
     public void updateCOM () {
         mCOMList = makeCOMForAllAssemblies();
     }
-
+    
     private List<COM> makeCOMForAllAssemblies () {
         List<COM> com_list = new ArrayList<COM>();
         ArrayList<Assembly> assembly_list = mSpringies.getAssemblyList();
@@ -119,18 +151,50 @@ public class EnvironmentManager {
         return toggle_map;
     }
     
+
+    /**
+     * Getter for the member HashMap of toggles for gravity, viscosity,
+     * and COM forces.
+     * 
+     * @param 
+     * @return mToggleMap
+     */
     public HashMap<String, Boolean> getToggleMap () {
     	return mToggleMap;
     }
 
+
+    /**
+     * Stores one of the forces based on its ID and 
+     * toggles its boolean toggle value.
+     * 
+     * @param forceid
+     * @return
+     */
     public void toggleForces (String forceid) {
         mToggleMap.put(forceid, !mToggleMap.get(forceid));
     }
 
+
+    /**
+     * Stores one of the wall forces based on its ID and
+     * toggles its boolean toggle value.
+     * 
+     * @param 
+     * @return
+     */
     public void toggleWallForces (int wall_id) {
         mWallToggleMap.put(wall_id, !mWallToggleMap.get(wall_id));
     }
 
+
+    /**
+     * Applies gravity, viscosity, center of mass, and wall repulsion 
+     * forces on every mass in all assemblies.
+     * 
+     * @param 
+     * @return
+     */
     public void doForces () {
         for (Assembly assembly : mSpringies.getAssemblyList()) {
             for (Mass mass : assembly.getMassList()) {
@@ -156,6 +220,15 @@ public class EnvironmentManager {
         }
     }
 
+
+    /**
+     * This will apply the computed force on the mass depending on whether 
+     * the force_id exists in the map of all toggle values for the forces.
+     * If the id does not exist, it will apply the zero vector.
+     * 
+     * @param 
+     * @return com_list
+     */
     public void applyForce (String force_id, Force force, Mass mass) {
         if (mToggleMap.get(force_id)) {
             mass.applyForceVector(force.calculateForce(mass));
@@ -165,6 +238,15 @@ public class EnvironmentManager {
         }
     }
 
+
+    /**
+     * Moves walls based on a boolean for toggling motion outward.
+     * If move_out is true, the bounds will expand outward.
+     * If move_out is false, the bounds will contract inward.
+     * 
+     * @param move_out
+     * @return 
+     */
     public void moveWalls (boolean move_out) {
         for (Wall wall : mWallMap.values()) {
             if (move_out) {
@@ -176,6 +258,15 @@ public class EnvironmentManager {
         }
     }
 
+
+    /**
+     * Changes muscle-spring's amplitude in sinusoidal motion 
+     * based on specified offset.  Iterates through manager's 
+     * comprehensive spring list.
+     * 
+     * @param increase
+     * @return 
+     */
     public void changeMuscleAmplitude (boolean increase) {
         List<Spring> spring_list = getSpringsList();
         for (Spring s : spring_list) {
@@ -183,6 +274,15 @@ public class EnvironmentManager {
         }
     }
 
+
+    /**
+     * Iterates through all assemblies obtained from Springies object 
+     * to add to comprehensive mass list for storage in the environment.
+     * Returns this mass list.
+     * 
+     * @param 
+     * @return all_masses
+     */
     public List<Mass> getMassList () {
         List<Mass> all_masses = new ArrayList<Mass>();
         List<Assembly> all_assemblies = mSpringies.getAssemblyList();
@@ -195,6 +295,15 @@ public class EnvironmentManager {
         return all_masses;
     }
 
+
+    /**
+     * Iterates through all assemblies obtained from Springies object 
+     * to add to comprehensive spring list for storage in the environment.
+     * Returns this spring list.
+     * 
+     * @param 
+     * @return all_springs
+     */
     public List<Spring> getSpringsList () {
         List<Spring> all_springs = new ArrayList<Spring>();
         List<Assembly> all_assemblies = mSpringies.getAssemblyList();

@@ -17,8 +17,7 @@ public class Main {
     public static final String TITLE = "Springies!";
 
     /**
-     * main --- where the program starts
-     * 
+     * main: Where the program starts.  Run Springies from here.
      * @param args
      */
     public static void main (String args[]) {
