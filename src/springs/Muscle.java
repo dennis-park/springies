@@ -7,9 +7,9 @@ public class Muscle extends Spring {
 
     private double mAmplitude;
     private double mLength;
+    private int mCount;
     public static final int DEFAULT_PERIOD = 60;
     public static final double AMPLITUDE_INCREMENT = 0.05;
-    private int mCount;
 
     public Muscle (Mass m1, Mass m2, double amplitude) {
         super(m1, m2);
