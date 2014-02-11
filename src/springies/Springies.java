@@ -2,7 +2,6 @@ package springies;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import jboxGlue.WorldManager;
@@ -54,7 +53,8 @@ public class Springies extends JGEngine {
         // so set all directions (e.g., forces, velocities) in world coords
         WorldManager.initWorld(this);
         assemblyList = new ArrayList<Assembly>();
-        makeAssembly();
+        // makeAssembly();
+        loadAssemblyFromFile(new File("assets/daintywalker.xml"));
         mEnvironmentManager = new EnvironmentManager(this);
         // mForceManager = new EnvironmentManager(this, environment_filename);
         mActionListener = new JGameActionListener(mEnvironmentManager);
@@ -63,20 +63,11 @@ public class Springies extends JGEngine {
     }
 
     private void testAssembly () {
-        String model_filename = "assets/lamp.xml";
-        String model_filename2 = "assets/daintywalker.xml";
+        String model_filename = "assets/daintywalker.xml";
         makeModelFromXML(model_filename);
-        try {
-            Thread.sleep(1000);
-        }
-        catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        makeModelFromXML(model_filename2);
     }
 
-    private void makeModelFromXML (String filename) {
+    private ModelParser makeModelFromXML (String filename) {
         XMLParserCaller caller = new XMLParserCaller();
         ModelParser parser = new ModelParser(this);
         try {
@@ -87,6 +78,7 @@ public class Springies extends JGEngine {
             e.printStackTrace();
             System.exit(1);
         }
+        return parser;
     }
 
     @Override
@@ -135,9 +127,8 @@ public class Springies extends JGEngine {
 
     public void loadAssemblyFromFile (File file) {
         if (file != null) {
-            ModelParser factory = new ModelParser(this);
             try {
-                makeModelFromXML(file.getAbsolutePath());
+                ModelParser factory = makeModelFromXML(file.getAbsolutePath());
                 Assembly a = new Assembly();
                 for (Mass mass : factory.getMasses()) {
                     a.add(mass);
@@ -154,7 +145,7 @@ public class Springies extends JGEngine {
         }
     }
 
-    public List<Assembly> getAssemblyList () {
+    public ArrayList<Assembly> getAssemblyList () {
         if (assemblyList.size() == 0) {
             makeAssembly();
         }
