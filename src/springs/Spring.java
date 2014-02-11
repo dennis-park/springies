@@ -1,12 +1,14 @@
 package springs;
 import org.jbox2d.collision.PolygonDef;
 import org.jbox2d.common.Vec2;
+
+import forces.Force;
 import jboxGlue.PhysicalObject;
 import jgame.JGColor;
 import jgame.JGObject;
 import masses.Mass;
 
-public class Spring extends PhysicalObject{
+public class Spring extends PhysicalObject implements Force{
     private Mass mStart;
     private Mass mEnd;
     private double mRestLength;
@@ -64,6 +66,20 @@ public class Spring extends PhysicalObject{
      * @param y
      * @return spring force vector
      */
+    @Override
+	public Vec2 calculateForce(double x, double y) {
+		return null;
+	}
+	@Override
+	public Vec2 calculateForce() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Vec2 calculateForce(Mass mass) {
+		// TODO Auto-generated method stub
+		return null;
+	}
     public void doSpringForce() {
         float mag = (float) (mKval*(mRestLength-computeLength(mStart,mEnd)));
         Vec2 force = computeNormalizedForce();
@@ -119,4 +135,5 @@ public class Spring extends PhysicalObject{
         myEngine.setColor(DEFAULT_COLOR);
         myEngine.drawLine(getStartX(), getStartY(), getEndX(), getEndY());
     }
+	
 }

@@ -33,11 +33,9 @@ public class Assembly{
 		return this.mSprings;
 	}
 	
-	public double getCOM() {
-		
+	/*public double getCOM() {
 		return 0;
-		
-	}
+	}*/
 	
 	public Assembly getAssembly() {
 		return this;

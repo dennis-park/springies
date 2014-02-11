@@ -39,6 +39,7 @@ public class EnvironmentManager {
     private String VISC = "viscosity";
     private String COM = "com";
     private String WALL = "wall";
+    //private String SPR = "spring";
     
     protected HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
     protected HashMap<Integer, Wall> mWallMap;
@@ -88,6 +89,10 @@ public class EnvironmentManager {
         mToggleMap.put(COM, true);
         mToggleMap.put(WALL, true);
     }
+
+    public void toggleForces(String forceid) {
+    	mToggleMap.put(forceid, !mToggleMap.get(forceid));
+    }
     
     private List<WallRepulsion> makeFourWallRepulsion () {
         makeFourWalls();
@@ -110,16 +115,12 @@ public class EnvironmentManager {
         mWallMap.put(RIGHT_ID, new Wall(this.RIGHT_ID));
     }
 
-    public void toggleForces(String forceid) {
-    	mToggleMap.put(forceid, !mToggleMap.get(forceid));
-    }
-    
     public void doForces() {
         for (Mass mass: mSpringies.getMassList()) {
             applyForce(GRAV, mGravity, mass);
             applyForce(VISC, mViscosity, mass);
             applyForce(COM, mCOM, mass);
-            for (WallRepulsion w: mWallRepulsionList) {
+            for (WallRepulsion w : mWallRepulsionList) {
                 applyForce(WALL, w, mass);
             }
             //System.out.printf("Force applied on mass (%s): <%.2f, %.2f>\n", mass.getName(), mass.getBody().m_force.x, mass.getBody().m_force.y);
