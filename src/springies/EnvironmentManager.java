@@ -9,12 +9,14 @@ import walls.Wall;
 import forces.*;
 import Parsers.*;
 
+
 /**
- * This class is a manager for the environment specified by
- * either default values or those parsed in the environment XML.
- * It organizes forces, applies their computed values to objects 
- * living in the Springies environment, and toggles them based on 
- * user input.
+ * This class is a manager for the environment specified by either default values or those parsed in
+ * the environment XML. It organizes forces, applies their computed values to objects living in the
+ * Springies environment, and calls toggle methods if necessary.
+ * 
+ * Known dependency: EnvironmentManager can only be initialized after the first assembly has been
+ * created.
  * 
  * @author Thanh-Ha Nguyen & Dennis Park
  */
@@ -64,7 +66,7 @@ public class EnvironmentManager {
 
     /**
      * Constructor for EnvironmentManager.
-     * Copies Springies object and sets values for forces as 
+     * Copies Springies object and sets values for forces as
      * defined by the XML document from the specified file path.
      * Calls helper method to initialize environment.
      * 
@@ -85,7 +87,7 @@ public class EnvironmentManager {
 
         initEnvironment();
     }
-    
+
     private void initEnvironment () {
         for (int i = 1; i <= Constants.NUM_WALLS; i++) {
             Wall new_wall = new Wall(i);
@@ -101,12 +103,14 @@ public class EnvironmentManager {
     }
 
     /**
-     * Updates Center of Mass force for all Assembly objects.
+     * Updates Center of Mass force for all Assembly objects. Must be called
+     * after every assembly is made or else the center of mass force will not be called on those
+     * masses
      */
     public void updateCOM () {
         mCOMList = makeCOMForAllAssemblies();
     }
-    
+
     private List<COM> makeCOMForAllAssemblies () {
         List<COM> com_list = new ArrayList<COM>();
         ArrayList<Assembly> assembly_list = mSpringies.getAssemblyList();
@@ -145,20 +149,19 @@ public class EnvironmentManager {
         }
         return toggle_map;
     }
-    
 
     /**
      * Getter for the member HashMap of toggles for gravity, viscosity,
      * and COM forces.
+     * 
      * @return mToggleMap
      */
     public HashMap<String, Boolean> getToggleMap () {
-    	return mToggleMap;
+        return mToggleMap;
     }
 
-
     /**
-     * Stores one of the forces based on its ID and 
+     * Stores one of the forces based on its ID and
      * toggles its boolean toggle value.
      * 
      * @param forceid
@@ -166,7 +169,6 @@ public class EnvironmentManager {
     public void toggleForces (String forceid) {
         mToggleMap.put(forceid, !mToggleMap.get(forceid));
     }
-
 
     /**
      * Stores one of the wall forces based on its ID and
@@ -178,9 +180,8 @@ public class EnvironmentManager {
         mWallToggleMap.put(wall_id, !mWallToggleMap.get(wall_id));
     }
 
-
     /**
-     * Applies gravity, viscosity, center of mass, and wall repulsion 
+     * Applies gravity, viscosity, center of mass, and wall repulsion
      * forces on every mass in all assemblies.
      * 
      */
@@ -209,9 +210,8 @@ public class EnvironmentManager {
         }
     }
 
-
     /**
-     * This will apply the computed force on the mass depending on whether 
+     * This will apply the computed force on the mass depending on whether
      * the force_id exists in the map of all toggle values for the forces.
      * If the id does not exist, it will apply the zero vector.
      * 
@@ -228,7 +228,6 @@ public class EnvironmentManager {
             mass.applyForceVector(Constants.ZERO_VECTOR);
         }
     }
-
 
     /**
      * Moves walls based on a boolean for toggling motion outward.
@@ -248,10 +247,9 @@ public class EnvironmentManager {
         }
     }
 
-
     /**
-     * Changes muscle-spring's amplitude in sinusoidal motion 
-     * based on specified offset.  Iterates through manager's 
+     * Changes muscle-spring's amplitude in sinusoidal motion
+     * based on specified offset. Iterates through manager's
      * comprehensive spring list.
      * 
      * @param increase
@@ -263,9 +261,8 @@ public class EnvironmentManager {
         }
     }
 
-
     /**
-     * Iterates through all assemblies obtained from Springies object 
+     * Iterates through all assemblies obtained from Springies object
      * to add to comprehensive mass list for storage in the environment.
      * Returns this mass list.
      * 
@@ -283,12 +280,11 @@ public class EnvironmentManager {
         return all_masses;
     }
 
-
     /**
-     * Iterates through all assemblies obtained from Springies object 
+     * Iterates through all assemblies obtained from Springies object
      * to add to comprehensive spring list for storage in the environment.
      * Returns this spring list.
-     *
+     * 
      * @return all_springs
      */
     public List<Spring> getSpringsList () {

@@ -10,12 +10,46 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 
+/**
+ * <p>
+ * The ModelParser is a subclass of XMLParser (a SAX Handler). The ModelParser parses through an XML
+ * file with the tag "model" and acts as a factory for building an assembly. The Parser will create
+ * the Mass, Spring, and Muscle objects, build, and connect them appropriately. This assumes that
+ * the XML documents follows the conventions set by the Springies Part 2 assignment and the example
+ * XML documents given.
+ * </p>
+ * <p>
+ * In order to access the masses list and springs list created by the ModelParser, user must call
+ * the appropriate get methods after Model Parser is called.
+ * </p>
+ * <p>
+ * ModelParser factory = makeModelFromXML(file.getAbsolutePath()); </br> for (Mass mass :
+ * factory.getMasses()) </br> { mAssembly.add(mass); } </br> for (Spring spring :
+ * factory.getSprings()) </br> {mAssembly.add(spring); }
+ * </p>
+ * <p>
+ * private ModelParser makeModelFromXML (String filename) { </br> XMLParserCaller caller = new
+ * XMLParserCaller(); </br> ModelParser parser = new ModelParser(mSpringies); </br> try { </br>
+ * caller.call(filename, parser); </br> } </br> catch (Exception e) { </br>
+ * System.out.println("Error: Unable to parse XML file"); </br> e.printStackTrace(); </br>
+ * System.exit(1); </br> } </br> return parser; </br> }
+ * </p>
+ * 
+ * @author Thanh-Ha Nguyen
+ * 
+ */
 public class ModelParser extends XMLParser {
     protected Springies mSpringies;
     protected HashMap<String, Mass> mMassMap;
     protected List<Mass> mMassList;
     protected List<Spring> mSpringList;
 
+    /**
+     * ModelParser takes only Springies as a parameter. Filename is parsed through by caller
+     * (XMLParserCaller)
+     * 
+     * @param s
+     */
     public ModelParser (Springies s) {
         mSpringies = s;
         mMassList = new ArrayList<Mass>();
@@ -23,6 +57,9 @@ public class ModelParser extends XMLParser {
         mMassMap = new HashMap<String, Mass>();
     }
 
+    /**
+     * SAX Default Handler method.
+     */
     public void startElement (String namespaceURI,
                               String localName,
                               String qName,
@@ -79,7 +116,7 @@ public class ModelParser extends XMLParser {
         }
     }
 
-    public FixedMass createFixedMassObj (String id, String x, String y, String mass) {
+    private FixedMass createFixedMassObj (String id, String x, String y, String mass) {
         if (id == null || x == null || y == null) {
             System.out.println("Mass not properly created");
         }
@@ -94,7 +131,7 @@ public class ModelParser extends XMLParser {
         return new FixedMass(mass_id, x_pos, y_pos, obj_mass);
     }
 
-    public Mass createMassObj (String id,
+    private Mass createMassObj (String id,
                                String x,
                                String y,
                                String init_x,
@@ -181,10 +218,18 @@ public class ModelParser extends XMLParser {
         mSpringList.add(newMuscle);
     }
 
+    /**
+     * Returns Masses created when parsed in. Supposed to handle errors. Not enough time to
+     * implement
+     */
     public List<Mass> getMasses () {
         return mMassList;
     }
 
+    /**
+     * Returns Springss created when parsed in. Supposed to handle errors. Not enough time to
+     * implement
+     */
     public List<Spring> getSprings () {
         return mSpringList;
     }
