@@ -73,6 +73,7 @@ public class Springies extends JGEngine {
      */
     public void doFrame () {
         doListenerEvents();
+        updateToggleView();
         // update game objects
         if (!mAssemblyList.isEmpty()) {
 			mEnvironmentManager.doForces();
@@ -82,7 +83,17 @@ public class Springies extends JGEngine {
 		}
     }
 
-    // This is a helper method to call the built in JEngine listeners. This way
+    private String[] forceView = {EnvironmentManager.GRAV_ID,
+    							  EnvironmentManager.VISC_ID,
+    							  EnvironmentManager.COM_ID,
+    							  EnvironmentManager.WALL_ID};
+    private void updateToggleView() {
+    	for (String forceString : forceView) {
+    		this.drawString(forceString, pfWidth(), pfHeight(), 1);
+    	}
+	}
+
+	// This is a helper method to call the built in JEngine listeners. This way
     // we don't have to worry about coordinates, etc. This method will send the lastKeyPressed
     // and the mouseEvents to the Listener class and the Listener class will perform
     // the appropriate actions
