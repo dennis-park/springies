@@ -34,7 +34,6 @@ public class Main
             public void actionPerformed (ActionEvent arg0) {
                 double xpos = sp.displayWidth() / 2;
                 double ypos = sp.displayHeight() / 2;
-                sp.addTestSpring();
             }
         });
         // container that will work with user's OS

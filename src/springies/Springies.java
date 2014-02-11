@@ -2,14 +2,12 @@ package springies;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import jboxGlue.WorldManager;
 import jgame.platform.JGEngine;
 import listeners.JGameActionListener;
-import masses.FixedMass;
 import masses.Mass;
 import springs.Spring;
 import walls.Wall;
@@ -20,9 +18,6 @@ import Parsers.XMLParserCaller;
 @SuppressWarnings("serial")
 public class Springies extends JGEngine {
     public ArrayList<Assembly> assemblyList;
-    private HashMap<String, Mass> mMassMap;
-    private ArrayList<Mass> mMassList;
-    private ArrayList<Spring> mSpringsList;
     private Wall[] mWallArray;
     private EnvironmentManager mEnvironmentManager;
     private JGameActionListener mActionListener;
@@ -32,8 +27,6 @@ public class Springies extends JGEngine {
         int height = 480;
         double aspect = 16.0 / 9.0;
         initEngineComponent((int) (height * aspect), height);
-        mMassMap = new HashMap<String, Mass>();
-        mSpringsList = (new ArrayList<Spring>());
         assemblyList = new ArrayList<Assembly>();
     }
 
@@ -51,9 +44,6 @@ public class Springies extends JGEngine {
 
     @Override
     public void initGame () {
-        mMassList = new ArrayList<Mass>();
-        mSpringsList = new ArrayList<Spring>();
-
         // setFrameRate(60, 2); // given
         setFrameRate(5, 2);
 
@@ -64,7 +54,6 @@ public class Springies extends JGEngine {
         // so set all directions (e.g., forces, velocities) in world coords
         WorldManager.initWorld(this);
         // addTestSpring();
-        testSpringForce();
         testAssembly();
 
         mEnvironmentManager = new EnvironmentManager(this);
@@ -111,16 +100,11 @@ public class Springies extends JGEngine {
     public void doFrame ()
     {
         doListenerEvents();
-
         // update game objects
         mEnvironmentManager.doForces();
         WorldManager.getWorld().step(1f, 1);
         moveObjects();
         checkCollision(1 + 2, 1);
-
-        /**
-         * iterate through massmap to do forcemanager.doforces
-         */
     }
 
     // This is a helper method to call the built in JEngine listeners. This way
@@ -135,56 +119,8 @@ public class Springies extends JGEngine {
                 .doMouseEvent(getMouseButton(1), getMouseButton(3), getMouseX(), getMouseY());
     }
 
-    public void testSpringForce () {
-        double xpos = displayWidth() / 2;
-        double ypos = displayHeight() / 2;
-        addMass(xpos, ypos + 200);
-        addFixedMass(xpos, ypos);
-        Mass mass1 = this.mMassList.get(0);
-        Mass mass2 = this.mMassList.get(1);
-        Spring newSpring1 = new Spring(mass1, mass2, 150, 1);
-        this.mSpringsList.add(newSpring1);
-    }
-
-    public void addTestSpring () {
-        double xpos = displayWidth() / 2;
-        double ypos = displayHeight() / 2;
-        addMass(xpos, ypos);
-        addMass(xpos + 100, ypos + 20);
-        addMass(xpos + 100, ypos - 20);
-        addMass(xpos - 100, ypos - 20);
-        Mass mass1 = this.mMassList.get(0);
-        Mass mass2 = this.mMassList.get(1);
-        Mass mass3 = this.mMassList.get(2);
-        Mass mass4 = this.mMassList.get(3);
-        Spring newSpring1 = new Spring(mass1, mass2);
-        Spring newSpring2 = new Spring(mass1, mass3, 2);
-        Spring newSpring3 = new Spring(mass1, mass4, 2);
-        Spring newSpring4 = new Spring(mass2, mass3, 2);
-        this.mSpringsList.add(newSpring1);
-        this.mSpringsList.add(newSpring2);
-        this.mSpringsList.add(newSpring3);
-        this.mSpringsList.add(newSpring4);
-    }
-
-    public void addMass (double xpos, double ypos)
-    {
-        Mass ball = new Mass("m0", xpos, ypos);
-        this.mMassList.add(ball);
-    }
-
-    public void addFixedMass (double xpos, double ypos)
-    {
-        FixedMass ball = new FixedMass("m0", xpos, ypos);
-        this.mMassList.add(ball);
-    }
-
     public Wall[] getWalls () {
         return mWallArray;
-    }
-
-    public List<Mass> getMassList () {
-        return mMassList;
     }
 
     private static final String ASSETS = "assets/";
@@ -222,27 +158,15 @@ public class Springies extends JGEngine {
         }
     }
 
-    public void setMassMap (HashMap<String, Mass> massList) {
-        this.mMassMap = massList;
-    }
-
-    public void setMassMap (ArrayList<Mass> mass_list) {
-        this.mMassList = mass_list;
-    }
-
-    public void setSpringsList (ArrayList<Spring> springList) {
-        this.mSpringsList = springList;
-    }
-
-    public List<Spring> getSpringsList () {
-        return mSpringsList;
-    }
-
-    public List<Assembly> getAssembly () {
+    public List<Assembly> getAssemblyList () {
         return assemblyList;
+    }
+    
+    public Assembly getAssembly(int index) {
+        return assemblyList.get(index);
     }
 
     public void clearLoadedAssemblies () {
-        assemblyList = new ArrayList<Assembly>();
+        assemblyList.clear();
     }
 }

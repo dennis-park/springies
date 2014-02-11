@@ -43,6 +43,8 @@ public class EnvironmentManager {
     protected HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
     protected HashMap<Integer, Wall> mWallMap;
     
+    private List<Assembly> mAssemblies;
+    
     public EnvironmentManager(Springies s, String filename) {
         mSpringies = s;
         XMLParserCaller caller = new XMLParserCaller();
@@ -59,6 +61,7 @@ public class EnvironmentManager {
         mViscosity = parser.getViscosity();
         mCOM = parser.getCOM();
         mWallRepulsionList = parser.getWallRepulsionList();
+        mAssemblies = s.getAssemblyList();
         initForceToggleMap();
     }
     
@@ -66,11 +69,12 @@ public class EnvironmentManager {
         mSpringies = s;
         mGravity = new Gravity(this.DEFAULT_GRAVITY_MAGNITUDE);
         mViscosity = new Viscosity(this.DEFAULT_VISCOSITY_MAGNITUDE);
-        mCOM = new COM(this.DEFAULT_COM_MAGNITUDE, this.DEFAULT_EXPONENT, s.getMassList());
+        
+        /**
+         * replace getMassList with getAssemblyList
+         */
+        //mCOM = new COM(this.DEFAULT_COM_MAGNITUDE, this.DEFAULT_EXPONENT, s.getMassList());
         mWallRepulsionList = makeFourWallRepulsion(); 
-        for (Mass m: mSpringies.getMassList()) {
-            System.out.printf("In Force Manager: Mass in mass list: %s\n", m.getName());
-        }
         initForceToggleMap();
     }
     
@@ -107,7 +111,8 @@ public class EnvironmentManager {
     }
 
     public void doForces() {
-        for (Mass mass: mSpringies.getMassList()) {
+    	int TEMP_INDEX = 0;
+        for (Mass mass: (mSpringies.getAssemblyList().get(TEMP_INDEX)).getMassList()) {
             applyForce(GRAV, mGravity, mass);
             applyForce(VISC, mViscosity, mass);
             applyForce(COM, mCOM, mass);
