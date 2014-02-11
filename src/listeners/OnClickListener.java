@@ -1,6 +1,5 @@
 package listeners;
 
-import java.util.ArrayList;
 import java.util.List;
 import masses.Mass;
 import masses.MouseMass;

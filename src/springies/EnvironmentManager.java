@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import masses.Mass;
-import org.jbox2d.common.Vec2;
 import springs.Spring;
 import walls.Wall;
 import forces.*;

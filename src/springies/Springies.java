@@ -7,9 +7,6 @@ import listeners.OnClickListener;
 import listeners.OnKeyListener;
 import masses.Mass;
 import springs.Spring;
-import Parsers.ModelParser;
-import Parsers.XMLParserCaller;
-
 
 @SuppressWarnings("serial")
 public class Springies extends JGEngine {
