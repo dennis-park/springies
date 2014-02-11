@@ -2,22 +2,11 @@ package forces;
 
 import masses.Mass;
 import org.jbox2d.common.Vec2;
+import springies.Constants;
 import walls.Wall;
 
 
 public class WallRepulsion implements Force {
-    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 0.1;
-    public static final double DEFAULT_EXPONENT = 2.0;
-    public static final double TOP_DIRECTION = Math.PI / 2;
-    public static final double RIGHT_DIRECTION = 0.0;
-    public static final double BOTTOM_DIRECTION = Math.PI / 2;
-    public static final double LEFT_DIRECTION = 0.0;
-
-    public static final int TOP_ID = 1;
-    public static final int RIGHT_ID = 2;
-    public static final int BOTTOM_ID = 3;
-    public static final int LEFT_ID = 4;
-
     private Wall mWall;
     private int mWallId;
 
@@ -38,31 +27,10 @@ public class WallRepulsion implements Force {
         mWall = wall;
         mWallId = wall.getWallId();
         mDirection = wall.getWallDirection();
-
-        System.out.printf("Wall Repulsion created for wall #%d w/ mag = %.2f, exp = %.2f ",
-                          mWallId, magnitude, exponent);
-        System.out.printf("at JGAME (%.2f, %.2f) \t JBOX (%.2f, %.2f) \n", wall.x, wall.y, wall
-                .getBody().getPosition().x, wall.getBody().getPosition().y);
     }
 
-    // private void setWallDirection(int wall_id) {
-    // if (wall_id == TOP_ID) {
-    // this.mDirection = TOP_DIRECTION;
-    // }
-    // else if (wall_id == RIGHT_ID) {
-    // this.mDirection = RIGHT_DIRECTION;
-    // }
-    // else if (wall_id == BOTTOM_ID) {
-    // this.mDirection = BOTTOM_DIRECTION;
-    // }
-    // else if (wall_id == LEFT_ID) {
-    // this.mDirection = LEFT_DIRECTION;
-    // }
-    // System.out.printf("Wall ID = %d, angle = %.2f\n", wall_id, this.mDirection);
-    // }
-
     public WallRepulsion (Wall wall) {
-        this(wall, DEFAULT_WALL_REPULSION_MAGNITUDE, DEFAULT_EXPONENT);
+        this(wall, Constants.DEFAULT_WALL_REPULSION_MAGNITUDE, Constants.DEFAULT_EXPONENT);
     }
 
     public void setWall (Wall wall) {
@@ -92,23 +60,9 @@ public class WallRepulsion implements Force {
         Vec2 force = new Vec2(x_f, y_f);
 
         float scalar = (float) (this.mMagnitude * 1 / (Math.pow(force.length(), this.mExponent)));
-        // System.out.printf("Distance to wall: %.2f, exp = %.2f, scalar = %.2f",
-        // force.length(), this.mExponent, scalar);
-        //
+
         force.normalize();
-
-        // testWallRepulsion(mass, force, scalar);
         return force.mul(scalar);
-    }
-
-    private void testWallRepulsion (Mass mass, Vec2 force, float scalar) {
-        System.out
-                .printf("\tCalculating wall force: Position=(%.2f, %.2f), Wall direction=%d, angle=%.2f\n",
-                        mass.getBody().getPosition().x, mass.getBody().getPosition().y,
-                        this.mWallId, this.mDirection);
-        Vec2 calc = force.mul(scalar);
-        System.out.printf("\tforce=<%.2f, %.2f>, Scalar=%.2f, Total Force = <%.2f, %.2f>\n\n",
-                          force.x, force.y, scalar, calc.x, calc.y);
     }
 
     @Override
@@ -124,7 +78,7 @@ public class WallRepulsion implements Force {
     public int getWallId () {
         return mWallId;
     }
-    
+
     public String getWallIdString () {
         return String.format("%d", mWallId);
     }

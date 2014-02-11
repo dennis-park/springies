@@ -1,21 +1,16 @@
 package forces;
 
 import java.util.List;
-
 import masses.Mass;
-
 import org.jbox2d.common.Vec2;
-
 import springies.Assembly;
-
+import springies.Constants;
 
 public class COM implements Force {
-    private static final double DEFAULT_MAGNITUDE = 50;
-    private static final double DEFAULT_EXPONENT = 0.0;
     private List<Mass> mList;
     private double mMagnitude;
     private double mExponent;
-	
+
     /**
      * This is an imaginary force which attracts all masses toward their calculated center of mass.
      * In the data file, this force is indicated by the keyword centermass followed by a magnitude
@@ -33,45 +28,43 @@ public class COM implements Force {
     }
 
     public COM (double magnitude, Assembly assembly) {
-        this(magnitude, DEFAULT_EXPONENT, assembly);
+        this(magnitude, Constants.DEFAULT_EXPONENT, assembly);
     }
 
     public COM (Assembly assembly) {
-        this(DEFAULT_MAGNITUDE, DEFAULT_EXPONENT, assembly);
+        this(Constants.DEFAULT_COM_MAGNITUDE, Constants.DEFAULT_EXPONENT, assembly);
     }
 
-    public void setMassList(List<Mass> mass_list) {
+    public void setMassList (List<Mass> mass_list) {
         if (mass_list != null && mass_list.size() > 0) {
             this.mList = mass_list;
         }
     }
+
     /**
-     * Calculations of the center of gravity point based on the list of all masses 
-     * R = (1/M) sum (m*r). 
+     * Calculations of the center of gravity point based on the list of all masses
+     * R = (1/M) sum (m*r).
      */
     public Vec2 calculateCOMPoint () {
-        if (mList == null || mList.size() == 0) { 
-            throw new RuntimeException("call addMassList(List<Mass>) with a MassList of size > 0!"); 
-        }
+        if (mList == null || mList.size() == 0) { throw new RuntimeException(
+                                                                             "call addMassList(List<Mass>) with a MassList of size > 0!"); }
 
         double sum_mass = 0.0;
         double sum_mr_x = 0.0;
         double sum_mr_y = 0.0;
-        
+
         for (Mass m : mList) {
             Vec2 mass_position = m.getBody().getPosition();
             float mass = m.getBody().m_mass;
             sum_mr_x += mass * mass_position.x;
             sum_mr_y += mass * mass_position.y;
             sum_mass += mass;
-            // System.out.printf("\tx = %.2f, y = %.2f, mass = %.2f\n", mass_position.x, mass_position.y, mass);
         }
 
         float x_com_pt = (float) ((1 / sum_mass) * sum_mr_x);
         float y_com_pt = (float) ((1 / sum_mass) * sum_mr_y);
-        
-        // System.out.printf("\tCalculating COM point: x=%.2f, y=%.2f\n", x_com_pt, y_com_pt);
-        return new Vec2(x_com_pt, y_com_pt); 
+
+        return new Vec2(x_com_pt, y_com_pt);
     }
 
     /**
@@ -96,28 +89,18 @@ public class COM implements Force {
         float total_magnitude = (float) (mMagnitude / Math.pow(distance, mExponent));
 
         force.normalize();
-        
-        // testCOMCalculations(mass, force, total_magnitude);
         return force.mul(total_magnitude);
     }
-    
-    private void testCOMCalculations(Mass mass, Vec2 force, float total_magnitude) {
-        Vec2 v = force.mul(total_magnitude);
-        float x_f = v.x;
-        float y_f = v.y;
-        System.out.printf("\tX = %.2f, Y = %.2f\n", 
-                          mass.getBody().getPosition().x, mass.getBody().getPosition().y);
-        System.out.printf("\tCenter of Mass vector: mag = %.2f, exponent = %.2f, x = %.2f, y = %.2f\n", 
-                          this.mMagnitude, this.mExponent, x_f, y_f);
+
+    @Override
+    public Vec2 calculateForce (double x, double y) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
-	@Override
-	public Vec2 calculateForce(double x, double y) {
-		return null;
-	}
-
-	@Override
-	public Vec2 calculateForce() {
-		return null;
-	}
+    @Override
+    public Vec2 calculateForce () {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

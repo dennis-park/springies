@@ -38,7 +38,7 @@ public interface Force {
      * @param y
      * @return
      */
-    public Vec2 calculateForce();
-    
+    public Vec2 calculateForce ();
+
     public Vec2 calculateForce (Mass mass);
 }

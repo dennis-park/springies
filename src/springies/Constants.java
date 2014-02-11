@@ -1,5 +1,6 @@
 package springies;
 
+import jgame.JGColor;
 import org.jbox2d.common.Vec2;
 
 public class Constants{
@@ -7,7 +8,7 @@ public class Constants{
     public static final double DEFAULT_GRAVITY_MAGNITUDE = 1.0;
     public static final double DEFAULT_GRAVITY_DIRECTION = Math.PI / 2;
     public static final double DEFAULT_VISCOSITY_MAGNITUDE = 0.1;
-    public static final double DEFAULT_COM_MAGNITUDE = 0.5;
+    public static final double DEFAULT_COM_MAGNITUDE = 1.0;
     public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 500;
     public static final double DEFAULT_EXPONENT = 1.0;
 
@@ -38,4 +39,20 @@ public class Constants{
     public static final String VISC_ID = "viscosity";
     public static final String COM_ID = "com";
     public static final String WALL_ID = "wall";
+    
+    // For masses
+    public static final int COLLISION_ID = 1;
+    public static final int DEFAULT_RADIUS = 5;
+    public static final JGColor DEFAULT_COLOR = JGColor.white;
+    public static final double DEFAULT_XPOS = 0.0;
+    public static final double DEFAULT_YPOS = 0.0;
+    public static final double DEFAULT_XVEL = 0.0;
+    public static final double DEFAULT_YVEL = 0.0;
+    public static final double DEFAULT_MASS = 1.0 / (Math.PI * DEFAULT_RADIUS * DEFAULT_RADIUS);
+    
+    // For springs & muscles
+    public static final double DEFAULT_KVAL = 1;
+    public static final double DEFAULT_PERIOD = 3 * Math.PI / 2;
+    public static final double AMPLITUDE_INCREMENT = 0.25;
+
 }

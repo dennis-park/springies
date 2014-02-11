@@ -1,8 +1,8 @@
 package springies;
 
 import java.util.ArrayList;
-import springs.Spring;
 import masses.Mass;
+import springs.Spring;
 
 
 public class Assembly {
@@ -41,11 +41,6 @@ public class Assembly {
         return this.mSprings;
     }
 
-    /*
-     * public double getCOM() {
-     * return 0;
-     * }
-     */
 
     public Assembly getAssembly () {
         return this;

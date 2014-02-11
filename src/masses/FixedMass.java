@@ -1,6 +1,7 @@
 package masses;
 
 import org.jbox2d.common.Vec2;
+import springies.Constants;
 
 public class FixedMass extends Mass {
     private double mStartX; 
@@ -10,12 +11,11 @@ public class FixedMass extends Mass {
         super(id, x, y, mass);
         mStartX = x;
         mStartY = y;
-        this.myBody.setLinearVelocity(new Vec2(0.0f, 0.0f));
-        System.out.printf("Fixed mass created at (%.2f, %.2f)\n", mStartX, mStartY);
+        this.myBody.setLinearVelocity(new Vec2(0.0f, 0.0f));    
     }
 
     public FixedMass (String id, double x, double y) {
-        this(id, x, y, Mass.DEFAULT_MASS);
+        this(id, x, y, Constants.DEFAULT_MASS);
     }
     
     @Override

@@ -1,5 +1,6 @@
 package springs;
 
+import springies.Constants;
 import masses.Mass;
 
 
@@ -8,8 +9,6 @@ public class Muscle extends Spring {
     private double mAmplitude;
     private double mLength;
     private int mCount;
-    public static final int DEFAULT_PERIOD = 60;
-    public static final double AMPLITUDE_INCREMENT = 0.1;
 
     public Muscle (Mass m1, Mass m2, double amplitude) {
         super(m1, m2);
@@ -32,7 +31,7 @@ public class Muscle extends Spring {
     @Override
     public void move () {
         setLength(mLength + mAmplitude
-                  * Math.cos((mCount * Math.PI) / (DEFAULT_PERIOD / 2)));
+                  * Math.cos((mCount * Math.PI) / (Constants.DEFAULT_PERIOD / 2)));
         mCount++;
     }
 
@@ -40,10 +39,10 @@ public class Muscle extends Spring {
     public void changeAmplitude (boolean increase) {
         //System.out.printf("Changing amplitude. Increase = %b\n", increase);
         if (increase) {
-            mAmplitude += AMPLITUDE_INCREMENT;
+            mAmplitude += Constants.AMPLITUDE_INCREMENT;
         }
         else {
-            mAmplitude -= AMPLITUDE_INCREMENT;
+            mAmplitude -= Constants.AMPLITUDE_INCREMENT;
         }
     }
 

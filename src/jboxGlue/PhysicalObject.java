@@ -27,9 +27,7 @@ public abstract class PhysicalObject extends JGObject
     {
         super(name, true, 0, 0, collisionId, gfxname);
         init(null, true);
-        if (gfxname == null) {
-            throw new IllegalArgumentException("gfxname cannot be null!");
-        }
+        if (gfxname == null) { throw new IllegalArgumentException("gfxname cannot be null!"); }
     }
 
     private void init (JGColor color, boolean hasImage)
@@ -63,13 +61,13 @@ public abstract class PhysicalObject extends JGObject
     {
         myColor = val;
     }
-    
+
     @Override
     public void setBBox (int x, int y, int width, int height)
     {
-        // NOTE: 
-        //  If bounding box is same size as physical object,
-        //  JGame will never see the bounding boxes overlap.
+        // NOTE:
+        // If bounding box is same size as physical object,
+        // JGame will never see the bounding boxes overlap.
         // So fudge box size a little bit so JGame can see the collisions.
         final int FUDGE_TERM = 4;
         x -= FUDGE_TERM;
@@ -98,9 +96,9 @@ public abstract class PhysicalObject extends JGObject
     public void setPos (double x, double y)
     {
         // there's no body while the game object is initializing
-        if (myBody != null) { 
+        if (myBody != null) {
             // set position of jbox2d object, not jgame object
-            myBody.setXForm(new Vec2((float)x, (float)y), -myRotation);
+            myBody.setXForm(new Vec2((float) x, (float) y), -myRotation);
             this.x = x;
             this.y = y;
         }
@@ -108,7 +106,7 @@ public abstract class PhysicalObject extends JGObject
 
     public void setForce (double x, double y)
     {
-        myBody.applyForce(new Vec2((float)x, (float)y), myBody.m_xf.position);
+        myBody.applyForce(new Vec2((float) x, (float) y), myBody.m_xf.position);
     }
 
     @Override
