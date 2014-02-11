@@ -30,6 +30,7 @@ public class Main {
 		final Springies sp = new Springies();
 		// container that will work with user's OS
 		JFrame frame = new JFrame(TITLE);
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// add our user interface components
 		frame.getContentPane().add(sp, BorderLayout.CENTER);

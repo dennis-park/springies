@@ -21,6 +21,7 @@ import Parsers.XMLParserCaller;
 public class Springies extends JGEngine {
 
     public ArrayList<Assembly> mAssemblyList;
+    private AssemblyFactory mFactory;
     private Wall[] mWallArray;
     private EnvironmentManager mEnvironmentManager;
     private OnClickListener mMouseListener;
@@ -34,7 +35,6 @@ public class Springies extends JGEngine {
         int height = 480;
         double aspect = 16.0 / 9.0;
         initEngineComponent((int) (height * aspect), height);
-        mAssemblyList = new ArrayList<Assembly>();
     }
 
     @Override
@@ -49,32 +49,20 @@ public class Springies extends JGEngine {
     }
 
     @Override
-	public void initGame () {
-		setFrameRate(FPS, FRAME_SKIP);
-		  WorldManager.initWorld(this);
-	        mAssemblyList = new ArrayList<Assembly>();
-	        // makeAssembly();
-	        String environment_filename = "assets/environment.xml";
-	        loadAssemblyFromFile(new File("assets/example.xml"));
-	        //mEnvironmentManager = new EnvironmentManager(this);
-	        mEnvironmentManager = new EnvironmentManager(this, environment_filename);
-	        mKeyListener = new OnKeyListener(this, mEnvironmentManager);
-	        mMouseListener = new OnClickListener(mEnvironmentManager);
-	}
-
-    private ModelParser makeModelFromXML (String filename) {
-        XMLParserCaller caller = new XMLParserCaller();
-        ModelParser parser = new ModelParser(this);
-        try {
-            caller.call(filename, parser);
-        }
-        catch (Exception e) {
-            System.out.println("Error: Unable to parse XML file");
-            e.printStackTrace();
-            System.exit(1);
-        }
-        return parser;
+    public void initGame () {
+    	setFrameRate(FPS, FRAME_SKIP);
+    	WorldManager.initWorld(this);
+    	mAssemblyList = new ArrayList<Assembly>();
+        mFactory = new AssemblyFactory(this);
+    	// notifyAssemblyFactory();
+    	String environment_filename = "assets/environment.xml";
+    	mFactory.loadAssemblyFromFile(new File("assets/daintywalker.xml"));
+    	//mEnvironmentManager = new EnvironmentManager(this);
+    	mEnvironmentManager = new EnvironmentManager(this, environment_filename);
+    	mKeyListener = new OnKeyListener(this, mEnvironmentManager);
+    	mMouseListener = new OnClickListener(mEnvironmentManager);
     }
+
 
     @Override
     /**
@@ -105,41 +93,10 @@ public class Springies extends JGEngine {
         mMouseListener
                 .doMouseEvent(getMouseButton(1), getMouseButton(3), getMouseX(), getMouseY());
     }
-
-    public Wall[] getWalls () {
-        return mWallArray;
-    }
-
-    public void makeAssembly () {
-        JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("XML documents", "xml");
-        chooser.setFileFilter(filter);
-        int returnVal = chooser.showDialog(null, "Load new Assembly file");
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            this.loadAssemblyFromFile(file);
-        }
-    }
-
-    public void loadAssemblyFromFile (File file) {
-        if (file != null) {
-            try {
-                ModelParser factory = makeModelFromXML(file.getAbsolutePath());
-                Assembly a = new Assembly();
-                for (Mass mass : factory.getMasses()) {
-                    a.add(mass);
-                }
-                for (Spring spring : factory.getSprings()) {
-                    a.add(spring);
-                }
-                mAssemblyList.add(a);
-                mEnvironmentManager.updateCOM(a);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    
+    public void notifyAssemblyFactory() {
+		mFactory.makeAssembly();
+	}
 
 	private void removeAllObjects() {
 		for (Assembly a : mAssemblyList) {
@@ -161,4 +118,5 @@ public class Springies extends JGEngine {
 		return mAssemblyList;
 	}
 
+	
 }
