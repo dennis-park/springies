@@ -1,13 +1,7 @@
 package springies;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import Parsers.ModelParser;
-import springs.Muscle;
 import springs.Spring;
-import masses.FixedMass;
 import masses.Mass;
 
 public class Assembly{
@@ -39,11 +33,9 @@ public class Assembly{
 		return this.mSprings;
 	}
 	
-	public double getCOM() {
-		
+	/*public double getCOM() {
 		return 0;
-		
-	}
+	}*/
 	
 	public Assembly getAssembly() {
 		return this;

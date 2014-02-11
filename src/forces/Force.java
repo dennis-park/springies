@@ -14,11 +14,9 @@ import org.jbox2d.common.Vec2;
  * @param y
  * @return
  */
-public class Force {
-    protected double mMagnitude;
-    protected double mDirection;
-    protected double mExponent;
-
+public interface Force {
+	double mMagnitude = 0.0;
+	double mExponent = 0.0;
     
     /**
      * calculateForce will take as input an x and y value that can represent
@@ -30,9 +28,7 @@ public class Force {
      * @param y
      * @return
      */
-    public Vec2 calculateForce(double x, double y) {
-        return new Vec2(0.0f, 0.0f);
-    }
+    public Vec2 calculateForce(double x, double y);
     
     /**
      * If calculateForce is not given an argument, it will return a zero vector
@@ -42,13 +38,9 @@ public class Force {
      * @param y
      * @return
      */
-    public Vec2 calculateForce() {
-        return new Vec2(0.0f, 0.0f);
-    }
+    public Vec2 calculateForce();
     
-    public Vec2 calculateForce (Mass mass) {
-        return new Vec2(0.0f, 0.0f);
-    }
+    public Vec2 calculateForce (Mass mass);
    
 //    public void turnOn () {
 //        forceOn = true;
@@ -57,16 +49,4 @@ public class Force {
 //    public void turnOff () {
 //        forceOn = false;
 //    }
-    
-    public void setMagnitude (double magnitude) {
-        this.mMagnitude = magnitude;
-    }
-    
-    public void setDirection (double direction) {
-        this.mDirection = direction;
-    }
-
-    public void setExponent (double exponent) {
-        this.mExponent = exponent;
-    }
 }

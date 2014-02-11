@@ -3,7 +3,9 @@ package springies;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import masses.Mass;
+
 import org.jbox2d.common.Vec2;
 import forces.COM;
 import forces.Force;
@@ -86,6 +88,10 @@ public class EnvironmentManager {
         mToggleMap.put(COM, true);
         mToggleMap.put(WALL, true);
     }
+
+    public void toggleForces(String forceid) {
+    	mToggleMap.put(forceid, !mToggleMap.get(forceid));
+    }
     
     private List<WallRepulsion> makeFourWallRepulsion () {
         makeFourWalls();
@@ -108,16 +114,12 @@ public class EnvironmentManager {
         mWallMap.put(RIGHT_ID, new Wall(this.RIGHT_ID));
     }
 
-    public void toggleForces(String forceid) {
-    	mToggleMap.put(forceid, !mToggleMap.get(forceid));
-    }
-    
     public void doForces() {
         for (Mass mass: mSpringies.getMassList()) {
             applyForce(GRAV, mGravity, mass);
             applyForce(VISC, mViscosity, mass);
             applyForce(COM, mCOM, mass);
-            for (WallRepulsion w: mWallRepulsionList) {
+            for (WallRepulsion w : mWallRepulsionList) {
                 applyForce(WALL, w, mass);
             }
             //System.out.printf("Force applied on mass (%s): <%.2f, %.2f>\n", mass.getName(), mass.getBody().m_force.x, mass.getBody().m_force.y);

@@ -3,7 +3,7 @@ package forces;
 import masses.Mass;
 import org.jbox2d.common.Vec2;
 
-public class Viscosity extends Force {
+public class Viscosity implements Force {
     /**
      * This is a viscous drag force which applies a resistive force on masses proportional to their
      * velocity. In the data file, this force is indicated by the keyword viscosity followed by a
@@ -11,6 +11,9 @@ public class Viscosity extends Force {
      * 
      * @param magnitude
      */
+	private double mMagnitude;
+	private double mDirection;
+	
     public Viscosity (double magnitude) {
         System.out.printf("Viscosity created w/ mag = %.2f\n", magnitude);
         this.mMagnitude = magnitude;
@@ -44,6 +47,16 @@ public class Viscosity extends Force {
         System.out.printf("\tViscosity vector: mag = %.2f, angle = %.2f, x = %.2f, y = %.2f\n", 
                           this.mMagnitude, this.mDirection, x_f, y_f);
     }
+
+	@Override
+	public Vec2 calculateForce(double x, double y) {
+		return null;
+	}
+
+	@Override
+	public Vec2 calculateForce() {
+		return null;
+	}
 }
 
 

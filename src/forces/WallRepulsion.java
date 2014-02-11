@@ -4,11 +4,9 @@ import masses.Mass;
 import org.jbox2d.common.Vec2;
 import walls.Wall;
 
-
-public class WallRepulsion extends Force {
-    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 10;
-    public static final double DEFAULT_EXPONENT = 1.0;
-    
+public class WallRepulsion implements Force {
+    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 0.1;
+    public static final double DEFAULT_EXPONENT = 2.0;
     public static final double TOP_DIRECTION = Math.PI / 2;
     public static final double RIGHT_DIRECTION = 0.0;
     public static final double BOTTOM_DIRECTION = Math.PI / 2;
@@ -21,7 +19,11 @@ public class WallRepulsion extends Force {
 
     private Wall mWall;
     private int mWallId;
-
+    
+    private double mMagnitude;
+    private double mExponent;
+	private double mDirection;
+    
     /**
      * This is a wall-repulsion force which applies a resistive force on masses inversely
      * proportional to their
@@ -103,4 +105,14 @@ public class WallRepulsion extends Force {
         System.out.printf("\tforce=<%.2f, %.2f>, Scalar=%.2f, Total Force = <%.2f, %.2f>\n\n", 
                           force.x, force.y, scalar, calc.x, calc.y);
     }
+
+	@Override
+	public Vec2 calculateForce(double x, double y) {
+		return null;
+	}
+
+	@Override
+	public Vec2 calculateForce() {
+		return null;
+	}
 }

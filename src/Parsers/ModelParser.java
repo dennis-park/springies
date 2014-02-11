@@ -2,7 +2,6 @@ package Parsers;
 
 import masses.*;
 import springs.*;
-import springies.Assembly;
 import springies.Springies;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +13,12 @@ public class ModelParser extends XMLParser {
     protected Springies mSpringies;
     protected HashMap<String, Mass> mMassMap;
     protected List<Mass> mMassList;
-    protected List<Spring> mSprings;
+    protected List<Spring> mSpringList;
     
-
     public ModelParser (Springies s) {
         mSpringies = s;
         mMassList = new ArrayList<Mass>();
-        mSprings = new ArrayList<Spring>();
+        mSpringList = new ArrayList<Spring>();
         mMassMap = new HashMap<String, Mass>();
     }
     
@@ -46,37 +44,6 @@ public class ModelParser extends XMLParser {
             parseMuscle(atts);
         }
         mNodeNum++;
-    }
-
-    private void parseMass (Attributes a) {
-        checkIdXY(a);
-        Mass newMass = createMassObj(a.getValue("id"), a.getValue("x"), a.getValue("y"),
-                                     a.getValue("vx"), a.getValue("vy"), a.getValue("mass"));
-        mMassMap.put(a.getValue("id"), newMass);
-    }
-
-    private void parseFixedMass (Attributes a) {
-        checkIdXY(a);
-        FixedMass newMass =
-                createFixedMassObj(a.getValue("id"), a.getValue("x"), a.getValue("y"),
-                                   a.getValue("mass"));
-        mMassMap.put(a.getValue("id"), newMass);
-    }
-
-    private void parseSpring (Attributes a) {
-        checkSpringMasses(a);
-        Spring newSpring =
-                createSpringObj(a.getValue("a"), a.getValue("b"), a.getValue("restlength"),
-                                a.getValue("constant"));
-        mSprings.add(newSpring);
-    }
-
-    private void parseMuscle (Attributes a) {
-        checkSpringMasses(a);
-        Muscle newMuscle =
-                createMuscleObj(a.getValue("a"), a.getValue("b"), a.getValue("restlength"),
-                                a.getValue("amplitude"));
-        mSprings.add(newMuscle);
     }
 
     private void checkSpringMasses (Attributes a) {
@@ -180,5 +147,48 @@ public class ModelParser extends XMLParser {
         newMuscle = new Muscle(m1, m2, Double.parseDouble(restlength), amp);
         return newMuscle;
     }
+    
 
+    private void parseMass (Attributes a) {
+        checkIdXY(a);
+        Mass newMass = createMassObj(a.getValue("id"), a.getValue("x"), a.getValue("y"),
+                                     a.getValue("vx"), a.getValue("vy"), a.getValue("mass"));
+        mMassMap.put(a.getValue("id"), newMass);
+        mMassList.add(newMass);
+    }
+
+    private void parseFixedMass (Attributes a) {
+        checkIdXY(a);
+        FixedMass newMass =
+                createFixedMassObj(a.getValue("id"), a.getValue("x"), a.getValue("y"),
+                                   a.getValue("mass"));
+        mMassMap.put(a.getValue("id"), newMass);
+        mMassList.add(newMass);
+    }
+
+    private void parseSpring (Attributes a) {
+        checkSpringMasses(a);
+        Spring newSpring =
+                createSpringObj(a.getValue("a"), a.getValue("b"), a.getValue("restlength"),
+                                a.getValue("constant"));
+        mSpringList.add(newSpring);
+    }
+
+    private void parseMuscle (Attributes a) {
+        checkSpringMasses(a);
+        Muscle newMuscle =
+                createMuscleObj(a.getValue("a"), a.getValue("b"), a.getValue("restlength"),
+                                a.getValue("amplitude"));
+        mSpringList.add(newMuscle);
+    }
+    
+    public HashMap<String, Mass> getMassMap() {
+    	return mMassMap;
+    }
+    public List<Mass> getMasses() {
+    	return mMassList;
+    }
+    public List<Spring> getSprings() {
+    	return mSpringList;
+    }
 }
