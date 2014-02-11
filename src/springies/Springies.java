@@ -44,6 +44,7 @@ public class Springies extends JGEngine {
     	setFrameRate(FPS, FRAME_SKIP);
     	WorldManager.initWorld(this);
     	mAssemblyList = new ArrayList<Assembly>();
+    	mFactory = new AssemblyFactory(this);
     	// notifyAssemblyFactory();
     	String environment_filename = "assets/environment.xml";
     	//mFactory.loadAssemblyFromFile(new File("assets/daintywalker.xml"));
