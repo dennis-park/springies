@@ -14,7 +14,7 @@ import org.jbox2d.common.Vec2;
  * @param y
  * @return
  */
-public abstract interface Force {
+public interface Force {
 	double mMagnitude = 0.0;
 	double mExponent = 0.0;
     
