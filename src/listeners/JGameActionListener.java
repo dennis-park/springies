@@ -20,11 +20,7 @@ public class JGameActionListener {
     public JGameActionListener(EnvironmentManager e_manager) {
         mEnvironmentManager = e_manager;
     }
-    
-    public JGameActionListener() {
-        
-    }
-
+ 
     public void doKeyEvent (int key) {
         boolean move_walls_out = true;
         

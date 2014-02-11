@@ -187,11 +187,6 @@ public class Springies extends JGEngine {
     public List<Mass> getMassList() {
         return mMassList;
     }
-    public void initListeners() {
-    	this.addKeyListener(new ClearAssemblyListener(this));
-    	this.addKeyListener(new LoadNewAssemblyListener(this));
-    	this.addKeyListener(new ToggleForceListener(this));
-    }
     public void addMassMap(HashMap<String, Mass> massList) {
     	/**
     	 * TODO
