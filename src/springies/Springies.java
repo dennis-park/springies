@@ -64,7 +64,7 @@ public class Springies extends JGEngine {
         setFrameRate(FPS, FRAME_SKIP);
     }
 
-    private void testAssembly () {
+    private void testAssembly() {
         String model_filename = "assets/lamp.xml";
         String model_filename2 = "assets/daintywalker.xml";
         makeModelFromXML(model_filename);
@@ -114,8 +114,8 @@ public class Springies extends JGEngine {
     // the appropriate actions
     private void doListenerEvents () {
     	int last_key = getLastKey();
+    	this.clearLastKey();
         mActionListener.doKeyEvent(last_key);
-        clearLastKey();
         mActionListener
                 .doMouseEvent(getMouseButton(1), getMouseButton(3), getMouseX(), getMouseY());
     }
@@ -157,9 +157,6 @@ public class Springies extends JGEngine {
     }
 
     public List<Assembly> getAssemblyList () {
-//        if (mAssemblyList.size() == 0) {
-//            makeAssembly();
-//        }
         return mAssemblyList;
     }
     
@@ -168,6 +165,6 @@ public class Springies extends JGEngine {
     }
 
     public void clearLoadedAssemblies () {
-        mAssemblyList.clear();
+        mAssemblyList = new ArrayList<Assembly>();
     }
 }
