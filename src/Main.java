@@ -15,28 +15,26 @@ import listeners.JGameActionListener;
  * @author Dennis Park
  * @author Thanh-ha Nguyen
  */
-public class Main
-{
-    // constants
-    public static final Dimension SIZE = new Dimension(800, 600);
-    public static final String TITLE = "Springies!";
+public class Main {
+	// constants
+	public static final Dimension SIZE = new Dimension(800, 600);
+	public static final String TITLE = "Springies!";
 
-    /**
-     * main --- where the program starts
-     * 
-     * @param args
-     */
-    public static void main (String args[])
-    {
-        // view of user's content
-        final Springies sp = new Springies();
-        // container that will work with user's OS
-        JFrame frame = new JFrame(TITLE);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // add our user interface components
-        frame.getContentPane().add(sp, BorderLayout.CENTER);
-        // display them
-        frame.pack();
-        frame.setVisible(true);
-    }
+	/**
+	 * main --- where the program starts
+	 * 
+	 * @param args
+	 */
+	public static void main (String args[]) {
+		// view of user's content
+		final Springies sp = new Springies();
+		// container that will work with user's OS
+		JFrame frame = new JFrame(TITLE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// add our user interface components
+		frame.getContentPane().add(sp, BorderLayout.CENTER);
+		// display them
+		frame.pack();
+		frame.setVisible(true);
+	}
 }
