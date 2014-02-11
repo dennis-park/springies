@@ -100,9 +100,24 @@ public class Mass extends PhysicalObjectCircle {
      * On-hit collisions are to be ignored.
      * @param other
      */
-    public void hit (JGObject other) {
+    public void hit (JGObject other)
+    {
+        if (other.getName() == "wall") {
+            // we hit something! bounce off it!
+            Vec2 velocity = myBody.getLinearVelocity();
+            // is it a tall wall?
+            final double DAMPING_FACTOR = 1;
+            boolean isSide = other.getBBox().height > other.getBBox().width;
+            if (isSide) {
+                velocity.x *= -DAMPING_FACTOR;
+            }
+            else {
+                velocity.y *= -DAMPING_FACTOR;
+            }
+            // apply the change
+            myBody.setLinearVelocity(velocity);
+        }
     }
-
     /**
      * Mass moves based on superclass.
      */

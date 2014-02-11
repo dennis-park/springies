@@ -130,7 +130,7 @@ public class Springies extends JGEngine {
      */
     public void makeAssembly () {
         mFactory.loadAssembly();
-        //mFactory.loadFromFile(new File("assets/daintywalker.xml"));
+        // mFactory.loadFromFile(new File("assets/daintywalker.xml"));
         mAssemblyList.add(mFactory.getAssembly());
     }
 

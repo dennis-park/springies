@@ -190,16 +190,7 @@ public class Spring extends PhysicalObject implements Force {
     public double getEndY () {
         return mEnd.y;
     }
-
-    @Override
-    /**
-     * On-hit collisions are to be ignored
-     * 
-     * @param other
-     */
-    public void hit (JGObject other) {
-    }
-
+    
     @Override
     /**
      * Computes the spring force every time the spring moves
@@ -224,4 +215,25 @@ public class Spring extends PhysicalObject implements Force {
      */
     public void changeAmplitude (boolean increase) {
     }
+    
+    @Override
+    public void hit (JGObject other)
+    {
+        if (other.getName() == "wall") {
+            // we hit something! bounce off it!
+            Vec2 velocity = myBody.getLinearVelocity();
+            // is it a tall wall?
+            final double DAMPING_FACTOR = 1;
+            boolean isSide = other.getBBox().height > other.getBBox().width;
+            if (isSide) {
+                velocity.x *= -DAMPING_FACTOR;
+            }
+            else {
+                velocity.y *= -DAMPING_FACTOR;
+            }
+            // apply the change
+            myBody.setLinearVelocity(velocity);
+        }
+    }
+
 }
