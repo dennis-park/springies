@@ -40,7 +40,7 @@ public class AssemblyFactory {
         int returnVal = chooser.showDialog(null, "Load new Assembly file");
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
-            this.loadFromFile(file);
+            loadFromFile(file);
         }
     }
 
