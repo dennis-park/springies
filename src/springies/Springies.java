@@ -34,8 +34,7 @@ public class Springies extends JGEngine {
 	}
 
 	@Override
-	public void initCanvas ()
-	{
+	public void initCanvas () {
 		setCanvasSettings(1, // width of the canvas in tiles
 				1, // height of the canvas in tiles
 				displayWidth(), // width of one tile
@@ -82,23 +81,24 @@ public class Springies extends JGEngine {
 		}
 	}
 
-	@Override
 	/**
 	 * In each frame, Springies will check all the user input events and perform actions accordingly.
 	 * It will also iterate through all the masses and apply the Forces acting upon the masses at the 
 	 * moment. Then the JBox world will take 1 time step and update JGame accordingly.  
 	 * 
 	 */
-	public void doFrame ()
-	{
+	@Override
+	public void doFrame () {
 		doListenerEvents();
 		// update game objects
+		
 		if (!mAssemblyList.isEmpty()) {
 			mEnvironmentManager.doForces();
 			WorldManager.getWorld().step(1f, 1);
 			moveObjects();
 			checkCollision(1 + 2, 1);
-		}
+		} 
+		
 	}
 
 	// This is a helper method to call the built in JEngine listeners. This way
@@ -149,6 +149,15 @@ public class Springies extends JGEngine {
 		}
 	}
 
+	
+	private void removeAllObjects() {
+		for (Assembly a : mAssemblyList) {
+			for (Mass m : a.getMassList()) {
+				removeObject(m);
+			}
+		}
+	}
+
 	public List<Assembly> getAssemblyList () {
 		return mAssemblyList;
 	}
@@ -158,6 +167,7 @@ public class Springies extends JGEngine {
 	}
 
 	public void clearLoadedAssemblies () {
+		removeAllObjects();
 		mAssemblyList.clear();
 	}
 }

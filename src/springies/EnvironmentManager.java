@@ -148,7 +148,7 @@ public class EnvironmentManager {
         // TODO Auto-generated method stub
         
     }
-
+    
     public ArrayList<Mass> getMassList () {
         ArrayList<Mass> all_masses = new ArrayList<Mass>(); 
         for (Assembly assembly: mAssemblies) {
