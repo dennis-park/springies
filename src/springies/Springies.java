@@ -1,5 +1,7 @@
 package springies;
 
+//import jgame.JGColor;
+//import jgame.JGFont;
 import java.util.ArrayList;
 import jboxGlue.WorldManager;
 import jgame.platform.JGEngine;
@@ -7,6 +9,7 @@ import listeners.OnClickListener;
 import listeners.OnKeyListener;
 import masses.Mass;
 import springs.Spring;
+
 
 
 @SuppressWarnings("serial")
@@ -39,19 +42,20 @@ public class Springies extends JGEngine {
                           null); // standard font -> use default font
     }
 
+    
     @Override
     public void initGame () {
         setFrameRate(FPS, FRAME_SKIP);
         WorldManager.initWorld(this);
         mAssemblyList = new ArrayList<Assembly>();
         mFactory = new AssemblyFactory(this);
-        // notifyAssemblyFactory();
         String environment_filename = "assets/environment.xml";
         // mFactory.loadAssemblyFromFile(new File("assets/daintywalker.xml"));
         // mEnvironmentManager = new EnvironmentManager(this);
         mEnvironmentManager = new EnvironmentManager(this, environment_filename);
         mKeyListener = new OnKeyListener(this, mEnvironmentManager);
         mMouseListener = new OnClickListener(mEnvironmentManager);
+        
     }
 
     @Override
@@ -63,7 +67,7 @@ public class Springies extends JGEngine {
      */
     public void doFrame () {
         doListenerEvents();
-        updateToggleView();
+        //toggleView();
         if (!mAssemblyList.isEmpty()) {
             mEnvironmentManager.doForces();
             WorldManager.getWorld().step(1f, 1);
@@ -76,16 +80,16 @@ public class Springies extends JGEngine {
                                   Constants.WALL_ID };
 	private String[] force_view;
 	
-    private void updateToggleView () {
+    /*private void toggleView () {
     	force_view = new String[force_id.length];
     	for (int index = 0; index < force_id.length; index ++) {
     		int offset = index*10;
     		force_view[index] = force_id[1] + " " +
     				(mEnvironmentManager.getToggleMap().get(force_id[1])).toString().charAt(0);
-    		this.drawString(force_view[index], 20+offset, 20+offset, 0);
+    		drawString(force_view[index], 20+offset, 20+offset, 0, JGFont.ITALIC, JGColor.green);
     	}	
     }
-
+*/
     /**
      * This is a helper method to call the built in JEngine listeners. This way
      * we don't have to worry about coordinates, etc. This method will send the lastKeyPressed
