@@ -181,10 +181,6 @@ public class ModelParser extends XMLParser {
                                 a.getValue("amplitude"));
         mSpringList.add(newMuscle);
     }
-    
-    public HashMap<String, Mass> getMassMap() {
-    	return mMassMap;
-    }
     public List<Mass> getMasses() {
     	return mMassList;
     }

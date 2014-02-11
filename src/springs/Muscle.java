@@ -9,7 +9,7 @@ public class Muscle extends Spring {
     private double mLength;
     private int mCount;
     public static final int DEFAULT_PERIOD = 60;
-    public static final double AMPLITUDE_INCREMENT = 0.05;
+    public static final double AMPLITUDE_INCREMENT = 0.1;
 
     public Muscle (Mass m1, Mass m2, double amplitude) {
         super(m1, m2);
@@ -36,12 +36,15 @@ public class Muscle extends Spring {
         mCount++;
     }
 
-    public void increaseAmplitude () {
-        mAmplitude += AMPLITUDE_INCREMENT;
-    }
-    
-    public void decreaseAmplitude () {
-        mAmplitude -= AMPLITUDE_INCREMENT;
+    @Override
+    public void changeAmplitude (boolean increase) {
+        //System.out.printf("Changing amplitude. Increase = %b\n", increase);
+        if (increase) {
+            mAmplitude += AMPLITUDE_INCREMENT;
+        }
+        else {
+            mAmplitude -= AMPLITUDE_INCREMENT;
+        }
     }
 
 }

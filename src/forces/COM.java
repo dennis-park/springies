@@ -14,7 +14,7 @@ public class COM implements Force {
     private static final double DEFAULT_EXPONENT = 0.0;
     private List<Mass> mList;
     private double mMagnitude;
-	private double mExponent;
+    private double mExponent;
 	
     /**
      * This is an imaginary force which attracts all masses toward their calculated center of mass.

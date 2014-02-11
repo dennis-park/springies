@@ -19,8 +19,8 @@ public class EnvironmentParser extends XMLParser {
     private Springies mSpringies;
     private Gravity mGravity; 
     private Viscosity mViscosity;
-    private COM mCOM;
     private List<WallRepulsion> mWallRepulsionList;
+    private ArrayList<COM> mCOMList;
     private HashMap<Integer, Wall> mWallList;
     
     protected static final String ID = "id";
@@ -32,6 +32,7 @@ public class EnvironmentParser extends XMLParser {
         mSpringies = s;
         mWallRepulsionList = new ArrayList<WallRepulsion>();
         mWallList = new HashMap<Integer, Wall>();
+        mCOMList = new ArrayList<COM>();
         makeWalls();
     }
 
@@ -90,8 +91,11 @@ public class EnvironmentParser extends XMLParser {
          * Temporary index in assembly
          * needs to iterate through all them
          */
-        Assembly assembly = mSpringies.getAssembly(0);
-        mCOM = new COM(mag, exp, assembly);
+        ArrayList<Assembly> assembly_list = mSpringies.getAssemblyList();
+        for (Assembly assembly: assembly_list) {
+            COM center_of_mass = new COM(mag, exp, assembly);
+            mCOMList.add(center_of_mass);
+        }
     }
 
     private void parseViscosity (Attributes a) {
@@ -127,12 +131,12 @@ public class EnvironmentParser extends XMLParser {
         return mViscosity;
     }
     
-    public COM getCOM() {
-        if (mCOM == null) {
+    public ArrayList<COM> getCOMList() {
+        if (mCOMList == null) {
             System.out.println("Error. Center of mass has not been initialized yet.");
             System.exit(1);
         }
-        return mCOM;
+        return mCOMList;
     }
     
     public List<WallRepulsion> getWallRepulsionList() {
