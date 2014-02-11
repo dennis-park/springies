@@ -12,6 +12,8 @@ import listeners.JGameActionListener;
  * Creates window that can be moved, resized, and closed by the user.
  * 
  * @author Robert C. Duvall
+ * @author Dennis Park
+ * @author Thanh-ha Nguyen
  */
 public class Main
 {
@@ -28,20 +30,11 @@ public class Main
     {
         // view of user's content
         final Springies sp = new Springies();
-        JButton jb = new JButton("Make new Ball");
-        jb.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed (ActionEvent arg0) {
-                double xpos = sp.displayWidth() / 2;
-                double ypos = sp.displayHeight() / 2;
-            }
-        });
         // container that will work with user's OS
         JFrame frame = new JFrame(TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // add our user interface components
         frame.getContentPane().add(sp, BorderLayout.CENTER);
-        frame.getContentPane().add(jb, BorderLayout.SOUTH);
         // display them
         frame.pack();
         frame.setVisible(true);

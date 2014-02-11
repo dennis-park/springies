@@ -138,7 +138,7 @@ public class Springies extends JGEngine {
     }
 
     public void loadAssemblyFromFile (File file) {
-        if (file != null && file.getAbsolutePath().equals(ASSETS + "environment.xml")) {
+        if (file != null) {
             ModelParser factory = new ModelParser(this);
             try {
                 makeModelFromXML(ASSETS + file.getPath());
