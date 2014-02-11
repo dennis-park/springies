@@ -129,7 +129,6 @@ public class EnvironmentManager {
     }
 
     public void doForces () {
-
         for (Assembly assembly : mSpringies.getAssemblyList()) {
             for (Mass mass : assembly.getMassList()) {
                 applyForce(Constants.GRAV_ID, mGravity, mass);

@@ -12,7 +12,7 @@ public class Constants{
     public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 500;
     public static final double DEFAULT_EXPONENT = 1.0;
 
-    // USEFUL Vector
+    // Useful vector(s)
     public static final Vec2 ZERO_VECTOR = new Vec2(0.0f, 0.0f);
     
     // Wall ID's
