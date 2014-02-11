@@ -3,8 +3,11 @@ package springies;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import masses.Mass;
+
 import org.jbox2d.common.Vec2;
+
 import springs.Spring;
 import forces.COM;
 import forces.Force;
@@ -33,10 +36,10 @@ public class EnvironmentManager {
     public static final int BOTTOM_ID = 3;
     public static final int LEFT_ID = 4;
     
-    public static final String GRAV_ID = "gravity";
-    public static final String VISC_ID = "viscosity";
-    public static final String COM_ID = "com";
-    public static final String WALL_ID = "wall";
+    public static final String GRAV_ID = "g";
+    public static final String VISC_ID = "v";
+    public static final String COM_ID = "m";
+    public static final String WALL_ID = "w";
     
     protected HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
     protected HashMap<Integer, Wall> mWallMap;
@@ -93,7 +96,21 @@ public class EnvironmentManager {
         }
         return toggle_map;
     }
+    
+    /*private void toggle() {
+		HashMap<Character, String> forces = new HashMap<Character, String>();
+		forces.put(GRAV_ID, GRAV);
+		forces.put(VISC_ID, VISC);
+		forces.put(COM_ID, COM);
 
+		for (char c : forces.keySet()) {
+			if (mSpringies.getKey(c)) {
+				mSpringies.clearKey(c);
+				mEnvForces.toggle(forces.get(c));
+			}
+		}
+	}
+*/
     public void toggleForces(String forceid) {
     	mToggleMap.put(forceid, !mToggleMap.get(forceid));
     }
@@ -122,17 +139,19 @@ public class EnvironmentManager {
     }
 
     public void doForces() {
-    	int TEMP_INDEX = 0;
-        for (Mass mass: (mSpringies.getAssemblyList().get(TEMP_INDEX)).getMassList()) {
-            applyForce(GRAV_ID, mGravity, mass);
-            applyForce(VISC_ID, mViscosity, mass);
-            for (COM c: mCOMList) {
-                applyForce(COM_ID, c, mass);
+    	for (Assembly assembly : mSpringies.getAssemblyList()) {
+    		for (Mass mass : assembly.getMassList()) {
+                applyForce(GRAV_ID, mGravity, mass);
+                applyForce(VISC_ID, mViscosity, mass);
+                for (COM c: mCOMList) {
+                    applyForce(COM_ID, c, mass);
+                }
+                for (WallRepulsion w : mWallRepulsionList) {
+                    applyForce(String.format("%d", w.getWallId()), w, mass);
+                }
             }
-            for (WallRepulsion w : mWallRepulsionList) {
-                applyForce(String.format("%d", w.getWallId()), w, mass);
-            }
-        }
+    	}
+        
     }
     
     public void applyForce(String force_id, Force force, Mass mass) {

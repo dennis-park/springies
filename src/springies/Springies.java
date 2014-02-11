@@ -34,8 +34,7 @@ public class Springies extends JGEngine {
     }
 
     @Override
-    public void initCanvas ()
-    {
+    public void initCanvas () {
         setCanvasSettings(1, // width of the canvas in tiles
                           1, // height of the canvas in tiles
                           displayWidth(), // width of one tile
@@ -79,8 +78,7 @@ public class Springies extends JGEngine {
      * moment. Then the JBox world will take 1 time step and update JGame accordingly.  
      * 
      */
-    public void doFrame ()
-    {
+    public void doFrame () {
         doListenerEvents();
         // update game objects
         if (!mAssemblyList.isEmpty()) {

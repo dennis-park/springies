@@ -116,6 +116,9 @@ public class JGameActionListener {
             System.out.printf("Mass list is empty");
         }
         double shortest_distance = Double.POSITIVE_INFINITY;
+        /*
+         * Temporary index = 0
+         */
         Mass nearest_mass = all_masses.get(0);
         for (Mass mass : all_masses) {
             double current_distance = Spring.computeLength(mouse_mass, mass);
