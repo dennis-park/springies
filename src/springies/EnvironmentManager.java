@@ -33,10 +33,10 @@ public class EnvironmentManager {
     public static final int BOTTOM_ID = 3;
     public static final int LEFT_ID = 4;
     
-    private String GRAV = "gravity";
-    private String VISC = "viscosity";
-    private String COM = "com";
-    private String WALL = "wall";
+    public static final String GRAV = "gravity";
+    public static final String VISC = "viscosity";
+    public static final String COM = "com";
+    public static final String WALL = "wall";
     
     protected HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
     protected HashMap<Integer, Wall> mWallMap;
@@ -142,5 +142,13 @@ public class EnvironmentManager {
                 wall.toggleIn();
             }
         }
+    }
+    public void toggleWallForces (int wall_id) {
+        // TODO Auto-generated method stub
+        
+    }
+    public void changeMuscleAmplitude (boolean increase) {
+        // TODO Auto-generated method stub
+        
     }
 }

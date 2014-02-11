@@ -37,8 +37,8 @@ public class Wall extends PhysicalObjectRect {
         mWallId = wall_id;
         createWallJGObject();
     }
-
-    public void createWallJGObject () {
+    
+    private void createWallJGObject () {
         int width;
         int height;
         if (mWallId == TOP_ID) {
@@ -62,7 +62,7 @@ public class Wall extends PhysicalObjectRect {
             mDirection = LEFT_DIRECTION;
         }
     }
-
+    
     @Override
     public void move () {
         float xpos = myBody.getPosition().x;
@@ -74,7 +74,7 @@ public class Wall extends PhysicalObjectRect {
             ypos += (-1 * Math.sin(mDirection) * PIXEL_MOVEMENT);
             setPos(xpos, ypos);
             
-            System.out.printf("Wall %d moved OUT to (%.2f, %.2f)\n", mWallId, xpos, ypos);
+//            System.out.printf("Wall %d moved OUT to (%.2f, %.2f)\n", mWallId, xpos, ypos);
         }
         else if (mToggleIn) {
             mToggleIn = false;
@@ -82,7 +82,7 @@ public class Wall extends PhysicalObjectRect {
             ypos -= (-1 * Math.sin(mDirection) * PIXEL_MOVEMENT);
             setPos(xpos, ypos);
             
-            System.out.printf("Wall %d moved IN to (%.2f, %.2f)\n", mWallId, xpos, ypos);
+//            System.out.printf("Wall %d moved IN to (%.2f, %.2f)\n", mWallId, xpos, ypos);
         }
         
     }

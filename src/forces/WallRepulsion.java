@@ -6,8 +6,8 @@ import walls.Wall;
 
 
 public class WallRepulsion extends Force {
-    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 0.1;
-    public static final double DEFAULT_EXPONENT = 2.0;
+    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 10;
+    public static final double DEFAULT_EXPONENT = 1.0;
     
     public static final double TOP_DIRECTION = Math.PI / 2;
     public static final double RIGHT_DIRECTION = 0.0;

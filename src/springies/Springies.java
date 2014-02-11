@@ -173,8 +173,9 @@ public class Springies extends JGEngine {
     // and the mouseEvents to the Listener class and the Listener class will perform
     // the appropriate actions
     private void doListenerEvents() {
-        mActionListener.doKeyEvent(getLastKey());
-        this.clearLastKey(); // last key has to be cleared every time
+        int last_key = getLastKey();
+        clearLastKey(); // last key has to be cleared every time
+        mActionListener.doKeyEvent(last_key);
         mActionListener.doMouseEvent(getMouseButton(1), getMouseButton(3), getMouseX(), getMouseY());
     }
 
