@@ -1,21 +1,12 @@
 package springies;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import jboxGlue.WorldManager;
 import jgame.platform.JGEngine;
 import listeners.OnClickListener;
 import listeners.OnKeyListener;
 import masses.Mass;
 import springs.Spring;
-import walls.Wall;
-import Parsers.ModelParser;
-import Parsers.XMLParserCaller;
 
 
 @SuppressWarnings("serial")
@@ -23,7 +14,6 @@ public class Springies extends JGEngine {
 
     public ArrayList<Assembly> mAssemblyList;
     private AssemblyFactory mFactory;
-    private Wall[] mWallArray;
     private EnvironmentManager mEnvironmentManager;
     private OnClickListener mMouseListener;
     private OnKeyListener mKeyListener;
@@ -54,10 +44,9 @@ public class Springies extends JGEngine {
     	setFrameRate(FPS, FRAME_SKIP);
     	WorldManager.initWorld(this);
     	mAssemblyList = new ArrayList<Assembly>();
-        mFactory = new AssemblyFactory(this);
     	// notifyAssemblyFactory();
     	String environment_filename = "assets/environment.xml";
-    	mFactory.loadAssemblyFromFile(new File("assets/daintywalker.xml"));
+    	//mFactory.loadAssemblyFromFile(new File("assets/daintywalker.xml"));
     	//mEnvironmentManager = new EnvironmentManager(this);
     	mEnvironmentManager = new EnvironmentManager(this, environment_filename);
     	mKeyListener = new OnKeyListener(this, mEnvironmentManager);
@@ -113,8 +102,9 @@ public class Springies extends JGEngine {
                 .doMouseEvent(getMouseButton(1), getMouseButton(3), getMouseX(), getMouseY());
     }
     
-    public void notifyAssemblyFactory() {
-		mFactory.makeAssembly();
+    public void makeAssembly() {
+		mFactory.loadAssembly();
+		mAssemblyList.add(mFactory.getAssembly());
 	}
 
 	private void removeAllObjects() {
@@ -136,6 +126,5 @@ public class Springies extends JGEngine {
 	public ArrayList<Assembly> getAssemblyList() {
 		return mAssemblyList;
 	}
-
 	
 }

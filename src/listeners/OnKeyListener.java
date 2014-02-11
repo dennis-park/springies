@@ -31,7 +31,7 @@ public class OnKeyListener{
                 mEnvironmentManager.moveWalls(!move_walls_out);
                 break;
             case KeyEvent.VK_N:
-                mSpringies.notifyAssemblyFactory();
+                mSpringies.makeAssembly();
                 break;
             case KeyEvent.VK_C:
                 mSpringies.clearLoadedAssemblies();

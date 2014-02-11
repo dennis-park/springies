@@ -7,8 +7,8 @@ import springies.EnvironmentManager;
 import springs.Spring;
 
 /**
- * This class implements a Key Listener in order to toggle walls in (towards center)
- * and out (away from center) in Springies.
+ * This class implements a on click listener in order to 
+ * create a spring and drag the assembly around in Springies.
  * 
  * @author Thanh-Ha Nguyen & Dennis Park
  * 
