@@ -79,7 +79,12 @@ public class EnvironmentParser extends XMLParser {
         }
         double mag = Double.parseDouble(a.getValue(MAGNITUDE));
         double exp = Double.parseDouble(a.getValue(EXPONENT));
-        List<Mass> mass_list = mSpringies.getMassList();
+        
+        /**
+         * Temporary index in assembly
+         * needs to iterate through all them
+         */
+        List<Mass> mass_list = mSpringies.getAssembly(0).getMassList();
         mCOM = new COM(mag, exp, mass_list);
     }
 
