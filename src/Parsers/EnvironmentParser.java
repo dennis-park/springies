@@ -2,12 +2,18 @@ package Parsers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import masses.Mass;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
+import springies.Assembly;
 import springies.Springies;
-import walls.*;
-import forces.*;
+import walls.Wall;
+import walls.WallType;
+import forces.COM;
+import forces.Gravity;
+import forces.Viscosity;
+import forces.WallRepulsion;
 
 public class EnvironmentParser extends XMLParser {
     private Springies mSpringies;
@@ -84,8 +90,8 @@ public class EnvironmentParser extends XMLParser {
          * Temporary index in assembly
          * needs to iterate through all them
          */
-        List<Mass> mass_list = mSpringies.getAssembly(0).getMassList();
-        mCOM = new COM(mag, exp, mass_list);
+        Assembly assembly = mSpringies.getAssembly(0);
+        mCOM = new COM(mag, exp, assembly);
     }
 
     private void parseViscosity (Attributes a) {

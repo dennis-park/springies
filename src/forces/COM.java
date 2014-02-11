@@ -1,8 +1,12 @@
 package forces;
 
 import java.util.List;
+
 import masses.Mass;
+
 import org.jbox2d.common.Vec2;
+
+import springies.Assembly;
 
 
 public class COM implements Force {
@@ -22,18 +26,18 @@ public class COM implements Force {
      * 
      * @param magnitude
      */
-    public COM (double magnitude, double exponent, List<Mass> mass_list) {
+    public COM (double magnitude, double exponent, Assembly assembly) {
         mMagnitude = magnitude;
         mExponent = exponent;
-        mList = mass_list;
+        mList = assembly.getMassList();
     }
 
-    public COM (double magnitude, List<Mass> mass_list) {
-        this(magnitude, DEFAULT_EXPONENT, mass_list);
+    public COM (double magnitude, Assembly assembly) {
+        this(magnitude, DEFAULT_EXPONENT, assembly);
     }
 
-    public COM (List<Mass> mass_list) {
-        this(DEFAULT_MAGNITUDE, DEFAULT_EXPONENT, mass_list);
+    public COM (Assembly assembly) {
+        this(DEFAULT_MAGNITUDE, DEFAULT_EXPONENT, assembly);
     }
 
     public void setMassList(List<Mass> mass_list) {

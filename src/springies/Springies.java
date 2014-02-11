@@ -53,9 +53,8 @@ public class Springies extends JGEngine {
         // so gravity is up in world coords and down in game coords
         // so set all directions (e.g., forces, velocities) in world coords
         WorldManager.initWorld(this);
-        // addTestSpring();
-        // testAssembly();
         assemblyList = new ArrayList<Assembly>();
+        makeAssembly();
         mEnvironmentManager = new EnvironmentManager(this);
         // mForceManager = new EnvironmentManager(this, environment_filename);
         mActionListener = new JGameActionListener(mEnvironmentManager);
@@ -123,12 +122,9 @@ public class Springies extends JGEngine {
         return mWallArray;
     }
 
-    private static final String ASSETS = "assets/";
-
     public void makeAssembly () {
         JFileChooser chooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                                                                     "XML documents", "xml");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("XML documents", "xml");
         chooser.setFileFilter(filter);
         int returnVal = chooser.showDialog(null, "Load new Assembly file");
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -138,10 +134,10 @@ public class Springies extends JGEngine {
     }
 
     public void loadAssemblyFromFile (File file) {
-        if (file != null && file.getAbsolutePath().equals(ASSETS + "environment.xml")) {
+        if (file != null) {
             ModelParser factory = new ModelParser(this);
             try {
-                makeModelFromXML(ASSETS + file.getPath());
+                makeModelFromXML(file.getAbsolutePath());
                 Assembly a = new Assembly();
                 for (Mass mass : factory.getMasses()) {
                     a.add(mass);
