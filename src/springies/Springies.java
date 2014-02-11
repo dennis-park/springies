@@ -57,7 +57,7 @@ public class Springies extends JGEngine {
         makeAssembly();
         mEnvironmentManager = new EnvironmentManager(this);
         // mForceManager = new EnvironmentManager(this, environment_filename);
-        mActionListener = new JGameActionListener(mEnvironmentManager);
+        mActionListener = new JGameActionListener(this, mEnvironmentManager);
 
         setFrameRate(5, 2);
     }

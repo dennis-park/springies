@@ -34,10 +34,10 @@ public class EnvironmentManager {
     public static final int BOTTOM_ID = 3;
     public static final int LEFT_ID = 4;
     
-    public static final String GRAV = "gravity";
-    public static final String VISC = "viscosity";
-    public static final String COM = "com";
-    public static final String WALL = "wall";
+    public static final String GRAV_ID = "gravity";
+    public static final String VISC_ID = "viscosity";
+    public static final String COM_ID = "com";
+    public static final String WALL_ID = "wall";
     
     protected HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
     protected HashMap<Integer, Wall> mWallMap;
@@ -78,10 +78,10 @@ public class EnvironmentManager {
     }
     
     private void initForceToggleMap() {
-        mToggleMap.put(GRAV, true);
-        mToggleMap.put(VISC, true);
-        mToggleMap.put(COM, true);
-        mToggleMap.put(WALL, true);
+        mToggleMap.put(GRAV_ID, true);
+        mToggleMap.put(VISC_ID, true);
+        mToggleMap.put(COM_ID, true);
+        mToggleMap.put(WALL_ID, true);   
     }
 
     public void toggleForces(String forceid) {
@@ -112,13 +112,12 @@ public class EnvironmentManager {
     public void doForces() {
     	int TEMP_INDEX = 0;
         for (Mass mass: (mSpringies.getAssemblyList().get(TEMP_INDEX)).getMassList()) {
-            applyForce(GRAV, mGravity, mass);
-            applyForce(VISC, mViscosity, mass);
-            applyForce(COM, mCOM, mass);
+            applyForce(GRAV_ID, mGravity, mass);
+            applyForce(VISC_ID, mViscosity, mass);
+            applyForce(COM_ID, mCOM, mass);
             for (WallRepulsion w : mWallRepulsionList) {
-                applyForce(WALL, w, mass);
+                applyForce(WALL_ID, w, mass);
             }
-            //System.out.printf("Force applied on mass (%s): <%.2f, %.2f>\n", mass.getName(), mass.getBody().m_force.x, mass.getBody().m_force.y);
         }
     }
     
@@ -132,7 +131,7 @@ public class EnvironmentManager {
     }
     
     public void moveWalls (boolean move_out) {
-        for (Wall wall: mWallMap.values()) {
+        for (Wall wall : mWallMap.values()) {
             if (move_out) {
                 wall.toggleOut();
             }
