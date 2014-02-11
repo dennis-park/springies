@@ -8,9 +8,6 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import jboxGlue.WorldManager;
 import jgame.platform.JGEngine;
-import listeners.ClearAssemblyListener;
-import listeners.LoadNewAssemblyListener;
-import listeners.ToggleForceListener;
 import listeners.JGameActionListener;
 import masses.FixedMass;
 import masses.Mass;
@@ -86,7 +83,6 @@ public class Springies extends JGEngine {
         // NEED TO ADD CODE SO WE CAN UPDATE FORCE MANAGER AS NEW MASSES ARE ADDED
         
         mActionListener = new JGameActionListener(mEnvironmentManager);
-        initListeners();
     }
 
     private void makeModelFromXML (String filename) {
