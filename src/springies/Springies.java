@@ -9,7 +9,6 @@ import jgame.platform.JGEngine;
 import listeners.JGameActionListener;
 import masses.Mass;
 import springs.Spring;
-import walls.Wall;
 import Parsers.ModelParser;
 import Parsers.XMLParserCaller;
 
@@ -17,20 +16,18 @@ import Parsers.XMLParserCaller;
 @SuppressWarnings("serial")
 public class Springies extends JGEngine {
 
-    public ArrayList<Assembly> mAssemblyList;
-    private Wall[] mWallArray;
+    public ArrayList<Assembly> mAssemblyList = new ArrayList<Assembly>();
     private EnvironmentManager mEnvironmentManager;
     private JGameActionListener mActionListener;
 
-    private final int FPS = 40;
-    private final int FRAME_SKIP = 2;
+    private static final int FPS = 10;
+    private static final int FRAME_SKIP = 2;
 
     public Springies () {
         // set the window size
         int height = 480;
         double aspect = 16.0 / 9.0;
         initEngineComponent((int) (height * aspect), height);
-        mAssemblyList = new ArrayList<Assembly>();
     }
 
     @Override
@@ -49,15 +46,20 @@ public class Springies extends JGEngine {
     public void initGame () {
         setFrameRate(FPS, FRAME_SKIP);
         WorldManager.initWorld(this);
-        mAssemblyList = new ArrayList<Assembly>();
+        
+        mEnvironmentManager = initEnvironment();
+        loadAssemblyFromFile(new File("assets/ball.xml"));
+        
         // makeAssembly();
-        String environment_filename = "assets/environment.xml";
-        loadAssemblyFromFile(new File("assets/example.xml"));
-        // mEnvironmentManager = new EnvironmentManager(this);
-        mEnvironmentManager = new EnvironmentManager(this, environment_filename);
         mActionListener = new JGameActionListener(this, mEnvironmentManager);
     }
-
+    
+    private EnvironmentManager initEnvironment() {
+        String environment_filename = "assets/environment.xml";
+        //return new EnvironmentManager(this, environment_filename);
+        return new EnvironmentManager(this);
+    }
+    
     private ModelParser makeModelFromXML (String filename) {
         XMLParserCaller caller = new XMLParserCaller();
         ModelParser parser = new ModelParser(this);
@@ -103,9 +105,6 @@ public class Springies extends JGEngine {
                 .doMouseEvent(getMouseButton(1), getMouseButton(3), getMouseX(), getMouseY());
     }
 
-    public Wall[] getWalls () {
-        return mWallArray;
-    }
 
     public void makeAssembly () {
         JFileChooser chooser = new JFileChooser();
@@ -114,29 +113,25 @@ public class Springies extends JGEngine {
         int returnVal = chooser.showDialog(null, "Load new Assembly file");
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = chooser.getSelectedFile();
-            this.loadAssemblyFromFile(file);
+            loadAssemblyFromFile(file);
         }
     }
 
     public void loadAssemblyFromFile (File file) {
         if (file != null) {
-            try {
-                ModelParser factory = makeModelFromXML(file.getAbsolutePath());
-                Assembly a = new Assembly();
-                for (Mass mass : factory.getMasses()) {
-                    a.add(mass);
-                }
-                for (Spring spring : factory.getSprings()) {
-                    a.add(spring);
-                }
-                mAssemblyList.add(a);
-                mEnvironmentManager.updateCOM(a);
+            ModelParser factory = makeModelFromXML(file.getAbsolutePath());
+            Assembly a = new Assembly();
+            for (Mass mass : factory.getMasses()) {
+                a.add(mass);
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            for (Spring spring : factory.getSprings()) {
+                a.add(spring);
             }
+            mAssemblyList.add(a);
+            mEnvironmentManager.updateCOM();
         }
     }
+    
 
     private void removeAllObjects () {
         for (Assembly a : mAssemblyList) {

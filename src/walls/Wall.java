@@ -2,30 +2,19 @@ package walls;
 
 import jboxGlue.PhysicalObjectRect;
 import jgame.JGColor;
+import springies.Constants;
 
 
 public class Wall extends PhysicalObjectRect {
-    public static final int TOP_ID = 1;
-    public static final int RIGHT_ID = 2;
-    public static final int BOTTOM_ID = 3;
-    public static final int LEFT_ID = 4;
-    public static final double TOP_DIRECTION = Math.PI / 2;
-    public static final double RIGHT_DIRECTION = Math.PI;
-    public static final double BOTTOM_DIRECTION = 3 * Math.PI / 2;
-    public static final double LEFT_DIRECTION = 0.0;
-
-    public final static double WALL_MASS = 0.0;
-    public final static double DEFAULT_WALL_MARGIN = -2;
-    public final static double DEFAULT_WALL_THICKNESS = 10;
     public final static double DEFAULT_WALL_HEIGHT = 1; // In order to initialize w/o a calculated
-                                                        // width/height
+    // width/height
     public final static double DEFAULT_WALL_WIDTH = 1;  // In order to initialize w/o a calculated
-                                                       // width/height
-    public final double WALL_WIDTH = eng.displayWidth() - DEFAULT_WALL_MARGIN * 2 +
-                                     DEFAULT_WALL_THICKNESS;
-    public final double WALL_HEIGHT = eng.displayHeight() - DEFAULT_WALL_MARGIN * 2 +
-                                      DEFAULT_WALL_THICKNESS;
-    public final double PIXEL_MOVEMENT = 5.0;
+    // width/height
+    private final double WALL_WIDTH = eng.displayWidth() - Constants.DEFAULT_WALL_MARGIN * 2 +
+                                            Constants.DEFAULT_WALL_THICKNESS;
+    private final double WALL_HEIGHT = eng.displayHeight() - Constants.DEFAULT_WALL_MARGIN *
+                                             2 +
+                                             Constants.DEFAULT_WALL_THICKNESS;
 
     protected int mWallId;
     protected double mDirection;
@@ -33,36 +22,35 @@ public class Wall extends PhysicalObjectRect {
     protected boolean mToggleIn = false;
 
     public Wall (int wall_id) {
-        super("wall", 2, JGColor.green, DEFAULT_WALL_THICKNESS, DEFAULT_WALL_HEIGHT, WALL_MASS);
+        super("wall", 2, JGColor.green, Constants.DEFAULT_WALL_THICKNESS, DEFAULT_WALL_HEIGHT,
+              Constants.WALL_MASS);
         mWallId = wall_id;
         createWallJGObject();
     }
-    
+
     private void createWallJGObject () {
-        int width;
-        int height;
-        if (mWallId == TOP_ID) {
-            init(WALL_WIDTH, DEFAULT_WALL_THICKNESS, WALL_MASS);
-            setPos(eng.displayWidth() / 2, DEFAULT_WALL_MARGIN);
-            mDirection = TOP_DIRECTION;
+        if (mWallId == Constants.TOP_ID) {
+            init(WALL_WIDTH, Constants.DEFAULT_WALL_THICKNESS, Constants.WALL_MASS);
+            setPos(eng.displayWidth() / 2, Constants.DEFAULT_WALL_MARGIN);
+            mDirection = Constants.TOP_DIRECTION;
         }
-        if (mWallId == BOTTOM_ID) {
-            init(WALL_WIDTH, DEFAULT_WALL_THICKNESS, WALL_MASS);
-            setPos(eng.displayWidth() / 2, eng.displayHeight() - DEFAULT_WALL_MARGIN);
-            mDirection = BOTTOM_DIRECTION;
+        if (mWallId == Constants.BOTTOM_ID) {
+            init(WALL_WIDTH, Constants.DEFAULT_WALL_THICKNESS, Constants.WALL_MASS);
+            setPos(eng.displayWidth() / 2, eng.displayHeight() - Constants.DEFAULT_WALL_MARGIN);
+            mDirection = Constants.BOTTOM_DIRECTION;
         }
-        else if (mWallId == RIGHT_ID) {
-            init(DEFAULT_WALL_THICKNESS, WALL_WIDTH, WALL_MASS);
-            setPos(eng.displayWidth() - DEFAULT_WALL_MARGIN, eng.displayHeight() / 2);
-            mDirection = RIGHT_DIRECTION;
+        else if (mWallId == Constants.RIGHT_ID) {
+            init(Constants.DEFAULT_WALL_THICKNESS, WALL_HEIGHT, Constants.WALL_MASS);
+            setPos(eng.displayWidth() - Constants.DEFAULT_WALL_MARGIN, eng.displayHeight() / 2);
+            mDirection = Constants.RIGHT_DIRECTION;
         }
-        else if (mWallId == LEFT_ID) {
-            init(DEFAULT_WALL_THICKNESS, WALL_WIDTH, WALL_MASS);
-            setPos(DEFAULT_WALL_MARGIN, eng.displayHeight() / 2);
-            mDirection = LEFT_DIRECTION;
+        else if (mWallId == Constants.LEFT_ID) {
+            init(Constants.DEFAULT_WALL_THICKNESS, WALL_HEIGHT, Constants.WALL_MASS);
+            setPos(Constants.DEFAULT_WALL_MARGIN, eng.displayHeight() / 2);
+            mDirection = Constants.LEFT_DIRECTION;
         }
     }
-    
+
     @Override
     public void move () {
         float xpos = myBody.getPosition().x;
@@ -70,21 +58,21 @@ public class Wall extends PhysicalObjectRect {
 
         if (mToggleOut) {
             mToggleOut = false;
-            xpos += (-1 * Math.cos(mDirection) * PIXEL_MOVEMENT);
-            ypos += (-1 * Math.sin(mDirection) * PIXEL_MOVEMENT);
+            xpos += (-1 * Math.cos(mDirection) * Constants.PIXEL_MOVEMENT);
+            ypos += (-1 * Math.sin(mDirection) * Constants.PIXEL_MOVEMENT);
             setPos(xpos, ypos);
-            
-//            System.out.printf("Wall %d moved OUT to (%.2f, %.2f)\n", mWallId, xpos, ypos);
+
+            // System.out.printf("Wall %d moved OUT to (%.2f, %.2f)\n", mWallId, xpos, ypos);
         }
         else if (mToggleIn) {
             mToggleIn = false;
-            xpos -= (-1 * Math.cos(mDirection) * PIXEL_MOVEMENT);
-            ypos -= (-1 * Math.sin(mDirection) * PIXEL_MOVEMENT);
+            xpos -= (-1 * Math.cos(mDirection) * Constants.PIXEL_MOVEMENT);
+            ypos -= (-1 * Math.sin(mDirection) * Constants.PIXEL_MOVEMENT);
             setPos(xpos, ypos);
-            
-//            System.out.printf("Wall %d moved IN to (%.2f, %.2f)\n", mWallId, xpos, ypos);
+
+            // System.out.printf("Wall %d moved IN to (%.2f, %.2f)\n", mWallId, xpos, ypos);
         }
-        
+
     }
 
     public void toggleOut () {

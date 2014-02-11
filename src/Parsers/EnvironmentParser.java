@@ -1,27 +1,20 @@
 package Parsers;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-
-import springies.Assembly;
 import springies.Springies;
-import walls.Wall;
-import walls.WallType;
-import forces.COM;
-import forces.Gravity;
-import forces.Viscosity;
-import forces.WallRepulsion;
 
 public class EnvironmentParser extends XMLParser {
-    private Springies mSpringies;
-    private Gravity mGravity; 
-    private Viscosity mViscosity;
-    private List<WallRepulsion> mWallRepulsionList;
-    private ArrayList<COM> mCOMList;
-    private HashMap<Integer, Wall> mWallMap;
+    
+    protected Springies mSpringies;
+    
+    protected double mGravityMag;
+    protected double mGravityDir;
+    protected double mViscosityMag;
+    protected double mCOMMag;
+    protected double mCOMExp;
+    protected HashMap<Integer, Double> mWallMag;
+    protected HashMap<Integer, Double> mWallExp;    
     
     protected static final String ID = "id";
     protected static final String MAGNITUDE = "magnitude";
@@ -30,17 +23,8 @@ public class EnvironmentParser extends XMLParser {
     
     public EnvironmentParser(Springies s) {
         mSpringies = s;
-        mWallRepulsionList = new ArrayList<WallRepulsion>();
-        mWallMap = new HashMap<Integer, Wall>();
-        mCOMList = new ArrayList<COM>();
-        makeWalls();
-    }
-
-    private void makeWalls () {
-        mWallMap.put(WallType.TOP_WALL, new Wall(WallType.TOP_WALL));
-        mWallMap.put(WallType.BOTTOM_WALL, new Wall(WallType.BOTTOM_WALL));
-        mWallMap.put(WallType.LEFT_WALL, new Wall(WallType.LEFT_WALL));
-        mWallMap.put(WallType.RIGHT_WALL, new Wall(WallType.RIGHT_WALL));
+        mWallMag = new HashMap<Integer, Double>();
+        mWallExp = new HashMap<Integer, Double>();
     }
 
     @Override
@@ -76,78 +60,53 @@ public class EnvironmentParser extends XMLParser {
         int id = Integer.parseInt(a.getValue(ID));
         double mag = Double.parseDouble(a.getValue(MAGNITUDE));
         double exp = Double.parseDouble(a.getValue(EXPONENT));
-        WallRepulsion wall = new WallRepulsion(mWallMap.get(id), mag, exp);
-        mWallRepulsionList.add(wall);
+        mWallMag.put(id, mag);
+        mWallExp.put(id, exp);
     }
 
     private void parseCenterMass (Attributes a) {
         if (a.getValue(MAGNITUDE) == null|| a.getValue(EXPONENT) == null) {
             this.malformedXML(a);
         }
-        double mag = Double.parseDouble(a.getValue(MAGNITUDE));
-        double exp = Double.parseDouble(a.getValue(EXPONENT));
+        mCOMMag = Double.parseDouble(a.getValue(MAGNITUDE));
+        mCOMExp = Double.parseDouble(a.getValue(EXPONENT));
         
-        /**
-         * Temporary index in assembly
-         * needs to iterate through all them
-         */
-        ArrayList<Assembly> assembly_list = mSpringies.getAssemblyList();
-        for (Assembly assembly: assembly_list) {
-            COM center_of_mass = new COM(mag, exp, assembly);
-            mCOMList.add(center_of_mass);
-        }
     }
 
     private void parseViscosity (Attributes a) {
         if (a.getValue(MAGNITUDE) == null) {
             this.malformedXML(a);
         }
-        double mag = Double.parseDouble(a.getValue(MAGNITUDE));
-        mViscosity = new Viscosity(mag);
+        mViscosityMag = Double.parseDouble(a.getValue(MAGNITUDE));
     }
 
     private void parseGravity (Attributes a) {
         if (a.getValue(DIRECTION) == null ||  a.getValue(MAGNITUDE) == null) {
             this.malformedXML(a);
         }
-        double mag = Double.parseDouble(a.getValue(MAGNITUDE));
-        double dir = Double.parseDouble(a.getValue(DIRECTION));
-        mGravity = new Gravity(mag, dir);
+        mGravityMag = Double.parseDouble(a.getValue(MAGNITUDE));
+        mGravityDir = Double.parseDouble(a.getValue(DIRECTION));
     }
     
-    public Gravity getGravity() {
-        if (mGravity == null) {
-            System.out.println("Error. Gravity has not been initialized yet.");
-            System.exit(1);
-        }
-        return mGravity;
+    public double getGravityMag() {
+        return mGravityMag;
     }
-    
-    public Viscosity getViscosity() {
-        if (mViscosity == null) {
-            System.out.println("Error. Viscosity has not been initialized yet.");
-            System.exit(1);
-        }
-        return mViscosity;
+    public double getGravityDir() {
+        return mGravityDir;
     }
-    
-    public List<COM> getCOMList() {
-        if (mCOMList == null) {
-            System.out.println("Error. Center of mass has not been initialized yet.");
-            System.exit(1);
-        }
-        return mCOMList;
+    public double getViscosityMag() {
+        return mViscosityMag;
     }
-    
-    public List<WallRepulsion> getWallRepulsionList() {
-        if (mWallRepulsionList == null) {
-            System.out.println("Error. Wall repulsion has not been initialized yet.");
-            System.exit(1);
-        }
-        return mWallRepulsionList;
+    public double getCOMMag() {
+        return mCOMMag;
     }
-    
-    public HashMap<Integer, Wall> getWallMap() {
-        return mWallMap;
+    public double getCOMExp() {
+        return mCOMExp;
     }
+    public HashMap<Integer, Double> getWallMagMap() {
+        return mWallMag;
+    }
+    public HashMap<Integer, Double> getWallExpMap() {
+        return mWallExp;
+    }    
 }
