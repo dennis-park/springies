@@ -2,6 +2,7 @@ package springies;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -74,7 +75,6 @@ public class Springies extends JGEngine {
     public void doFrame () {
         doListenerEvents();
         updateToggleView();
-        // update game objects
         if (!mAssemblyList.isEmpty()) {
 			mEnvironmentManager.doForces();
 			WorldManager.getWorld().step(1f, 1);
@@ -83,13 +83,21 @@ public class Springies extends JGEngine {
 		}
     }
 
+    /**
+     * public HashMap<String, Boolean> getToggleMap() {
+     * 	return mToggleMap;
+     * }
+     */
+    
     private String[] forceView = {EnvironmentManager.GRAV_ID,
     							  EnvironmentManager.VISC_ID,
     							  EnvironmentManager.COM_ID,
     							  EnvironmentManager.WALL_ID};
     private void updateToggleView() {
-    	for (String forceString : forceView) {
-    		this.drawString(forceString, pfWidth(), pfHeight(), 1);
+    	for (String symbol : forceView) {
+    		//String toggleString = symbol + " " + (getToggleMap().get(symbol)).toString();
+    		this.drawString(symbol, pfWidth(), pfHeight(), 1);
+    		//System.out.print(forceString + ", ");
     	}
 	}
 
