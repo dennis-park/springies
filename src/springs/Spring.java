@@ -60,7 +60,7 @@ public class Spring extends PhysicalObject implements Force{
      * @return spring force vector
      */
     private Vec2 computeNormalizedForce() {
-        float x = mEnd.getBody().getPosition().x - mStart.getBody().getPosition().x;
+    	float x = mEnd.getBody().getPosition().x - mStart.getBody().getPosition().x;
         float y = mEnd.getBody().getPosition().y - mStart.getBody().getPosition().y;
         Vec2 force = new Vec2(x, y);
         force.normalize();
@@ -72,7 +72,11 @@ public class Spring extends PhysicalObject implements Force{
 	}
 	@Override
 	public Vec2 calculateForce() {
-		return new Vec2(0.0f, 0.0f);
+		float x = mEnd.getBody().getPosition().x - mStart.getBody().getPosition().x;
+        float y = mEnd.getBody().getPosition().y - mStart.getBody().getPosition().y;
+        Vec2 force = new Vec2(x, y);
+        force.normalize();
+        return force;
 	}
 	@Override
 	public Vec2 calculateForce(Mass mass) {
@@ -80,18 +84,21 @@ public class Spring extends PhysicalObject implements Force{
 	}
     public void doSpringForce() {
         float mag = (float) (mKval*(mRestLength-computeLength(mStart,mEnd)));
-        Vec2 force = computeNormalizedForce();
-//        System.out.printf("Rest length = %.2f, Force length = %.2f, difference = %.2f\n", 
-//                          mRestLength, force.mul(-1*mag).length(), mRestLength - force.mul(-1*mag).length());
-//        
-//        System.out.printf("\tForce applied on mass (%s): <%.2f, %.2f>\n", 
-//                          mStart.getName(), force.mul(-1*mag).x, force.mul(-1*mag).y); 
-//        System.out.printf("\tForce applied on mass (%s): <%.2f, %.2f>\n", 
-//                          mEnd.getName(), force.mul(mag).x, force.mul(mag).y);
-        
+        Vec2 force = calculateForce();
+        // Vec2 force = computeNormalizedForce();
+        //testSpringForce(force, mag);
         mStart.applyForceVector(force.mul(-1*mag));
         mEnd.applyForceVector(force.mul(mag));
     }
+    public void testSpringForce(Vec2 force, float mag) {
+    	System.out.printf("Rest length = %.2f, Force length = %.2f, difference = %.2f\n", 
+    			mRestLength, force.mul(-1*mag).length(), mRestLength - force.mul(-1*mag).length());
+    	System.out.printf("\tForce applied on mass (%s): <%.2f, %.2f>\n", 
+    			mStart.getName(), force.mul(-1*mag).x, force.mul(-1*mag).y); 
+    	System.out.printf("\tForce applied on mass (%s): <%.2f, %.2f>\n", 
+    			mEnd.getName(), force.mul(mag).x, force.mul(mag).y);
+    }
+
     protected double getLength() {
         return mRestLength;
     }
