@@ -14,7 +14,7 @@ import org.jbox2d.common.Vec2;
  * @param y
  * @return
  */
-public interface Force {
+public abstract interface Force {
 	double mMagnitude = 0.0;
 	double mExponent = 0.0;
     
@@ -41,12 +41,4 @@ public interface Force {
     public Vec2 calculateForce();
     
     public Vec2 calculateForce (Mass mass);
-   
-//    public void turnOn () {
-//        forceOn = true;
-//    }
-//    
-//    public void turnOff () {
-//        forceOn = false;
-//    }
 }

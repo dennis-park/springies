@@ -2,7 +2,6 @@ package masses;
 
 import java.util.ArrayList;
 import org.jbox2d.common.Vec2;
-import springies.EnvironmentManager;
 import springs.Spring;
 import jboxGlue.*;
 import jgame.JGColor;
@@ -61,9 +60,7 @@ public class Mass extends PhysicalObjectCircle {
     }
     
     @Override 
-    public void hit(JGObject other) {
-        // Do nothing 
-    }
+    public void hit(JGObject other) {}
     
     public void move() {
 //        System.out.printf("Speed of mass (%s): <%.2f, %.2f>\n", 
@@ -78,8 +75,7 @@ public class Mass extends PhysicalObjectCircle {
      * Apply specified force vector
      * 
      */
-    public void applyForceVector (Vec2 force)
-    {
+    public void applyForceVector (Vec2 force) {
         myBody.applyForce(force, myBody.m_xf.position);
     }
 }

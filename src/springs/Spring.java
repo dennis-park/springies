@@ -53,6 +53,12 @@ public class Spring extends PhysicalObject implements Force{
      *     -kx<x2-x1, y2-y1>     
      * @return
      */
+    /**
+     * Computes Hooke's Law
+     * @param x
+     * @param y
+     * @return spring force vector
+     */
     private Vec2 computeNormalizedForce() {
         float x = mEnd.getBody().getPosition().x - mStart.getBody().getPosition().x;
         float y = mEnd.getBody().getPosition().y - mStart.getBody().getPosition().y;
@@ -60,25 +66,17 @@ public class Spring extends PhysicalObject implements Force{
         force.normalize();
         return force;
     }
-    /**
-     * Computes Hooke's Law
-     * @param x
-     * @param y
-     * @return spring force vector
-     */
     @Override
 	public Vec2 calculateForce(double x, double y) {
-		return null;
+		return new Vec2(0.0f, 0.0f);
 	}
 	@Override
 	public Vec2 calculateForce() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Vec2(0.0f, 0.0f);
 	}
 	@Override
 	public Vec2 calculateForce(Mass mass) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Vec2(0.0f, 0.0f);
 	}
     public void doSpringForce() {
         float mag = (float) (mKval*(mRestLength-computeLength(mStart,mEnd)));
@@ -120,8 +118,7 @@ public class Spring extends PhysicalObject implements Force{
     }
 
     @Override 
-    public void hit(JGObject other) {        
-    }
+    public void hit(JGObject other) {}
     
     @Override
     public void move() {
