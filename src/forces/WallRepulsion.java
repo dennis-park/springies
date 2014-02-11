@@ -6,6 +6,8 @@ import walls.Wall;
 
 
 public class WallRepulsion implements Force {
+    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 0.1;
+    public static final double DEFAULT_EXPONENT = 2.0;
     public static final double TOP_DIRECTION = Math.PI / 2;
     public static final double RIGHT_DIRECTION = 0.0;
     public static final double BOTTOM_DIRECTION = Math.PI / 2;
@@ -56,6 +58,10 @@ public class WallRepulsion implements Force {
 //        }
 //        System.out.printf("Wall ID = %d, angle = %.2f\n",  wall_id, this.mDirection);
 //    }
+
+    public WallRepulsion (Wall wall) {
+        this(wall, DEFAULT_WALL_REPULSION_MAGNITUDE, DEFAULT_EXPONENT);
+    }
 
     public void setWall (Wall wall) {
         if (wall == null) { throw new RuntimeException("Wall given to setWall was null"); }

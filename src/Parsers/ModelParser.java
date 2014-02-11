@@ -19,8 +19,8 @@ public class ModelParser extends XMLParser {
 
     public ModelParser (Springies s) {
         mSpringies = s;
-        mMassList = s.getMassList();
-        mSprings = s.getSpringsList();
+        mMassList = new ArrayList<Mass>();
+        mSprings = new ArrayList<Spring>();
         mMassMap = new HashMap<String, Mass>();
     }
     
@@ -165,8 +165,6 @@ public class ModelParser extends XMLParser {
         else {
             newSpring = new Spring(m1, m2, Double.parseDouble(restlength), Double.parseDouble(constant));
         }
-        m1.connectSpring(newSpring);
-        m2.connectSpring(newSpring);
         return newSpring;
     }
 
@@ -180,8 +178,6 @@ public class ModelParser extends XMLParser {
             newMuscle = new Muscle(m1, m2, amp); 
         }
         newMuscle = new Muscle(m1, m2, Double.parseDouble(restlength), amp);
-        m1.connectSpring(newMuscle);
-        m2.connectSpring(newMuscle);
         return newMuscle;
     }
 

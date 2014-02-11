@@ -7,7 +7,6 @@ import java.util.List;
 import masses.Mass;
 
 import org.jbox2d.common.Vec2;
-
 import forces.COM;
 import forces.Force;
 import forces.Gravity;
@@ -41,7 +40,8 @@ public class EnvironmentManager {
     private String COM = "com";
     private String WALL = "wall";
     
-    HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
+    protected HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
+    protected HashMap<Integer, Wall> mWallMap;
     
     public EnvironmentManager(Springies s, Gravity g, Viscosity v, COM com, List<WallRepulsion> walls) {
         mSpringies = s;
@@ -75,7 +75,7 @@ public class EnvironmentManager {
         mGravity = new Gravity(this.DEFAULT_GRAVITY_MAGNITUDE);
         mViscosity = new Viscosity(this.DEFAULT_VISCOSITY_MAGNITUDE);
         mCOM = new COM(this.DEFAULT_COM_MAGNITUDE, this.DEFAULT_EXPONENT, s.getMassList());
-        mWallRepulsionList = makeFourWalls(); 
+        mWallRepulsionList = makeFourWallRepulsion(); 
         for (Mass m: mSpringies.getMassList()) {
             System.out.printf("In Force Manager: Mass in mass list: %s\n", m.getName());
         }
@@ -89,25 +89,25 @@ public class EnvironmentManager {
         mToggleMap.put(WALL, true);
     }
     
-    private List<WallRepulsion> makeFourWalls () {
-        // TODO Auto-generated method stub
-        Wall top_wall = new Wall(this.TOP_ID);
-        Wall bottom_wall = new Wall(this.BOTTOM_ID);
-        Wall left_wall = new Wall(this.LEFT_ID);
-        Wall right_wall = new Wall(this.RIGHT_ID);
+    private List<WallRepulsion> makeFourWallRepulsion () {
+        makeFourWalls();
         
-        WallRepulsion top_repulsion = new WallRepulsion(top_wall, DEFAULT_WALL_REPULSION_MAGNITUDE, DEFAULT_EXPONENT);
-        WallRepulsion bottom_repulsion = new WallRepulsion(bottom_wall, DEFAULT_WALL_REPULSION_MAGNITUDE, DEFAULT_EXPONENT);
-        WallRepulsion left_repulsion = new WallRepulsion(left_wall, DEFAULT_WALL_REPULSION_MAGNITUDE, DEFAULT_EXPONENT);
-        WallRepulsion right_repulsion = new WallRepulsion(right_wall, DEFAULT_WALL_REPULSION_MAGNITUDE, DEFAULT_EXPONENT);
+        ArrayList<WallRepulsion> wall_repulsion_list= new ArrayList<WallRepulsion>();
         
-        ArrayList<WallRepulsion> wall_list= new ArrayList<WallRepulsion>();
-        wall_list.add(top_repulsion);
-        wall_list.add(bottom_repulsion);
-        wall_list.add(left_repulsion);
-        wall_list.add(right_repulsion);
+        wall_repulsion_list.add(new WallRepulsion(mWallMap.get(TOP_ID)));
+        wall_repulsion_list.add(new WallRepulsion(mWallMap.get(BOTTOM_ID)));
+        wall_repulsion_list.add(new WallRepulsion(mWallMap.get(LEFT_ID)));
+        wall_repulsion_list.add(new WallRepulsion(mWallMap.get(RIGHT_ID)));
         
-        return wall_list;
+        return wall_repulsion_list;
+    }
+    
+    private void makeFourWalls() {
+        mWallMap = new HashMap<Integer, Wall>();
+        mWallMap.put(TOP_ID, new Wall(this.TOP_ID));
+        mWallMap.put(BOTTOM_ID, new Wall(this.BOTTOM_ID));
+        mWallMap.put(LEFT_ID, new Wall(this.LEFT_ID));
+        mWallMap.put(RIGHT_ID, new Wall(this.RIGHT_ID));
     }
 
     public void toggleForces(String forceid) {
@@ -122,7 +122,7 @@ public class EnvironmentManager {
             for (WallRepulsion w: mWallRepulsionList) {
                 applyForce(WALL, w, mass);
             }
-            System.out.printf("Force applied on mass (%s): <%.2f, %.2f>\n", mass.getName(), mass.getBody().m_force.x, mass.getBody().m_force.y);
+            //System.out.printf("Force applied on mass (%s): <%.2f, %.2f>\n", mass.getName(), mass.getBody().m_force.x, mass.getBody().m_force.y);
         }
     }
     
@@ -132,6 +132,17 @@ public class EnvironmentManager {
         } 
         else {
             mass.applyForceVector(ZERO_VECTOR);
+        }
+    }
+    
+    public void moveWalls (boolean move_out) {
+        for (Wall wall: mWallMap.values()) {
+            if (move_out) {
+                wall.toggleOut();
+            }
+            else {
+                wall.toggleIn();
+            }
         }
     }
 }
