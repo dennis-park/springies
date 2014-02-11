@@ -57,7 +57,7 @@ public class Springies extends JGEngine {
         loadAssemblyFromFile(new File("assets/daintywalker.xml"));
         mEnvironmentManager = new EnvironmentManager(this);
         // mForceManager = new EnvironmentManager(this, environment_filename);
-        mActionListener = new JGameActionListener(mEnvironmentManager);
+        mActionListener = new JGameActionListener(this, mEnvironmentManager);
 
         setFrameRate(5, 2);
     }

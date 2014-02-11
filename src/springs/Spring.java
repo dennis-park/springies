@@ -139,4 +139,6 @@ public class Spring extends PhysicalObject implements Force{
         myEngine.setColor(DEFAULT_COLOR);
         myEngine.drawLine(getStartX(), getStartY(), getEndX(), getEndY());
     }
+    
+    public void changeAmplitude (boolean increase) {}
 }

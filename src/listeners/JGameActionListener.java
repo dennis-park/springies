@@ -2,9 +2,11 @@ package listeners;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+
 import masses.Mass;
 import masses.MouseMass;
 import springies.EnvironmentManager;
+import springies.Springies;
 import springs.Spring;
 
 
@@ -19,67 +21,73 @@ public class JGameActionListener {
     public static final double DEFAULT_MOUSE_MASS_XPOSITION = -1;
     public static final double DEFAULT_MOUSE_MASS_YPOSITION = -1;
     
+    private Springies mSpringies;
     private EnvironmentManager mEnvironmentManager;
     private boolean leftMouseHeld = false;
     private Mass mMouseMass = new MouseMass("mouse_mass", DEFAULT_MOUSE_MASS_XPOSITION, DEFAULT_MOUSE_MASS_YPOSITION);
     private Spring mMouseSpring;
     
-    public JGameActionListener(EnvironmentManager e_manager) {
+    public JGameActionListener(Springies s, EnvironmentManager e_manager) {
+    	mSpringies = s;
         mEnvironmentManager = e_manager;
     }
  
     public void doKeyEvent (int key) {
         boolean move_walls_out = true;
         
-        if (key == KeyEvent.VK_UP) {
-            System.out.printf("Up Key pressed%d\n", key);
+        switch (key) {
+        case KeyEvent.VK_UP:
+        	System.out.printf("Up Key pressed%d\n", key);
             mEnvironmentManager.moveWalls(move_walls_out);
-        }
-        if (key == KeyEvent.VK_DOWN) {
-            System.out.printf("Down Key pressed %d\n", key);
+            break;
+        case KeyEvent.VK_DOWN:
+        	System.out.printf("Down Key pressed %d\n", key);
             mEnvironmentManager.moveWalls(!move_walls_out);
-        }
-        if (key == KeyEvent.VK_N) {
-            System.out.printf("N key pressed %d\n", key);
-        }
-        if (key == KeyEvent.VK_C) {
-            System.out.printf("C key pressed %d\n", key);
-        }
-        if (key == KeyEvent.VK_G) {
-            System.out.printf("G key pressed %d\n", key);
-            mEnvironmentManager.toggleForces(EnvironmentManager.GRAV);
-        }
-        if (key == KeyEvent.VK_V) {
-            System.out.printf("V key pressed %d\n", key);
-            mEnvironmentManager.toggleForces(EnvironmentManager.VISC);
-        }
-        if (key == KeyEvent.VK_M) {
-            System.out.printf("M key pressed %d\n", key);
-            mEnvironmentManager.toggleForces(EnvironmentManager.COM);
-        }
-        if (key == KeyEvent.VK_1) {
-            System.out.printf("1 key pressed %d\n", key);
-            mEnvironmentManager.toggleWallForces(EnvironmentManager.TOP_ID);
-        }
-        if (key == KeyEvent.VK_2) {
-            System.out.printf("2 key pressed %d\n", key);
-            mEnvironmentManager.toggleWallForces(EnvironmentManager.RIGHT_ID);
-        }
-        if (key == KeyEvent.VK_3) {
-            System.out.printf("3 key pressed %d\n", key);
-            mEnvironmentManager.toggleWallForces(EnvironmentManager.BOTTOM_ID);
-        }
-        if (key == KeyEvent.VK_4) {
-            System.out.printf("4 key pressed %d\n", key);
-            mEnvironmentManager.toggleWallForces(EnvironmentManager.LEFT_ID);
-        }
-        if (key == KeyEvent.VK_EQUALS) {
-            System.out.printf("+ key pressed %d\n", key);
-            mEnvironmentManager.changeMuscleAmplitude(true);
-        }
-        if (key == KeyEvent.VK_MINUS) {
-            System.out.printf("- key pressed %d\n", key);
-            mEnvironmentManager.changeMuscleAmplitude(false);
+            break;
+        case KeyEvent.VK_N:
+        	System.out.printf("N key pressed %d\n", key);
+        	mSpringies.makeAssembly();
+        	break;
+        case KeyEvent.VK_C:
+        	System.out.printf("C key pressed %d\n", key);
+        	mSpringies.clearLoadedAssemblies();
+        	break;
+        case KeyEvent.VK_G:
+        	System.out.printf("G key pressed %d\n", key);
+            mEnvironmentManager.toggleForces(EnvironmentManager.GRAV_ID);
+            break;
+        case KeyEvent.VK_V:
+        	System.out.printf("V key pressed %d\n", key);
+            mEnvironmentManager.toggleForces(EnvironmentManager.VISC_ID);
+            break;
+        case KeyEvent.VK_M:
+        	System.out.printf("M key pressed %d\n", key);
+            mEnvironmentManager.toggleForces(EnvironmentManager.COM_ID);
+            break;
+        case KeyEvent.VK_1:
+        	System.out.printf("1 key pressed %d\n", key);
+        	mEnvironmentManager.toggleForces(String.format("%d", EnvironmentManager.TOP_ID));
+        	break;
+        case KeyEvent.VK_2:
+        	System.out.printf("2 key pressed %d\n", key);
+        	mEnvironmentManager.toggleForces(String.format("%d", EnvironmentManager.RIGHT_ID));
+        	break;
+        case KeyEvent.VK_3:
+        	System.out.printf("3 key pressed %d\n", key);
+        	mEnvironmentManager.toggleForces(String.format("%d", EnvironmentManager.BOTTOM_ID));
+        	break;
+        case KeyEvent.VK_4:
+        	System.out.printf("4 key pressed %d\n", key);
+        	mEnvironmentManager.toggleForces(String.format("%d", EnvironmentManager.LEFT_ID));
+        	break;
+        case KeyEvent.VK_EQUALS:
+        	System.out.printf("+ key pressed %d\n", key);
+        	mEnvironmentManager.changeMuscleAmplitude(true);
+        	break;
+        case KeyEvent.VK_MINUS:
+        	System.out.printf("- key pressed %d\n", key);
+        	mEnvironmentManager.changeMuscleAmplitude(false);
+        	break;
         }
     }
 

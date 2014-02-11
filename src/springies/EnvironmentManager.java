@@ -20,11 +20,11 @@ public class EnvironmentManager {
     protected Viscosity mViscosity;
     protected List<WallRepulsion> mWallRepulsionList;
     protected List<COM> mCOMList;
-    public static final double DEFAULT_GRAVITY_MAGNITUDE = 0.1;
-    public static final double DEFAULT_VISCOSITY_MAGNITUDE = 0.05;
+    public static final double DEFAULT_GRAVITY_MAGNITUDE = 1;
+    public static final double DEFAULT_VISCOSITY_MAGNITUDE = 0.2;
     public static final double DEFAULT_COM_MAGNITUDE = 0.1;
-    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 0.1;
-    public static final double DEFAULT_EXPONENT = 2.0;
+    public static final double DEFAULT_WALL_REPULSION_MAGNITUDE = 10;
+    public static final double DEFAULT_EXPONENT = 1.0;
     
     public static final Vec2 ZERO_VECTOR = new Vec2(0.0f, 0.0f);
     
@@ -33,10 +33,10 @@ public class EnvironmentManager {
     public static final int BOTTOM_ID = 3;
     public static final int LEFT_ID = 4;
     
-    public static final String GRAV = "gravity";
-    public static final String VISC = "viscosity";
-    public static final String COM = "com";
-    public static final String WALL = "wall";
+    public static final String GRAV_ID = "gravity";
+    public static final String VISC_ID = "viscosity";
+    public static final String COM_ID = "com";
+    public static final String WALL_ID = "wall";
     
     protected HashMap<String, Boolean> mToggleMap = new HashMap<String, Boolean>();
     protected HashMap<Integer, Wall> mWallMap;
@@ -58,7 +58,7 @@ public class EnvironmentManager {
         mViscosity = parser.getViscosity();
         mCOMList = parser.getCOMList();
         mWallRepulsionList = parser.getWallRepulsionList();
-        initForceToggleMap();
+        mToggleMap = initForceToggleMap();
     }
     
     public EnvironmentManager(Springies s) {
@@ -71,7 +71,7 @@ public class EnvironmentManager {
          */
         mCOMList = makeCOMForAllForces();
         mWallRepulsionList = makeFourWallRepulsion(); 
-        initForceToggleMap();
+        mToggleMap = initForceToggleMap();
     }
     
     private ArrayList<COM> makeCOMForAllForces () {
@@ -83,11 +83,15 @@ public class EnvironmentManager {
         return com_list;
     }
 
-    private void initForceToggleMap() {
-        mToggleMap.put(GRAV, true);
-        mToggleMap.put(VISC, true);
-        mToggleMap.put(COM, true);
-        mToggleMap.put(WALL, true);
+    private HashMap<String, Boolean> initForceToggleMap() {
+        HashMap<String, Boolean> toggle_map = new HashMap<String, Boolean>();
+        toggle_map.put(GRAV_ID, true);
+        toggle_map.put(VISC_ID, true);
+        toggle_map.put(COM_ID, true);
+        for (WallRepulsion w: mWallRepulsionList) {
+            toggle_map.put(String.format("%d", w.getWallId()), true);
+        }
+        return toggle_map;
     }
 
     public void toggleForces(String forceid) {
@@ -118,15 +122,14 @@ public class EnvironmentManager {
     public void doForces() {
     	int TEMP_INDEX = 0;
         for (Mass mass: (mSpringies.getAssemblyList().get(TEMP_INDEX)).getMassList()) {
-            applyForce(GRAV, mGravity, mass);
-            applyForce(VISC, mViscosity, mass);
+            applyForce(GRAV_ID, mGravity, mass);
+            applyForce(VISC_ID, mViscosity, mass);
             for (COM c: mCOMList) {
-                applyForce(COM, c, mass);
+                applyForce(COM_ID, c, mass);
             }
             for (WallRepulsion w : mWallRepulsionList) {
-                applyForce(WALL, w, mass);
+                applyForce(String.format("%d", w.getWallId()), w, mass);
             }
-            //System.out.printf("Force applied on mass (%s): <%.2f, %.2f>\n", mass.getName(), mass.getBody().m_force.x, mass.getBody().m_force.y);
         }
     }
     
@@ -140,7 +143,7 @@ public class EnvironmentManager {
     }
     
     public void moveWalls (boolean move_out) {
-        for (Wall wall: mWallMap.values()) {
+        for (Wall wall : mWallMap.values()) {
             if (move_out) {
                 wall.toggleOut();
             }
@@ -149,13 +152,11 @@ public class EnvironmentManager {
             }
         }
     }
-    public void toggleWallForces (int wall_id) {
-        // TODO Auto-generated method stub
-        
-    }
     public void changeMuscleAmplitude (boolean increase) {
-        // TODO Auto-generated method stub
-        
+        ArrayList<Spring> spring_list = getSpringsList();
+        for (Spring s: spring_list) {
+            s.changeAmplitude(increase);
+        }
     }
 
     public ArrayList<Mass> getMassList () {
