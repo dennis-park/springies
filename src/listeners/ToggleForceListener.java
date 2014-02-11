@@ -34,6 +34,7 @@ public class ToggleForceListener implements SpringiesListener{
 		int key = e.getKeyChar();
 		switch (key) {
 		case 'g':
+			
 			break;
 		case 'v':
 			break;

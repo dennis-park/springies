@@ -12,16 +12,15 @@ import org.xml.sax.SAXException;
 
 public class ModelParser extends XMLParser {
     protected Springies mSpringies;
-    protected HashMap<String, Mass> mMassMap;
+    protected HashMap<String, Mass> mAssemblyMassMap;
     protected List<Mass> mMassList;
     protected List<Spring> mSprings;
     
-
     public ModelParser (Springies s) {
         mSpringies = s;
         mMassList = s.getMassList();
         mSprings = s.getSpringsList();
-        mMassMap = new HashMap<String, Mass>();
+        mAssemblyMassMap = new HashMap<String, Mass>();
     }
     
     public void startElement (String namespaceURI,
@@ -52,7 +51,8 @@ public class ModelParser extends XMLParser {
         checkIdXY(a);
         Mass newMass = createMassObj(a.getValue("id"), a.getValue("x"), a.getValue("y"),
                                      a.getValue("vx"), a.getValue("vy"), a.getValue("mass"));
-        mMassMap.put(a.getValue("id"), newMass);
+        mAssemblyMassMap.put(a.getValue("id"), newMass);
+        mMassList.add(newMass);
     }
 
     private void parseFixedMass (Attributes a) {
@@ -60,7 +60,8 @@ public class ModelParser extends XMLParser {
         FixedMass newMass =
                 createFixedMassObj(a.getValue("id"), a.getValue("x"), a.getValue("y"),
                                    a.getValue("mass"));
-        mMassMap.put(a.getValue("id"), newMass);
+        mAssemblyMassMap.put(a.getValue("id"), newMass);
+        mMassList.add(newMass);
     }
 
     private void parseSpring (Attributes a) {
@@ -90,7 +91,7 @@ public class ModelParser extends XMLParser {
 
     private boolean checkMassesExist (String mass_id) {
         boolean exist = false;
-        for (String m_id : mMassMap.keySet()) {
+        for (String m_id : mAssemblyMassMap.keySet()) {
             if (m_id.equals(mass_id)) {
                 exist = true;
                 break;
@@ -152,8 +153,8 @@ public class ModelParser extends XMLParser {
     private Spring createSpringObj (String m1_id, String m2_id, String restlength, String constant) {
         System.out.printf("Parsing ... : %s\t%s\t%s\t%s\n", m1_id, m2_id, restlength, constant);
         
-        Mass m1 = mMassMap.get(m1_id);
-        Mass m2 = mMassMap.get(m2_id);
+        Mass m1 = mAssemblyMassMap.get(m1_id);
+        Mass m2 = mAssemblyMassMap.get(m2_id);
         
         Spring newSpring;
         if (restlength == null && constant == null) { 
@@ -171,8 +172,8 @@ public class ModelParser extends XMLParser {
     }
 
     private Muscle createMuscleObj (String m1_id, String m2_id, String restlength, String amplitude) {
-        Mass m1 = mMassMap.get(m1_id);
-        Mass m2 = mMassMap.get(m2_id);
+        Mass m1 = mAssemblyMassMap.get(m1_id);
+        Mass m2 = mAssemblyMassMap.get(m2_id);
         double amp = Double.parseDouble(amplitude);
 
         Muscle newMuscle; 
@@ -184,5 +185,17 @@ public class ModelParser extends XMLParser {
         m2.connectSpring(newMuscle);
         return newMuscle;
     }
-
+    
+    public HashMap<String, Mass> getAssemblyMasses() {
+    	return mAssemblyMassMap;
+    }
+    public List<Mass> getAllMasses() {
+    	return mMassList;
+    }
+    public List<Mass> getAllSprings() {
+    	return mMassList;
+    }
+    public List<Mass> getAllMasses() {
+    	return mMassList;
+    }
 }

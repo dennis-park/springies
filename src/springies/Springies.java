@@ -170,6 +170,9 @@ public class Springies extends JGEngine {
     	 * TODO
     	 */
     }
+    
+    private static final String ASSETS = "assets/";
+    
     public void makeAssembly() {
     	JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -178,9 +181,28 @@ public class Springies extends JGEngine {
 		int returnVal = chooser.showDialog(null, "new Assembly file");
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
-			//new ModelParser(this).loadAssemblyFromFile(file);
+			this.loadAssemblyFromFile(file);
 		}
     }
+    public void loadAssemblyFromFile(File file) {
+      if (file != null && file.getAbsolutePath().equals(ASSETS+"environment.xml")) {
+                      ModelParser factory = new ModelParser(this);
+                      try {
+                              new XMLParserCaller().call(ASSETS+file.getPath(), factory);
+                              Assembly a = new Assembly();
+                              for (Mass mass : factory.getAssemblyMasses().values()) {
+                                      a.add(mass);
+                              }
+                              for (Spring spring : factory.getAssemblySprings()) {
+                                      a.add(spring);
+                              }
+                              //a.addMuscles(factory.getAssemblyMuscles());
+                      } catch (Exception e) {
+                              // TODO Auto-generated catch block
+                              e.printStackTrace();
+                      }
+              }
+  }
     
     public void setMassMap(HashMap<String, Mass> massList) {
     	this.mMassMap = massList;
@@ -206,25 +228,7 @@ public class Springies extends JGEngine {
 //        return mSprings;
 //    }
 //    
-//    public void loadFile(File file) {
-//        if (file != null && file.getAbsolutePath().equals(ASSETS+"environment.xml")) {
-//                        ModelParser factory = new ModelParser(mSpringies);
-//                        try {
-//                                mCaller.call(ASSETS+file.getPath(), factory);
-//                                Assembly a = new Assembly();
-//                                for (Mass mass : factory.getAssemblyMasses().values()) {
-//                                        a.add(mass);
-//                                }
-//                                for (Spring spring : factory.getAssemblySprings()) {
-//                                        a.add(spring);
-//                                }
-//                                //a.addMuscles(factory.getAssemblyMuscles());
-//                        } catch (Exception e) {
-//                                // TODO Auto-generated catch block
-//                                e.printStackTrace();
-//                        }
-//                }
-//    }
+//    
 	public void clearLoadedAssemblies() {
 		assemblyList = new ArrayList<Assembly>();
 	}
