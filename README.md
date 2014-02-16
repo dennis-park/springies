@@ -68,5 +68,7 @@ Keystroke : Behavior
 
 ##Known bugs
 * Masses may get stuck in walls due to bounds limitations of JBox and JGEngine
-
-* JFileChooser returns NullPointerException when called (temporary fix: place cursor over top-right corner, then press 'n')
+* JFileChooser returns NullPointerException when called (temporary fix: place cursor over top-right corner, then press 'n'). Sometimes works. Sometimes doesn't. Might have to do with calling file only when Springies is fully loaded. 
+* The direction that forces act upon are calculated in radians but environment.xml gives the direction in degrees. This is never converted so gravity will be at a strange angle (90 radians = 156.6 degrees) when using reading in the given environment.xml file. A simple fix is to change the direction in the XML file to 1.57 (90 degrees = 1.57 radians). 
+* If you move the walls 2-3 clicks outside of the game window, they become stuck there (some kind of collision) and will never go back to the game window. If you don't go too far out, walls will toggle in and out as expected. 
+* If you move the walls too quickly, they will move too quickly to exert repulsion forces on the masses. 
