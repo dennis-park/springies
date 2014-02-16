@@ -197,6 +197,10 @@ public class EnvironmentManager {
                     applyWallForce(i, mass);
                 }
             }
+            
+            for (Spring spring: assembly.getSpringList()) {
+                spring.doSpringForce();
+            }
         }
     }
 
