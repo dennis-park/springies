@@ -1,0 +1,13 @@
+<model>
+    <name>SimpleSpring</name>
+    <author>Thanh-HaNguyen</author>
+
+    <nodes>
+        <fixed id="m0" x="200" y="200"/>
+        <mass id="m1" x="200" y="200"/>
+    </nodes>
+
+    <links>
+        <spring a="m0" b="m1" restlength="25.0" constant=".5" mass="10.0"/>
+    </links>
+</model>
